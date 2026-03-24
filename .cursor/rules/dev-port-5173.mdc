@@ -1,0 +1,11 @@
+---
+description: Use port 5173 only for frontend dev; remind to refresh after changes
+globs: src/frontend/**/*
+alwaysApply: false
+---
+
+# Frontend dev – port 5173 only
+
+- The frontend dev server is configured to run on **port 5173** (see `src/frontend/vite.config.js`).
+- After applying any frontend change, tell the user: **"Refresh http://localhost:5173 (or hard refresh Cmd+Shift+R) to see changes."**
+- Do not suggest or use other ports (5174, 5175, etc.) unless 5173 is in use or the user asks.
