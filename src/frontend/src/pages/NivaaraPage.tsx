@@ -163,12 +163,12 @@ export function NivaaraPage() {
                 }}
               />
               <h2
-                className="section-subheading animate-on-scroll delay-200"
+                className="section-subheading animate-on-scroll delay-200 text-justify"
                 style={{ marginBottom: "2.5rem" }}
               >
                 Where Urban Energy Finds Balance
               </h2>
-              <div className="space-y-5 animate-on-scroll delay-300">
+              <div className="space-y-5 animate-on-scroll delay-300 text-justify">
                 <p className="body-refined-lg text-ivory-muted/70">
                   In the rhythm of modern cities, time moves quickly. Meetings
                   begin early. Flights depart late. Opportunities appear
@@ -188,7 +188,7 @@ export function NivaaraPage() {
                   city outside is moving fast.
                 </p>
                 <p
-                  className="font-display text-ivory/90 italic"
+                  className="font-display text-ivory/90 italic text-justify"
                   style={{
                     fontFamily: "Instrument Serif, Georgia, serif",
                     fontWeight: 400,
@@ -204,43 +204,32 @@ export function NivaaraPage() {
             </div>
 
             <div className="lg:col-span-5 lg:self-start lg:pt-12 animate-on-scroll-right delay-200">
-              <div
-                className="p-5 sm:p-8"
-                style={{ border: "1px solid rgba(168, 144, 112, 0.2)" }}
-              >
-                <p
-                  className="eyebrow eyebrow--gold-emphasis mb-4"
-                  style={{ color: "#c9a84c" }}
-                >
+              <div className="border border-gold/20 p-5 sm:p-8">
+                <p className="eyebrow eyebrow--gold-emphasis mb-4 text-justify">
                   The Nivaãra Promise
                 </p>
                 <ul className="space-y-3">
                   {[
-                    "Smart comfort — thoughtfully designed rooms that balance efficiency with modern elegance",
-                    "Seamless connectivity — reliable high-speed internet and technology that keeps you effortlessly connected",
-                    "Effortless arrival — smooth, efficient check-in and check-out designed for the pace of modern travel",
-                    "Honest dining — quality food crafted with care and offered at fair, transparent prices",
-                    "Urban access — well-located hotels that keep you close to the city’s business, culture, and movement",
+                    "Smart comfort — rooms that balance efficiency with modern elegance",
+                    "Seamless connectivity — reliable high-speed internet for effortless connectivity",
+                    "Effortless arrival — smooth, efficient check-in and check-out",
+                    "Honest dining — quality food crafted with care, offered at fair prices",
+                    "Urban access — well-located hotels close to city’s business and movement",
                   ].map((item) => {
                     const [label, ...rest] = item.split(" — ");
                     const restText = rest.join(" — ");
                     return (
-                      <li key={item} className="flex items-center gap-3">
+                      <li key={item} className="flex items-start gap-3">
+                        <span className="w-5 h-px bg-gold flex-shrink-0 mt-[0.65em]" />
                         <span
-                          className="w-5 h-px flex-shrink-0"
-                          style={{ background: "#a89070" }}
-                        />
-                        <span
-                          className="font-body text-base"
+                          className="font-body text-base text-ivory-muted/70 min-w-0 flex-1 text-justify"
                           style={{
+                            fontFamily:
+                              "General Sans, Helvetica Neue, sans-serif",
                             fontWeight: 300,
-                            color: "#ffffff",
                           }}
                         >
-                          <strong
-                            className="font-semibold"
-                            style={{ color: "#ffffff" }}
-                          >
+                          <strong className="text-ivory/90 font-semibold">
                             {label}
                           </strong>
                           {restText ? ` — ${restText}` : ""}
@@ -495,7 +484,7 @@ export function NivaaraPage() {
                   <div className="flex-shrink-0 mt-0.5">
                     <Icon size={18} style={{ color: "#c9a84c" }} />
                   </div>
-                  <div>
+                  <div className="min-w-0 text-justify">
                     <h3
                       className="font-display text-ivory text-base mb-2"
                       style={{

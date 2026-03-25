@@ -195,24 +195,26 @@ export function VisionPage() {
                     </div>
                   </div>
 
-                  <h3
-                    className="font-display text-ivory text-xl md:text-2xl mb-4"
-                    style={{
-                      fontFamily: "Instrument Serif, Georgia, serif",
-                      fontWeight: 400,
-                    }}
-                  >
-                    {pillar.title}
-                  </h3>
-                  <p
-                    className="font-body text-base text-ivory-muted/65 leading-relaxed"
-                    style={{
-                      fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                      fontWeight: 300,
-                    }}
-                  >
-                    {pillar.description}
-                  </p>
+                  <div className="min-w-0 text-justify">
+                    <h3
+                      className="font-display text-ivory text-xl md:text-2xl mb-4"
+                      style={{
+                        fontFamily: "Instrument Serif, Georgia, serif",
+                        fontWeight: 400,
+                      }}
+                    >
+                      {pillar.title}
+                    </h3>
+                    <p
+                      className="font-body text-base text-ivory-muted/65 leading-relaxed"
+                      style={{
+                        fontFamily: "General Sans, Helvetica Neue, sans-serif",
+                        fontWeight: 300,
+                      }}
+                    >
+                      {pillar.description}
+                    </p>
+                  </div>
                 </div>
               );
             })}

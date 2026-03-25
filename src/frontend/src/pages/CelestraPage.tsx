@@ -1,12 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import {
-  Crown,
-  Gem,
-  Heart,
-  Sparkles,
-  Star,
-  UtensilsCrossed,
-  Waves,
+  Armchair,
+  BedDouble,
+  Briefcase,
+  CalendarDays,
+  Coffee,
+  Dumbbell,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
@@ -15,46 +14,40 @@ import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 const features = [
   {
-    icon: Gem,
-    label: "Bespoke Suites",
+    icon: BedDouble,
+    label: "Modern Rooms & Suites",
     description:
-      "Private sanctuaries with layered lighting, bespoke furnishings, and views that restore perspective.",
+      "Thoughtfully designed rooms with premium fixtures, luxurious bedding, and sophisticated finishes.",
   },
   {
-    icon: UtensilsCrossed,
-    label: "Culinary Artistry",
+    icon: Coffee,
+    label: "All Day Dining Restaurant",
     description:
-      "Immersive journeys curated by master chefs, reflecting destination culture and timeless technique.",
+      "Vibrant all-day dining with international and regional cuisines served in a contemporary setting.",
   },
   {
-    icon: Sparkles,
-    label: "Signature Spa Rituals",
+    icon: Briefcase,
+    label: "Business Meeting Spaces",
     description:
-      "Holistic sanctuaries rooted in ancient wisdom and modern science; experiences that cannot be replicated.",
+      "State-of-the-art meeting rooms and boardrooms equipped with modern technology.",
   },
   {
-    icon: Waves,
-    label: "Iconic Pools & Landscapes",
+    icon: Armchair,
+    label: "Premium Lounge",
     description:
-      "Architecturally landmark infinity pools and settings that define the destination.",
+      "Exclusive lounge areas for relaxation, networking, and informal business conversations.",
   },
   {
-    icon: Crown,
-    label: "Grand Ballrooms & Events",
+    icon: Dumbbell,
+    label: "Fitness Center",
     description:
-      "Opulent spaces for celebrations that feel once-in-a-lifetime and business that feels regal.",
+      "Fully equipped, modern fitness facilities with professional equipment and wellness programs.",
   },
   {
-    icon: Heart,
-    label: "Destination Weddings",
+    icon: CalendarDays,
+    label: "Event Spaces",
     description:
-      "Bespoke celebrations set in architectural masterpieces — unforgettable by design.",
-  },
-  {
-    icon: Star,
-    label: "Butler-Led Service",
-    description:
-      "Personalized, intuitive service anticipating every preference — luxury that feels personal.",
+      "Flexible, elegantly designed spaces for corporate events, social gatherings, and private celebrations.",
   },
 ];
 
@@ -254,36 +247,32 @@ export function CelestraPage() {
               </p>
               <div className="gold-divider gold-divider-left animate-on-scroll delay-100" />
               <h2
-                className="section-subheading animate-on-scroll delay-200"
+                className="section-subheading animate-on-scroll delay-200 text-justify"
                 style={{ marginBottom: "1.5rem" }}
               >
                 A Celestial Expression of Refined Hospitality
               </h2>
-              <div className="space-y-6 animate-on-scroll delay-300">
-                <p className="body-refined-lg">
+              <div className="space-y-5 animate-on-scroll delay-300 text-justify">
+                <p className="body-refined-lg text-ivory-muted/70">
                   In a world where travel experiences are often routine,
                   Celéstra was envisioned as something brighter — a celestial
                   expression of refined hospitality. The name Celéstra is
                   inspired by celestial, symbolizing light, elevation, and
                   effortless grace.
                 </p>
-                <p className="body-refined-lg">
-                  Celéstra represents destinations that rise above the ordinary
-                  through thoughtful design, warm service, and contemporary
-                  elegance. As a 4-star hospitality brand, Celéstra blends
+                <p className="body-refined-lg text-ivory-muted/70">
+                  As a 4-star hospitality brand, Celéstra blends
                   comfort, style, and sophistication to create experiences that
-                  feel both uplifting and welcoming.
-                </p>
-                <p className="body-refined-lg">
-                  Every Celéstra property is crafted to reflect its surroundings
+                  feel both uplifting and welcoming. Every Celéstra property is crafted to reflect its surroundings
                   while maintaining a distinctive identity — whether overlooking
                   serene coastlines, set within vibrant cities, or located in
                   emerging travel destinations. Each hotel is designed to
                   provide guests with a sense of calm, balance, and modern
                   luxury.
                 </p>
+                
                 <p
-                  className="font-display text-ivory/90 italic mt-3"
+                  className="font-display text-ivory/90 italic mt-3 text-justify"
                   style={{
                     fontFamily: "Instrument Serif, Georgia, serif",
                     fontWeight: 400,
@@ -299,7 +288,7 @@ export function CelestraPage() {
 
             <div className="lg:col-span-5 lg:self-start lg:pt-12 animate-on-scroll-right delay-200">
               <div className="border border-gold/20 p-5 sm:p-8">
-                <p className="eyebrow eyebrow--gold-emphasis mb-4">
+                <p className="eyebrow eyebrow--gold-emphasis mb-4 text-justify">
                   The Celéstra Promise
                 </p>
                 <ul className="space-y-3">
@@ -313,10 +302,10 @@ export function CelestraPage() {
                     const [label, ...rest] = item.split(" — ");
                     const restText = rest.join(" — ");
                     return (
-                      <li key={item} className="flex items-center gap-3">
-                        <span className="w-5 h-px bg-gold flex-shrink-0" />
+                      <li key={item} className="flex items-start gap-3">
+                        <span className="w-5 h-px bg-gold flex-shrink-0 mt-[0.65em]" />
                         <span
-                          className="font-body text-base text-ivory-muted/70"
+                          className="font-body text-base text-ivory-muted/70 min-w-0 flex-1 text-justify"
                           style={{
                             fontFamily:
                               "General Sans, Helvetica Neue, sans-serif",
@@ -441,7 +430,7 @@ export function CelestraPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {features.map((feature, i) => {
               const Icon = feature.icon;
               return (
@@ -453,7 +442,7 @@ export function CelestraPage() {
                   <div className="flex-shrink-0 mt-0.5">
                     <Icon size={18} className="text-gold" />
                   </div>
-                  <div>
+                  <div className="min-w-0 text-justify">
                     <h3
                       className="font-display text-ivory text-base mb-2"
                       style={{

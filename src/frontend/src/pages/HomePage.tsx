@@ -42,7 +42,7 @@ const brands = [
     stars: "★★★★",
     tier: "4★ Premium Hotels",
     description:
-      "Every Celéstra property is crafted as a prestige asset — designed to stand as an architectural signature within its city or landscape. Whether overlooking the ocean, nestled in royal heritage, or rising within a global metropolis, each hotel becomes a symbol of distinction.",
+      "Every Celéstra property is thoughtfully designed as a contemporary hospitality destination — blending modern architecture, intelligent amenities, and refined comfort to meet the needs of today's traveler. With well-appointed spaces for leisure, business, and social gatherings, Celéstra aims to become a preferred destination for vacations, meetings, and everyday stays — where comfort, convenience, and modern hospitality come together seamlessly.",
     ocidCard: "brand.celestra.card",
     ocidBtn: "brand.celestra.button",
     accent: "#c9a84c",
@@ -431,10 +431,10 @@ export function HomePage() {
                     />
                   </div>
 
-                  <div className="p-5 sm:p-6 md:p-7 pt-6 flex-1 flex flex-col">
+                  <div className="p-5 sm:p-6 md:p-7 pt-6 flex-1 flex flex-col text-justify min-w-0">
                     <div className="flex items-baseline justify-between gap-3 mb-1.5">
                       <h3
-                        className="font-display text-ivory"
+                        className="font-display text-ivory text-justify min-w-0 flex-1"
                         style={{
                           fontFamily: "Instrument Serif, Georgia, serif",
                           fontWeight: 400,
@@ -445,7 +445,7 @@ export function HomePage() {
                         {brand.name}
                       </h3>
                       <p
-                        className="star-rating"
+                        className="star-rating flex-shrink-0"
                         style={{
                           textShadow:
                             "0 0 10px rgba(201,168,76,0.8), 0 0 18px rgba(201,168,76,0.6)",
@@ -560,7 +560,7 @@ export function HomePage() {
               style={{
                 fontFamily:
                   '"Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
-                fontWeight: 300,
+                fontWeight: 400,
                 fontSize: "1.3rem",
                 lineHeight: 1.9,
               }}

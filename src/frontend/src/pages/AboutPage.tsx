@@ -242,7 +242,7 @@ export function AboutPage() {
                   >
                     {value.number}
                   </span>
-                  <div className="pt-1 sm:pt-2 min-w-0">
+                  <div className="pt-1 sm:pt-2 min-w-0 text-justify">
                     <h3
                       className="font-display text-ivory mb-3"
                       style={{

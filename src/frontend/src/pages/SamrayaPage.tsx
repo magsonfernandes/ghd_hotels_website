@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import {
-  Armchair,
-  BedDouble,
-  Briefcase,
-  CalendarDays,
-  Coffee,
-  Dumbbell,
+  Crown,
+  Gem,
+  Heart,
+  Sparkles,
+  Star,
+  UtensilsCrossed,
+  Waves,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
@@ -14,41 +15,42 @@ import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 const features = [
   {
-    icon: BedDouble,
-    label: "Modern Rooms & Suites",
+    icon: Gem,
+    label: "Bespoke Suites",
     description:
-      "Thoughtfully designed rooms with premium fixtures, luxurious bedding, and sophisticated finishes.",
+      "Private sanctuaries with layered lighting, bespoke furnishings, and views that restore perspective.",
   },
   {
-    icon: Coffee,
-    label: "All Day Dining Restaurant",
+    icon: UtensilsCrossed,
+    label: "Culinary Artistry",
     description:
-      "Vibrant all-day dining with international and regional cuisines served in a contemporary setting.",
+      "Immersive journeys curated by master chefs, reflecting destination culture and timeless technique.",
   },
   {
-    icon: Briefcase,
-    label: "Business Meeting Spaces",
+    icon: Sparkles,
+    label: "Signature Spa Rituals",
     description:
-      "State-of-the-art meeting rooms and boardrooms equipped with modern technology.",
+      "Holistic sanctuaries rooted in ancient wisdom and modern science; experiences that cannot be replicated.",
   },
   {
-    icon: Armchair,
-    label: "Premium Lounge",
+    icon: Waves,
+    label: "Iconic Pools & Landscapes",
     description:
-      "Exclusive lounge areas for relaxation, networking, and informal business conversations.",
+      "Architecturally landmark infinity pools and settings that define the destination.",
   },
   {
-    icon: Dumbbell,
-    label: "Fitness Center",
+    icon: Crown,
+    label: "Grand Ballrooms & Events",
     description:
-      "Fully equipped, modern fitness facilities with professional equipment and wellness programs.",
+      "Opulent spaces for celebrations that feel once-in-a-lifetime and business that feels regal.",
   },
   {
-    icon: CalendarDays,
-    label: "Event Spaces",
+    icon: Heart,
+    label: "Destination Weddings",
     description:
-      "Flexible, elegantly designed spaces for corporate events, social gatherings, and private celebrations.",
+      "Bespoke celebrations set in architectural masterpieces — unforgettable by design.",
   },
+  
 ];
 
 const SAMRAYA_PHILOSOPHY = {
@@ -209,11 +211,7 @@ export function SamrayaPage() {
                   heritage. Drawing from the architectural elegance, cultural
                   richness, and royal traditions of historic Indian palaces, the
                   brand reinterprets these influences through contemporary
-                  design and modern hospitality standards. Each property is
-                  crafted to evoke refined grandeur—blending expansive
-                  architecture, curated interiors, and thoughtful service to
-                  deliver an experience that is both culturally rich and
-                  globally sophisticated.
+                  design and modern hospitality standards. 
                 </p>
                 <p
                   className="font-display text-ivory/90 italic"
@@ -237,7 +235,7 @@ export function SamrayaPage() {
                 style={{ borderColor: "rgba(184, 151, 90, 0.2)" }}
               >
                 <p
-                  className="eyebrow eyebrow--gold-emphasis mb-4"
+                  className="eyebrow eyebrow--gold-emphasis mb-4 text-justify"
                   style={{ color: "#b8975a" }}
                 >
                   The Samrāya Promise
@@ -253,12 +251,12 @@ export function SamrayaPage() {
                     const [bold, ...rest] = item.split(" — ");
                     const restText = rest.join(" — ");
                     return (
-                      <li key={item} className="flex items-center gap-3">
+                      <li key={item} className="flex items-start gap-3">
                         <span
-                          className="w-5 h-px flex-shrink-0"
+                          className="w-5 h-px flex-shrink-0 mt-[0.65em]"
                           style={{ background: "#b8975a" }}
                         />
-                        <span className="font-body text-base text-ivory-muted/70">
+                        <span className="font-body text-base text-ivory-muted/70 min-w-0 flex-1 text-justify">
                           <strong className="text-ivory/90 font-semibold">
                             {bold}
                           </strong>

@@ -42,21 +42,15 @@ export function Navbar() {
           {/* Logo — left aligned */}
           <Link
             to="/"
-            className="flex items-baseline gap-0.5 sm:gap-1 group flex-shrink-0 text-left"
+            className="flex items-center h-full group flex-shrink-0"
             data-ocid="nav.home.link"
           >
-            <span
-              className="font-display text-2xl sm:text-3xl tracking-widest text-ivory group-hover:text-gold transition-colors duration-300"
-              style={{ fontFamily: "Instrument Serif, Georgia, serif" }}
-            >
-              GHD
-            </span>
-            <span
-              className="font-body text-[0.8rem] sm:text-sm tracking-[0.2em] sm:tracking-[0.3em] text-gold uppercase ml-0.5 sm:ml-1"
-              style={{ fontFamily: "General Sans, Helvetica Neue, sans-serif" }}
-            >
-              Hotels
-            </span>
+            <img
+              src="/assets/logo/GHD HOTELS - Gold Emboss Logo.png"
+              alt="GHD Hotels"
+              className="h-18 sm:h-20 w-auto object-contain transition-opacity duration-300 group-hover:opacity-95"
+              draggable={false}
+            />
           </Link>
 
           {/* Desktop Nav — right aligned */}
