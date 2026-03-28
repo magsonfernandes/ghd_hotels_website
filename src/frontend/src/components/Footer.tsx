@@ -12,20 +12,18 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <div className="mb-6">
-              <span
-                className="font-display text-3xl tracking-widest text-ivory"
-                style={{ fontFamily: "Instrument Serif, Georgia, serif" }}
+              <Link
+                to="/"
+                className="inline-block group"
+                data-ocid="footer.home.logo"
               >
-                GHD
-              </span>
-              <span
-                className="block font-body text-sm tracking-[0.3em] text-gold uppercase mt-1"
-                style={{
-                  fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                }}
-              >
-                Hotels
-              </span>
+                <img
+                  src="/assets/logo/GHD HOTELS - Gold Emboss Logo.png"
+                  alt="GHD Hotels"
+                  className="h-14 sm:h-16 lg:h-[4.5rem] w-auto max-w-[min(100%,280px)] object-contain object-left transition-opacity duration-300 group-hover:opacity-95"
+                  draggable={false}
+                />
+              </Link>
             </div>
             <p
               className="font-body text-sm text-ivory-muted/70 leading-relaxed text-left mb-8"
