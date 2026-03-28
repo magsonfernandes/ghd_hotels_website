@@ -1,5 +1,7 @@
 # Install + Run (Localhost)
 
+pnpm workspace at repo root; the Vite + React app lives in `src/frontend`.
+
 ## Windows (PowerShell)
 
 1) Install Node.js (LTS), then:
