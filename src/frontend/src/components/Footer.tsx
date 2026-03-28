@@ -20,7 +20,7 @@ export function Footer() {
                 <img
                   src="/assets/logo/GHD HOTELS - Gold Emboss Logo.png"
                   alt="GHD Hotels"
-                  className="h-14 sm:h-16 lg:h-[4.5rem] w-auto max-w-[min(100%,280px)] object-contain object-left transition-opacity duration-300 group-hover:opacity-95"
+                  className="h-[4.25rem] sm:h-[6.25rem] lg:h-28 w-auto max-w-[min(100%,360px)] object-contain object-left transition-opacity duration-300 group-hover:opacity-95"
                   draggable={false}
                 />
               </Link>

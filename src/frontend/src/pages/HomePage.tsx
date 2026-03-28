@@ -125,6 +125,18 @@ export function HomePage() {
 
   // Our Hotel Brands — interactive carousel state
   const [activeBrandIndex, setActiveBrandIndex] = useState(1); // index 1 is Samrāya (5★) after swap
+  const [brandsCarouselPaused, setBrandsCarouselPaused] = useState(false);
+
+  const BRANDS_AUTO_ADVANCE_MS = 5500;
+
+  // Auto-advance carousel; pause while pointer is over or focus is inside the viewport
+  useEffect(() => {
+    if (brandsCarouselPaused) return;
+    const t = window.setTimeout(() => {
+      setActiveBrandIndex((prev) => (prev + 1) % brands.length);
+    }, BRANDS_AUTO_ADVANCE_MS);
+    return () => clearTimeout(t);
+  }, [activeBrandIndex, brandsCarouselPaused]);
 
   // Throttle wheel-based carousel navigation so it feels intentional
   const lastWheelTimeRef = useRef(0);
@@ -397,11 +409,20 @@ export function HomePage() {
 
           {/* Carousel viewport */}
           <div
-            className="relative mt-6 sm:mt-8 h-[500px] sm:h-[570px] md:h-[620px] flex items-center justify-center"
+            className="relative mt-6 sm:mt-8 h-[580px] sm:h-[640px] md:h-[720px] flex items-center justify-center"
             style={{ perspective: "1600px" }}
             onWheel={handleBrandWheel}
             onTouchStart={handleBrandTouchStart}
             onTouchEnd={handleBrandTouchEnd}
+            onMouseEnter={() => setBrandsCarouselPaused(true)}
+            onMouseLeave={() => setBrandsCarouselPaused(false)}
+            onFocusCapture={() => setBrandsCarouselPaused(true)}
+            onBlurCapture={(e) => {
+              const next = e.relatedTarget as Node | null;
+              if (!next || !e.currentTarget.contains(next)) {
+                setBrandsCarouselPaused(false);
+              }
+            }}
           >
             {brands.map((brand, i) => (
               <div
@@ -419,10 +440,10 @@ export function HomePage() {
                 style={getBrandPositionStyles(i)}
               >
                 <div
-                  className="glass-card group relative overflow-hidden flex flex-col w-[400px] sm:w-[460px] md:w-[520px] rounded-3xl"
+                  className="glass-card group relative overflow-hidden flex flex-col w-[400px] sm:w-[460px] md:w-[520px] h-[540px] sm:h-[600px] md:h-[680px] rounded-3xl"
                   data-ocid={brand.ocidCard}
                 >
-                  <div className="relative h-56 sm:h-64 md:h-80 overflow-hidden bg-charcoal">
+                  <div className="relative h-56 sm:h-64 md:h-80 flex-shrink-0 overflow-hidden bg-charcoal">
                     <img
                       src={brand.image}
                       alt={brand.name}
@@ -431,7 +452,7 @@ export function HomePage() {
                     />
                   </div>
 
-                  <div className="p-5 sm:p-6 md:p-7 pt-6 flex-1 flex flex-col text-justify min-w-0">
+                  <div className="p-5 sm:p-6 md:p-7 pt-6 flex-1 flex flex-col min-h-0 text-justify min-w-0">
                     <div className="flex items-baseline justify-between gap-3 mb-1.5">
                       <h3
                         className="font-display text-ivory text-justify min-w-0 flex-1"
@@ -466,21 +487,21 @@ export function HomePage() {
                       {brand.tagline}
                     </p>
                     <p
-                      className="font-body text-ivory leading-loose mb-6 flex-1"
-                    style={{
-                      fontFamily:
-                        '"Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
-                      fontWeight: 300,
-                      fontSize: "0.95rem",
-                      lineHeight: 1.85,
-                    }}
+                      className="font-body text-ivory leading-loose mb-4 flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain pr-1"
+                      style={{
+                        fontFamily:
+                          '"Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
+                        fontWeight: 300,
+                        fontSize: "0.95rem",
+                        lineHeight: 1.85,
+                      }}
                     >
                       {brand.description}
                     </p>
 
                     <Link
                       to={brand.to}
-                      className="btn-gold mt-auto"
+                      className="btn-gold mt-auto flex-shrink-0"
                       style={{ fontSize: "0.7rem", letterSpacing: "0.2em" }}
                       data-ocid={brand.ocidBtn}
                       onClick={(e) => {

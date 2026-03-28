@@ -38,7 +38,7 @@ export function Navbar() {
           scrolled ? "nav-solid" : "nav-transparent"
         }`}
       >
-        <div className="w-full px-4 sm:px-6 lg:px-10 flex items-center justify-between h-16 sm:h-20">
+        <div className="w-full px-4 sm:px-6 lg:px-10 flex items-center justify-between h-20 sm:h-28">
           {/* Logo — left aligned */}
           <Link
             to="/"
@@ -48,7 +48,7 @@ export function Navbar() {
             <img
               src="/assets/logo/GHD HOTELS - Gold Emboss Logo.png"
               alt="GHD Hotels"
-              className="h-18 sm:h-20 w-auto object-contain transition-opacity duration-300 group-hover:opacity-95"
+              className="h-[4.25rem] sm:h-[6.25rem] lg:h-28 w-auto max-h-full object-contain object-left transition-opacity duration-300 group-hover:opacity-95"
               draggable={false}
             />
           </Link>
