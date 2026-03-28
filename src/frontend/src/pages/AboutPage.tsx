@@ -164,34 +164,34 @@ export function AboutPage() {
                 <div className="about-logo-track" aria-hidden>
                   <div className="about-logo-group">
                     <img
-                      src="/assets/logo/Celestra logo_Final_png file.png"
+                      src="/assets/logo/Celestra_logo.png"
                       alt=""
                       className="about-logo-item about-logo-item--celestra"
                     />
                     <img
-                      src="/assets/logo/Samrāya logo_Final_png file.png"
+                      src="/assets/logo/Samrāya_logo.png"
                       alt=""
                       className="about-logo-item"
                     />
                     <img
-                      src="/assets/logo/Nivaãra logo_Final_png file.png"
+                      src="/assets/logo/Nivaãra_logo.png"
                       alt=""
                       className="about-logo-item"
                     />
                   </div>
                   <div className="about-logo-group">
                     <img
-                      src="/assets/logo/Celestra logo_Final_png file.png"
+                      src="/assets/logo/Celestra_logo.png"
                       alt=""
                       className="about-logo-item about-logo-item--celestra"
                     />
                     <img
-                      src="/assets/logo/Samrāya logo_Final_png file.png"
+                      src="/assets/logo/Samrāya_logo.png"
                       alt=""
                       className="about-logo-item"
                     />
                     <img
-                      src="/assets/logo/Nivaãra logo_Final_png file.png"
+                      src="/assets/logo/Nivaãra_logo.png"
                       alt=""
                       className="about-logo-item"
                     />
