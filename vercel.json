@@ -1,4 +1,7 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm --filter @caffeine/template-frontend build",
   "outputDirectory": "src/frontend/public",
   "rewrites": [{ "source": "/(.*)", 
   "destination": "/index.html" }]
