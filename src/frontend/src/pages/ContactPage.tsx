@@ -152,7 +152,7 @@ export function ContactPage() {
                         fontWeight: 300,
                       }}
                     >
-                      +91 (0) 832 000 0000
+                      +91 8680008687
                     </a>
                   </div>
                 </div>
