@@ -127,7 +127,7 @@ export function HomePage() {
   const [activeBrandIndex, setActiveBrandIndex] = useState(1); // index 1 is Samrāya (5★) after swap
   const [brandsCarouselPaused, setBrandsCarouselPaused] = useState(false);
 
-  const BRANDS_AUTO_ADVANCE_MS = 4500;
+  const BRANDS_AUTO_ADVANCE_MS = 3500;
 
   // Auto-advance carousel; pause while pointer is over or focus is inside the viewport
   useEffect(() => {
