@@ -145,7 +145,7 @@ export function ContactPage() {
                       Phone
                     </p>
                     <a
-                      href="tel:+910832000000"
+                      href="tel:+918680008687"
                       className="font-body text-ivory-muted/70 text-base hover:text-gold transition-colors duration-300"
                       style={{
                         fontFamily: "General Sans, Helvetica Neue, sans-serif",
