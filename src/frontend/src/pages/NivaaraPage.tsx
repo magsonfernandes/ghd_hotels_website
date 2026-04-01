@@ -119,7 +119,25 @@ export function NivaaraPage() {
     <div className="bg-charcoal min-h-screen nivaara-test-font">
       <HeroSection
         bgImage="/assets/generated/hero-nivaara.dim_1920x1080.png"
-        title="Nivaãra by GHD — Luxury in Motion"
+        title={
+          <>
+            — Nivaãra —
+            <span
+              className="block mt-6 sm:mt-8"
+              style={{
+                fontFamily:
+                  '"Zapfino", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Brush Script MT", cursive',
+                fontSize: "clamp(1.02rem, 2.2vw, 1.8rem)",
+                fontWeight: 400,
+                letterSpacing: "0.02em",
+                textTransform: "none",
+                WebkitTextStroke: "0px transparent",
+              }}
+            >
+              Luxury in Motion
+            </span>
+          </>
+        }
         overlay="dark"
         baseColor="black"
         bottomNote={
@@ -171,9 +189,9 @@ export function NivaaraPage() {
               <div className="space-y-5 animate-on-scroll delay-300 text-justify">
                 <p className="body-refined-lg text-ivory-muted/70">
                   In the rhythm of modern cities, time moves quickly. Meetings
-                  begin early. Flights depart late. Opportunities appear
-                  without warning. Nivaãra was created for those who live within
-                  this momentum.
+                  begin early. Flights depart late. Opportunities appear without
+                  warning. Nivaãra was created for those who live within this
+                  momentum.
                 </p>
                 <p className="body-refined-lg text-ivory-muted/70">
                   Derived from the idea of shelter and restoration, Nivaãra
@@ -183,9 +201,9 @@ export function NivaaraPage() {
                 </p>
                 <p className="body-refined-lg text-ivory-muted/70">
                   Every stay at Nivaãra is intentionally calm and quietly
-                  serene. From muted palettes to gentle lighting and acoustically
-                  softened rooms, the experience feels peaceful—even when the
-                  city outside is moving fast.
+                  serene. From muted palettes to gentle lighting and
+                  acoustically softened rooms, the experience feels
+                  peaceful—even when the city outside is moving fast.
                 </p>
                 <p
                   className="font-display text-ivory/90 italic text-justify"
@@ -245,10 +263,7 @@ export function NivaaraPage() {
       </section>
 
       {/* The Philosophy of Nivaãra */}
-      <section
-        ref={philosophyRef}
-        className="section-pad bg-black relative"
-      >
+      <section ref={philosophyRef} className="section-pad bg-black relative">
         {/* Background image – Buddha, softened behind content */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-65 transition-opacity duration-900 ease-out"
@@ -507,6 +522,35 @@ export function NivaaraPage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* Properties */}
+      <section className="py-12 sm:py-16 bg-black border-t border-gold/10">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <p className="eyebrow eyebrow--gold-emphasis mb-4">Properties</p>
+          <div
+            className="gold-divider mx-auto mb-8"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, #b8975a, transparent)",
+            }}
+          />
+          <ul className="text-left max-w-md mx-auto space-y-4">
+            <li
+              className="font-body text-ivory/90 border border-gold/15 rounded-lg px-5 py-4"
+              style={{
+                fontFamily: "General Sans, Helvetica Neue, sans-serif",
+              }}
+            >
+              <span className="font-display text-gold-light text-lg block mb-1">
+                Nivaara Nerul
+              </span>
+              <span className="text-ivory-muted/70 text-sm tracking-wide">
+                Location: Nerul
+              </span>
+            </li>
+          </ul>
         </div>
       </section>
 

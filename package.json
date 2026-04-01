@@ -14,5 +14,8 @@
   },
   "devDependencies": {
     "sharp": "^0.34.4"
+  },
+  "dependencies": {
+    "resend": "^6.9.4"
   }
 }

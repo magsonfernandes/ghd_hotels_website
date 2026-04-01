@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
+import { HomeSearchBar } from "../components/HomeSearchBar";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 const brands = [
@@ -278,9 +279,10 @@ export function HomePage() {
           </p>
         }
         fadeOnScroll
+        contentClassName="max-w-6xl"
       >
         <div>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="relative z-0 flex flex-col sm:flex-row gap-4 justify-center">
             <button
               type="button"
               onClick={() => scrollTo("philosophy")}
@@ -297,6 +299,9 @@ export function HomePage() {
             >
               Discover Our Brands
             </button>
+          </div>
+          <div className="relative z-20 mt-8 sm:mt-10 md:mt-12 w-full text-left">
+            <HomeSearchBar />
           </div>
         </div>
       </HeroSection>
@@ -341,7 +346,7 @@ export function HomePage() {
               }}
             >
               From the quiet comfort of <strong>Nivaãra</strong>, to the refined elegance of{" "}
-              <strong>Samrāya</strong>, to the iconic luxury of <strong>Celéstra</strong> — each brand reflects a
+              <strong>Celéstra</strong>, to the royal luxury of <strong>Samrāya</strong> — each brand reflects a
               different expression of the same philosophy.
             </p>
             <p

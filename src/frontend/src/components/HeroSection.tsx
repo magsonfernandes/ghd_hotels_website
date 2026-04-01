@@ -21,6 +21,8 @@ interface HeroSectionProps {
   fadeOnScroll?: boolean;
   /** Base color behind the hero image (section bg and bottom fade). Default charcoal (grey); use "black" for pure black. */
   baseColor?: "charcoal" | "black";
+  /** Max width class for the inner content column (default max-w-5xl). */
+  contentClassName?: string;
 }
 
 export function HeroSection({
@@ -38,6 +40,7 @@ export function HeroSection({
   bgBrightness = 1,
   fadeOnScroll = false,
   baseColor = "charcoal",
+  contentClassName = "max-w-5xl",
 }: HeroSectionProps) {
   const [bgOffset, setBgOffset] = useState(0);
   const [bgOpacity, setBgOpacity] = useState(1);
@@ -123,7 +126,9 @@ export function HeroSection({
       />
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 sm:px-6 max-w-5xl mx-auto w-full pt-3 sm:pt-6 md:pt-10">
+      <div
+        className={`relative z-10 text-center px-4 sm:px-6 mx-auto w-full pt-3 sm:pt-6 md:pt-10 ${contentClassName}`}
+      >
         {eyebrow && (
           <p
             className="eyebrow mb-7 opacity-0 animate-fade-up"

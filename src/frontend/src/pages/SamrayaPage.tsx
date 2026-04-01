@@ -50,7 +50,6 @@ const features = [
     description:
       "Bespoke celebrations set in architectural masterpieces — unforgettable by design.",
   },
-  
 ];
 
 const SAMRAYA_PHILOSOPHY = {
@@ -145,7 +144,25 @@ export function SamrayaPage() {
     <div className="bg-black min-h-screen overflow-x-clip">
       <HeroSection
         bgImage="/assets/generated/hero-samraya.dim_1920x1080.png"
-        title="Samrāya — A Realm of Refined Grandeur"
+        title={
+          <>
+            — Samrāya —
+            <span
+              className="block mt-6 sm:mt-8"
+              style={{
+                fontFamily:
+                  '"Zapfino", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Brush Script MT", cursive',
+                fontSize: "clamp(1.02rem, 2.2vw, 1.8rem)",
+                fontWeight: 400,
+                letterSpacing: "0.02em",
+                textTransform: "none",
+                WebkitTextStroke: "0px transparent",
+              }}
+            >
+              A Realm of Refined Grandeur
+            </span>
+          </>
+        }
         overlay="dark"
         baseColor="black"
         bottomNote={
@@ -163,6 +180,7 @@ export function SamrayaPage() {
         }
         fadeOnScroll
         titleStyle={{
+          fontSize: "clamp(4.85rem, 8.4vw, 9.25rem)",
           WebkitTextStroke: "1.3px rgba(0, 0, 0, 0.8)",
           textShadow:
             "0 0 20px rgba(0,0,0,0.75), 0 0 40px rgba(0,0,0,0.6), 0 0 70px rgba(0,0,0,0.85)",
@@ -211,7 +229,7 @@ export function SamrayaPage() {
                   heritage. Drawing from the architectural elegance, cultural
                   richness, and royal traditions of historic Indian palaces, the
                   brand reinterprets these influences through contemporary
-                  design and modern hospitality standards. 
+                  design and modern hospitality standards.
                 </p>
                 <p
                   className="font-display text-ivory/90 italic"
@@ -346,20 +364,21 @@ export function SamrayaPage() {
               className="body-refined-lg font-bold drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
               style={{ color: "rgba(245,240,232,0.92)", fontWeight: 700 }}
             >
-              At Samrāya, luxury is shaped by purpose, precision, and
-              thoughtful hospitality.
+              At Samrāya, luxury is shaped by purpose, precision, and thoughtful
+              hospitality.
             </p>
             <p
               className="body-refined-lg font-bold drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
               style={{ fontWeight: 700 }}
             >
-              Rooted in the timeless Indian principle of <em>Atithi Devo Bhava</em>
-              — the guest is divine — Samrāya interprets India’s heritage
-              through a contemporary lens, creating spaces where grandeur,
-              dignity, and thoughtful service coexist in perfect harmony. As the
-              flagship five-star brand of GHD Hotels, Samrāya is designed to
-              deliver world-class luxury experiences while preserving the warmth
-              and cultural depth of Indian hospitality.
+              Rooted in the timeless Indian principle of{" "}
+              <em>Atithi Devo Bhava</em>— the guest is divine — Samrāya
+              interprets India’s heritage through a contemporary lens, creating
+              spaces where grandeur, dignity, and thoughtful service coexist in
+              perfect harmony. As the flagship five-star brand of GHD Hotels,
+              Samrāya is designed to deliver world-class luxury experiences
+              while preserving the warmth and cultural depth of Indian
+              hospitality.
             </p>
             <p
               className="body-refined-lg font-bold drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"

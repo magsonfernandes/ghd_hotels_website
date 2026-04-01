@@ -62,7 +62,7 @@ const CELESTRA_PHILOSOPHY_PARALLAX = {
   },
   // Couple foreground movement
   couple: {
-    multiplier: 0.10, // parallax strength (a bit stronger than pathway)
+    multiplier: 0.1, // parallax strength (a bit stronger than pathway)
     clampMin: -280,
     clampMax: 200,
   },
@@ -161,7 +161,7 @@ export function CelestraPage() {
         0,
         1,
       );
-      const fadeOutSmooth = Math.pow(fadeOutT, CELESTRA_PHILOSOPHY_FADE.fadeOutEase);
+      const fadeOutSmooth = fadeOutT ** CELESTRA_PHILOSOPHY_FADE.fadeOutEase;
 
       // Pathway: start fading when halfway towards Celéstra Offerings (uses pathwayFadeStartVh / pathwayFadeEndVh)
       const offeringsEl = offeringsRef.current;
@@ -180,21 +180,14 @@ export function CelestraPage() {
       }
       // Smooth pathway fade (avoid double-easing which can look "steppy")
       const pathwayFadeOutSmooth = smoothstep01(pathwayFadeOutT);
-      const opacityRaw =
-        smoothstep01(fadeInT) * pathwayFadeOutSmooth;
-      setPhilosophyBgOpacity(
-        Math.pow(opacityRaw, CELESTRA_PHILOSOPHY_FADE.curvePower),
-      );
+      const opacityRaw = smoothstep01(fadeInT) * pathwayFadeOutSmooth;
+      setPhilosophyBgOpacity(opacityRaw ** CELESTRA_PHILOSOPHY_FADE.curvePower);
       // Couple: no fade-in, only fade-out; full opacity (1) until fade-out zone
       const inFadeOutZone = rect.top < fadeOutStart;
       const coupleOpacityRaw =
-        fadeInT > 0
-          ? inFadeOutZone
-            ? smoothstep01(fadeOutSmooth)
-            : 1
-          : 0;
+        fadeInT > 0 ? (inFadeOutZone ? smoothstep01(fadeOutSmooth) : 1) : 0;
       setPhilosophyCoupleOpacity(
-        Math.pow(coupleOpacityRaw, CELESTRA_PHILOSOPHY_FADE.curvePower),
+        coupleOpacityRaw ** CELESTRA_PHILOSOPHY_FADE.curvePower,
       );
     };
     onScroll();
@@ -209,7 +202,25 @@ export function CelestraPage() {
     >
       <HeroSection
         bgImage="/assets/generated/hero-celestra.dim_1920x1080.png"
-        title="Celéstra — Where Earth Meets the Extraordinary"
+        title={
+          <>
+            — Celéstra —
+            <span
+              className="block mt-6 sm:mt-8"
+              style={{
+                fontFamily:
+                  '"Zapfino", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Brush Script MT", cursive',
+                fontSize: "clamp(1.02rem, 2.2vw, 1.8rem)",
+                fontWeight: 400,
+                letterSpacing: "0.02em",
+                textTransform: "none",
+                WebkitTextStroke: "0px transparent",
+              }}
+            >
+              Where Earth Meets the Extraordinary
+            </span>
+          </>
+        }
         overlay="dark"
         fadeOnScroll
         baseColor="black"
@@ -261,16 +272,16 @@ export function CelestraPage() {
                   effortless grace.
                 </p>
                 <p className="body-refined-lg text-ivory-muted/70">
-                  As a 4-star hospitality brand, Celéstra blends
-                  comfort, style, and sophistication to create experiences that
-                  feel both uplifting and welcoming. Every Celéstra property is crafted to reflect its surroundings
-                  while maintaining a distinctive identity — whether overlooking
-                  serene coastlines, set within vibrant cities, or located in
-                  emerging travel destinations. Each hotel is designed to
-                  provide guests with a sense of calm, balance, and modern
-                  luxury.
+                  As a 4-star hospitality brand, Celéstra blends comfort, style,
+                  and sophistication to create experiences that feel both
+                  uplifting and welcoming. Every Celéstra property is crafted to
+                  reflect its surroundings while maintaining a distinctive
+                  identity — whether overlooking serene coastlines, set within
+                  vibrant cities, or located in emerging travel destinations.
+                  Each hotel is designed to provide guests with a sense of calm,
+                  balance, and modern luxury.
                 </p>
-                
+
                 <p
                   className="font-display text-ivory/90 italic mt-3 text-justify"
                   style={{
@@ -281,7 +292,8 @@ export function CelestraPage() {
                     lineHeight: 1.5,
                   }}
                 >
-                  Celéstra by GHD Hotels — Where Comfort Meets Celestial Elegance.
+                  Celéstra by GHD Hotels — Where Comfort Meets Celestial
+                  Elegance.
                 </p>
               </div>
             </div>
@@ -365,9 +377,10 @@ export function CelestraPage() {
           className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none hidden lg:block"
           style={{
             zIndex: 6,
-            objectPosition: CELESTRA_PHILOSOPHY_PARALLAX.couplePosition.objectPosition,
+            objectPosition:
+              CELESTRA_PHILOSOPHY_PARALLAX.couplePosition.objectPosition,
             transformOrigin: "center bottom",
-            transform: `translate3d(${CELESTRA_PHILOSOPHY_PARALLAX.coupleOffsetPx.x-200}px, ${coupleParallax + CELESTRA_PHILOSOPHY_PARALLAX.coupleOffsetPx.y+200}px, 0) scale(${CELESTRA_PHILOSOPHY_PARALLAX.couplePosition.scale})`,
+            transform: `translate3d(${CELESTRA_PHILOSOPHY_PARALLAX.coupleOffsetPx.x - 200}px, ${coupleParallax + CELESTRA_PHILOSOPHY_PARALLAX.coupleOffsetPx.y + 200}px, 0) scale(${CELESTRA_PHILOSOPHY_PARALLAX.couplePosition.scale})`,
             willChange: "transform",
             opacity: philosophyCoupleOpacity,
           }}
@@ -393,17 +406,17 @@ export function CelestraPage() {
               className="body-refined-lg text-ivory-muted/70"
               style={{ fontWeight: 700 }}
             >
-              True hospitality is not displayed; it is experienced — felt quietly
-              and remembered naturally. A hotel should never overwhelm the
-              traveler, but instead welcome them with ease and intention.
+              True hospitality is not displayed; it is experienced — felt
+              quietly and remembered naturally. A hotel should never overwhelm
+              the traveler, but instead welcome them with ease and intention.
             </p>
             <p
               className="body-refined-lg text-ivory-muted/70"
               style={{ fontWeight: 700 }}
             >
-              At Celéstra, this belief shapes every detail, where balanced design,
-              warm service, and a deep sense of place come together to create
-              environments in which journeys slow down and moments become
+              At Celéstra, this belief shapes every detail, where balanced
+              design, warm service, and a deep sense of place come together to
+              create environments in which journeys slow down and moments become
               meaningful.
             </p>
           </div>

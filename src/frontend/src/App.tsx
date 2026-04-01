@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   Outlet,
   RouterProvider,
@@ -8,17 +7,19 @@ import {
   createRouter,
   useLocation,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Navbar } from "./components/Navbar";
 
 // Scroll to top when the route pathname changes (e.g. clicking a nav link).
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, []);
   return null;
 }
 import { AboutPage } from "./pages/AboutPage";
+import { BookingPage } from "./pages/BookingPage";
 import { CelestraPage } from "./pages/CelestraPage";
 import { ContactPage } from "./pages/ContactPage";
 import { HomePage } from "./pages/HomePage";
@@ -81,6 +82,19 @@ const contactRoute = createRoute({
   component: ContactPage,
 });
 
+const bookingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/booking",
+  component: BookingPage,
+  validateSearch: (raw: Record<string, unknown>) => ({
+    hotelId: String(raw.hotelId ?? ""),
+    checkIn: String(raw.checkIn ?? ""),
+    checkOut: String(raw.checkOut ?? ""),
+    adults: String(raw.adults ?? ""),
+    children: String(raw.children ?? ""),
+  }),
+});
+
 // ── Router ───────────────────────────────────────────────────────────
 const routeTree = rootRoute.addChildren([
   homeRoute,
@@ -90,6 +104,7 @@ const routeTree = rootRoute.addChildren([
   nivaaraRoute,
   visionRoute,
   contactRoute,
+  bookingRoute,
 ]);
 
 const router = createRouter({ routeTree });

@@ -45,21 +45,33 @@ export function ContactPage() {
     setStatus("loading");
     setErrorMsg("");
 
-    const subject = `New enquiry from ${form.name}`;
-    const bodyLines = [
-      `Name: ${form.name}`,
-      `Email: ${form.email}`,
-      `Phone: ${form.phone || "Not provided"}`,
-      "",
-      "Message:",
-      form.message,
-    ];
-    const mailto = `mailto:info@ghdhotels.in?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
-      bodyLines.join("\n"),
-    )}`;
+    try {
+      const res = await fetch("/contact-submit", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          message: form.message,
+        }),
+      });
 
-    window.location.href = mailto;
-    setStatus("idle");
+      if (!res.ok) {
+        const payload = (await res.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        throw new Error(payload?.error || "Failed to send message.");
+      }
+
+      setForm({ name: "", email: "", phone: "", message: "" });
+      setStatus("success");
+    } catch (err) {
+      setErrorMsg(
+        err instanceof Error ? err.message : "Failed to send message.",
+      );
+      setStatus("error");
+    }
   };
 
   return (
@@ -120,9 +132,7 @@ export function ContactPage() {
                     <Mail size={18} className="text-gold" />
                   </div>
                   <div>
-                    <p className="eyebrow eyebrow--gold-emphasis mb-2">
-                      Email
-                    </p>
+                    <p className="eyebrow eyebrow--gold-emphasis mb-2">Email</p>
                     <a
                       href="mailto:info@ghdhotels.in"
                       className="font-body text-ivory-muted/70 text-base hover:text-gold transition-colors duration-300"
@@ -141,18 +151,16 @@ export function ContactPage() {
                     <Phone size={18} className="text-gold" />
                   </div>
                   <div>
-                    <p className="eyebrow eyebrow--gold-emphasis mb-2">
-                      Phone
-                    </p>
+                    <p className="eyebrow eyebrow--gold-emphasis mb-2">Phone</p>
                     <a
-                      href="tel:+918680008687"
+                      href="tel:+918380008687"
                       className="font-body text-ivory-muted/70 text-base hover:text-gold transition-colors duration-300"
                       style={{
                         fontFamily: "General Sans, Helvetica Neue, sans-serif",
                         fontWeight: 300,
                       }}
                     >
-                      +91 8680008687
+                      +91 8380008687
                     </a>
                   </div>
                 </div>
@@ -167,7 +175,10 @@ export function ContactPage() {
                   {[
                     { to: "/samraya", label: "Samrāya — 5★ Luxury Hotels" },
                     { to: "/celestra", label: "Celéstra — 4★ Premium Hotels" },
-                    { to: "/nivaara", label: "Nivaãra — 3★ Smart Comfort Hotels" },
+                    {
+                      to: "/nivaara",
+                      label: "Nivaãra — 3★ Smart Comfort Hotels",
+                    },
                   ].map((brand) => (
                     <Link
                       key={brand.label}
