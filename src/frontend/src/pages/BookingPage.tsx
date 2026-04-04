@@ -1,13 +1,18 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Footer } from "../components/Footer";
 import {
   HomeSearchBar,
   type HomeSearchValues,
   type IsoDate,
 } from "../components/HomeSearchBar";
+import {
+  BookingCheckoutModal,
+  type BookingSearchSnapshot,
+} from "../components/booking/BookingCheckoutModal";
 import { FiltersBar } from "../components/booking/FiltersBar";
 import { RoomCard } from "../components/booking/RoomCard";
+import type { BookingRateSelection } from "../components/booking/bookingRates";
 
 type Hotel = {
   id: string;
@@ -56,11 +61,40 @@ const HOTELS: Hotel[] = [
   },
 ];
 
+const defaultSearch: BookingSearchSnapshot = {
+  checkIn: "",
+  checkOut: "",
+  adults: 2,
+  children: 0,
+};
+
+function readBookingSearch(): BookingSearchSnapshot {
+  try {
+    const raw = sessionStorage.getItem("ghd_booking_search");
+    if (!raw) return defaultSearch;
+    const p = JSON.parse(raw) as Partial<BookingSearchSnapshot>;
+    return {
+      checkIn: typeof p.checkIn === "string" ? p.checkIn : "",
+      checkOut: typeof p.checkOut === "string" ? p.checkOut : "",
+      adults: typeof p.adults === "number" ? p.adults : 2,
+      children: typeof p.children === "number" ? p.children : 0,
+    };
+  } catch {
+    return defaultSearch;
+  }
+}
+
 export function BookingPage() {
   const [filters, setFilters] = useState<{ location: string; brand: string }>({
     location: "",
     brand: "",
   });
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [checkoutSelection, setCheckoutSelection] =
+    useState<BookingRateSelection | null>(null);
+  const [liveSearch, setLiveSearch] = useState<BookingSearchSnapshot>(() =>
+    readBookingSearch(),
+  );
 
   useEffect(() => {
     document.title = "Book a stay | GHD Hotels";
@@ -73,6 +107,21 @@ export function BookingPage() {
       return true;
     });
   }, [filters.brand, filters.location]);
+
+  const handleSearchValuesChange = useCallback((v: HomeSearchValues) => {
+    setLiveSearch({
+      checkIn: v.checkIn,
+      checkOut: v.checkOut,
+      adults: v.adults,
+      children: v.children,
+    });
+  }, []);
+
+  const openCheckout = useCallback((selection: BookingRateSelection) => {
+    setLiveSearch(readBookingSearch());
+    setCheckoutSelection(selection);
+    setCheckoutOpen(true);
+  }, []);
 
   const initialValues = useMemo((): Partial<HomeSearchValues> => {
     try {
@@ -115,7 +164,11 @@ export function BookingPage() {
           </div>
 
           <div className="mb-12">
-            <HomeSearchBar initial={initialValues} onSearch={() => {}} />
+            <HomeSearchBar
+              initial={initialValues}
+              onSearch={() => {}}
+              onValuesChange={handleSearchValuesChange}
+            />
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
@@ -126,8 +179,9 @@ export function BookingPage() {
                   fontFamily: "General Sans, Helvetica Neue, sans-serif",
                 }}
               >
-                {filteredHotels.length} property
-                {filteredHotels.length === 1 ? "" : "ies"} available
+                {filteredHotels.length}{" "}
+                {filteredHotels.length === 1 ? "property" : "properties"}{" "}
+                available
               </p>
             </div>
             <Link to="/" className="btn-gold w-full sm:w-auto text-center">
@@ -142,6 +196,7 @@ export function BookingPage() {
               roomType="Studio Apartment"
               image="/assets/generated/hero-nivaara.dim_1920x1080.png"
               totalInventory={15}
+              onBook={openCheckout}
             />
           ) : (
             <div className="rounded-2xl border border-gold/10 bg-black/30 p-8 text-center">
@@ -152,6 +207,17 @@ export function BookingPage() {
           )}
         </div>
       </section>
+      {checkoutOpen && checkoutSelection ? (
+        <BookingCheckoutModal
+          onClose={() => {
+            setCheckoutOpen(false);
+            setCheckoutSelection(null);
+          }}
+          search={liveSearch}
+          selection={checkoutSelection}
+          roomType="Studio Apartment"
+        />
+      ) : null}
       <Footer />
     </div>
   );

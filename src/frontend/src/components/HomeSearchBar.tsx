@@ -18,6 +18,8 @@ export type { HomeSearchValues, IsoDate };
 export function HomeSearchBar(props?: {
   initial?: Partial<HomeSearchValues>;
   onSearch?: (values: HomeSearchValues) => void;
+  /** Fires whenever dates, guests, or hotel change — use to keep checkout totals in sync */
+  onValuesChange?: (values: HomeSearchValues) => void;
 }) {
   const navigate = useNavigate();
   const [hotelId, setHotelId] = useState(
@@ -54,19 +56,20 @@ export function HomeSearchBar(props?: {
 
   // Persist the current selection so it can be reused on the Reserve page.
   useEffect(() => {
+    const payload: HomeSearchValues = {
+      hotelId,
+      checkIn,
+      checkOut,
+      adults,
+      children,
+    };
     try {
-      const payload: HomeSearchValues = {
-        hotelId,
-        checkIn,
-        checkOut,
-        adults,
-        children,
-      };
       sessionStorage.setItem("ghd_booking_search", JSON.stringify(payload));
     } catch {
       // Ignore (private mode / blocked storage)
     }
-  }, [hotelId, checkIn, checkOut, adults, children]);
+    props?.onValuesChange?.(payload);
+  }, [hotelId, checkIn, checkOut, adults, children, props?.onValuesChange]);
 
   useEffect(() => {
     if (checkIn && checkOut && checkOut < checkIn) {

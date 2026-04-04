@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Booking checkout: native <dialog> reset + dimmed backdrop */
+.booking-checkout-dialog {
+  margin: auto;
+  padding: 0;
+}
+.booking-checkout-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+}
+
 @layer base {
   :root {
     --radius: 0.25rem;
@@ -477,12 +486,6 @@ section {
     0 1px 3px rgba(0, 0, 0, 0.6);
   -webkit-text-stroke: 0.45px rgba(62, 50, 24, 0.55);
   paint-order: stroke fill;
-}
-
-/* Conceptual-image legal line — thin weight, dim (heroes, brands, footer) */
-.conceptual-disclaimer {
-  font-weight: 100;
-  color: #7d7970;
 }
 
 /* Footer: legal strip spacing (overrides layout utilities that zero padding) */

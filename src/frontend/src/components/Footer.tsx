@@ -201,7 +201,7 @@ export function Footer() {
             © {year} GHD Hotels. All rights reserved.
           </p>
           <p
-            className="font-body text-sm text-ivory-muted/40 tracking-wider leading-relaxed text-left sm:text-right sm:flex-1 sm:min-w-0"
+            className="font-body text-xs text-ivory-muted/40 tracking-wider leading-relaxed text-left sm:text-right sm:flex-1 sm:min-w-0"
             style={{ fontFamily: "General Sans, Helvetica Neue, sans-serif" }}
           >
             Disclaimer: The images shown are conceptual representations based on

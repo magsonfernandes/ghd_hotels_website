@@ -1,6 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { RoomOptionRow } from "./RoomOptionRow";
+import {
+  type BookingRateSelection,
+  NIVAARA_STUDIO_RATES,
+} from "./bookingRates";
 import { useInventoryManager } from "./useInventoryManager";
 
 export function RoomCard(props: {
@@ -9,13 +13,22 @@ export function RoomCard(props: {
   roomType: string;
   image: string;
   totalInventory: number;
+  onBook?: (selection: BookingRateSelection) => void;
 }) {
   const inv = useInventoryManager(props.totalInventory);
 
   const totalSelected = inv.selectedTotal;
 
   const onBook = () => {
-    // Placeholder — later we’ll route to checkout with selected qty + dates
+    if (props.onBook) {
+      props.onBook({
+        roomOnly: inv.selectedRooms.roomOnly,
+        breakfast: inv.selectedRooms.breakfast,
+        roomOnlyPerNight: NIVAARA_STUDIO_RATES.roomOnly.discounted,
+        breakfastPerNight: NIVAARA_STUDIO_RATES.breakfast.discounted,
+      });
+      return;
+    }
     // eslint-disable-next-line no-alert
     alert(
       `Booked — Room Only: ${inv.selectedRooms.roomOnly}, Breakfast: ${inv.selectedRooms.breakfast} (Remaining: ${inv.remainingInventory})`,
@@ -103,8 +116,8 @@ export function RoomCard(props: {
               title="Room Only"
               badge="Basic Discount"
               badgeTone="muted"
-              originalPrice={7500}
-              discountedPrice={5999}
+              originalPrice={NIVAARA_STUDIO_RATES.roomOnly.original}
+              discountedPrice={NIVAARA_STUDIO_RATES.roomOnly.discounted}
               quantity={inv.selectedRooms.roomOnly}
               maxQuantity={inv.maxSelectableFor("roomOnly")}
               onQuantityChange={(n) => inv.setQuantity("roomOnly", n)}
@@ -115,8 +128,8 @@ export function RoomCard(props: {
               title="Breakfast Included"
               badge="Best Value"
               badgeTone="gold"
-              originalPrice={9200}
-              discountedPrice={7699}
+              originalPrice={NIVAARA_STUDIO_RATES.breakfast.original}
+              discountedPrice={NIVAARA_STUDIO_RATES.breakfast.discounted}
               quantity={inv.selectedRooms.breakfast}
               maxQuantity={inv.maxSelectableFor("breakfast")}
               onQuantityChange={(n) => inv.setQuantity("breakfast", n)}

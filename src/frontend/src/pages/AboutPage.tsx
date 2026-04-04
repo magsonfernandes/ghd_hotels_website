@@ -30,6 +30,9 @@ const values = [
   },
 ];
 
+const ABOUT_COUPLE_HERO_IMAGE =
+  "/assets/generated/couple%20laughing.png";
+
 const ABOUT_SECTION_FADE = {
   fadeInStartVh: 0.9,
   fadeInEndVh: 0.1,
@@ -92,7 +95,7 @@ export function AboutPage() {
   return (
     <div className="bg-charcoal min-h-screen">
       <HeroSection
-        bgImage="/assets/generated/hero-about.dim_1920x1080.png"
+        bgImage={ABOUT_COUPLE_HERO_IMAGE}
         title="About GHD Hotels"
         overlay="dark"
         fadeOnScroll
@@ -101,19 +104,6 @@ export function AboutPage() {
           textShadow:
             "0 0 20px rgba(0,0,0,0.75), 0 0 40px rgba(0,0,0,0.6), 0 0 70px rgba(0,0,0,0.85)",
         }}
-        bottomNote={
-          <p
-            className="conceptual-disclaimer font-body text-left text-[0.58rem] sm:text-[0.64rem] md:text-[0.7rem]"
-            style={{
-              fontFamily:
-                '"Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
-              letterSpacing: "0.03em",
-              lineHeight: 1.35,
-            }}
-          >
-            Images are conceptual and may differ from final development.
-          </p>
-        }
       />
 
       {/* Mission Section */}
@@ -268,8 +258,7 @@ export function AboutPage() {
         ref={quoteRef}
         className="section-pad parallax-section relative text-center"
         style={{
-          backgroundImage:
-            "url(/assets/generated/hero-about.dim_1920x1080.png)",
+          backgroundImage: `url(${ABOUT_COUPLE_HERO_IMAGE})`,
         }}
       >
         {/* No vignette overlay (intentionally removed site-wide) */}

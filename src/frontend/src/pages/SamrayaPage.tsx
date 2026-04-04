@@ -165,19 +165,6 @@ export function SamrayaPage() {
         }
         overlay="dark"
         baseColor="black"
-        bottomNote={
-          <p
-            className="conceptual-disclaimer font-body text-left text-[0.58rem] sm:text-[0.64rem] md:text-[0.7rem]"
-            style={{
-              fontFamily:
-                '"Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
-              letterSpacing: "0.03em",
-              lineHeight: 1.35,
-            }}
-          >
-            Images are conceptual and may differ from final development.
-          </p>
-        }
         fadeOnScroll
         titleStyle={{
           fontSize: "clamp(4.85rem, 8.4vw, 9.25rem)",

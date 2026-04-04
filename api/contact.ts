@@ -25,7 +25,7 @@ export default async function handler(req: Request): Promise<Response> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return badRequest("Missing RESEND_API_KEY");
 
-  const to = process.env.CONTACT_TO || "info@ghdhotels.in";
+  const to = process.env.CONTACT_TO || "ghdhotels@gmail.com";
   const from = process.env.CONTACT_FROM;
   if (!from) return badRequest("Missing CONTACT_FROM");
 
