@@ -111,7 +111,7 @@ export function CelestraPage() {
   const [philosophyCoupleOpacity, setPhilosophyCoupleOpacity] = useState(0);
 
   useEffect(() => {
-    document.title = "Celéstra by GHD – Premium Hospitality | 4★ Hotels";
+    document.title = "Celéstra by GHD – Premium Hospitality";
   }, []);
 
   useEffect(() => {
@@ -239,7 +239,6 @@ export function CelestraPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-0">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-16 items-start">
             <div className="lg:col-span-7">
-              <p className="star-rating star-rating--brand mb-2">★★★★</p>
               <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll">
                 The Premium Brand
               </p>

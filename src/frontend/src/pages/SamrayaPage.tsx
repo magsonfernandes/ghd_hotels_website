@@ -92,7 +92,7 @@ export function SamrayaPage() {
   const [philosophyFade, setPhilosophyFade] = useState(0);
 
   useEffect(() => {
-    document.title = "Samrāya by GHD – Flagship Luxury | 5★ Hotels";
+    document.title = "Samrāya by GHD – Flagship Luxury";
   }, []);
 
   useEffect(() => {
@@ -179,7 +179,6 @@ export function SamrayaPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-0">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-center">
             <div className="lg:col-span-7 text-justify">
-              <p className="star-rating star-rating--brand mb-2">★★★★★</p>
               <p
                 className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
                 style={{ color: "#b8975a" }}

@@ -7,7 +7,16 @@ import {
   useRef,
   useState,
 } from "react";
-import { BOOKING_TAX_RATE, type BookingRateSelection } from "./bookingRates";
+import {
+  BOOKING_TAX_RATE,
+  type BookingRateSelection,
+  perGuestMealsPerNightTotal,
+} from "./bookingRates";
+import {
+  type RoomOccupancy,
+  computeOccupancySurcharges,
+  defaultRoomOccupancy,
+} from "./roomOccupancy";
 
 export type { BookingRateSelection };
 
@@ -16,6 +25,7 @@ export type BookingSearchSnapshot = {
   checkOut: string;
   adults: number;
   children: number;
+  rooms: RoomOccupancy[];
 };
 
 function formatInr(amount: number) {
@@ -59,7 +69,6 @@ export function BookingCheckoutModal(props: {
   onClose: () => void;
   search: BookingSearchSnapshot;
   selection: BookingRateSelection;
-  roomType: string;
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -86,15 +95,39 @@ export function BookingCheckoutModal(props: {
   );
 
   const pricing = useMemo(() => {
-    const { roomOnly, breakfast, roomOnlyPerNight, breakfastPerNight } =
-      props.selection;
-    const roomSub =
-      roomOnly * roomOnlyPerNight * nights +
-      breakfast * breakfastPerNight * nights;
-    const taxes = Math.round(roomSub * BOOKING_TAX_RATE * 100) / 100;
-    const total = Math.round((roomSub + taxes) * 100) / 100;
-    return { roomSub, taxes, total };
-  }, [props.selection, nights]);
+    const sel = props.selection;
+    const roomCount = sel.rooms.reduce((s, r) => s + r.quantity, 0);
+    const roomBaseSub = sel.rooms.reduce(
+      (s, r) => s + r.quantity * r.baseRatePerNight * nights,
+      0,
+    );
+    const rooms = props.search.rooms?.length
+      ? props.search.rooms
+      : [defaultRoomOccupancy()];
+    const adults = rooms.reduce((s, r) => s + r.adults, 0);
+    const children = rooms.reduce((s, r) => s + r.children, 0);
+    const mealsSub = perGuestMealsPerNightTotal({
+      adults,
+      children,
+      meals: sel.meals,
+    }) * nights;
+    const roomSub = roomBaseSub + mealsSub;
+    const occ = computeOccupancySurcharges(rooms, nights);
+    const surcharges = occ.surchargesSubtotal;
+    const taxable = roomSub + surcharges;
+    const taxes = Math.round(taxable * BOOKING_TAX_RATE * 100) / 100;
+    const total = Math.round((taxable + taxes) * 100) / 100;
+    return {
+      roomSub,
+      roomBaseSub,
+      mealsSub,
+      surcharges,
+      occ,
+      taxes,
+      total,
+      roomCount,
+    };
+  }, [props.selection, props.search.rooms, nights]);
 
   const checkInDate = parseISODate(props.search.checkIn);
   const checkOutDate = parseISODate(props.search.checkOut);
@@ -106,12 +139,16 @@ export function BookingCheckoutModal(props: {
         : `${nights} night${nights === 1 ? "" : "s"}`;
 
   const guestLine = useMemo(() => {
+    const n = props.search.rooms?.length ?? 0;
     const a = props.search.adults;
     const c = props.search.children;
-    const parts = [`${a} Adult${a === 1 ? "" : "s"}`];
-    if (c > 0) parts.push(`${c} Child${c === 1 ? "" : "ren"}`);
-    return parts.join(", ");
-  }, [props.search.adults, props.search.children]);
+    const parts = [
+      `${n || 1} room${n === 1 ? "" : "s"}`,
+      `${a} adult${a === 1 ? "" : "s"}`,
+    ];
+    if (c > 0) parts.push(`${c} child${c === 1 ? "" : "ren"}`);
+    return parts.join(" · ");
+  }, [props.search.adults, props.search.children, props.search.rooms?.length]);
 
   const resetForm = useCallback(() => {
     setFirstName("");
@@ -176,9 +213,13 @@ export function BookingCheckoutModal(props: {
     props.onClose();
   };
 
-  const { roomOnly, breakfast, roomOnlyPerNight, breakfastPerNight } =
-    props.selection;
-  const roomPolicyLabel = `Room 1 ${props.roomType}, ${props.roomType}`;
+  const sel = props.selection;
+  const roomPolicyLabel = useMemo(() => {
+    const parts = sel.rooms
+      .filter((r) => r.quantity > 0)
+      .map((r) => `${r.quantity} × ${r.categoryLabel}`);
+    return parts.length ? parts.join(" · ") : "Room selection";
+  }, [sel.rooms]);
 
   return (
     <dialog
@@ -568,9 +609,18 @@ export function BookingCheckoutModal(props: {
                 >
                   Price Details
                 </h3>
-                <p className="text-sm font-medium text-charcoal leading-snug">
-                  {props.roomType}, {props.roomType}
-                </p>
+                <div className="space-y-1">
+                  {sel.rooms
+                    .filter((r) => r.quantity > 0)
+                    .map((r) => (
+                      <p
+                        key={r.categoryId}
+                        className="text-sm font-medium text-charcoal leading-snug"
+                      >
+                        {r.quantity} × {r.categoryLabel}
+                      </p>
+                    ))}
+                </div>
                 <p className="mt-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-gold">
                   Book Direct
                 </p>
@@ -579,14 +629,32 @@ export function BookingCheckoutModal(props: {
                 </p>
                 <p className="text-xs text-charcoal/55 mt-1">
                   {nights} night{nights === 1 ? "" : "s"} stay
-                  {roomOnly > 0 && breakfast > 0
-                    ? " · mixed rates"
-                    : roomOnly > 0
-                      ? ` · ${formatInr(roomOnlyPerNight)} / room / night`
-                      : breakfast > 0
-                        ? ` · ${formatInr(breakfastPerNight)} / room / night`
-                        : ""}
+                  {pricing.roomCount > 0
+                    ? ` · ${formatInr(
+                        pricing.roomSub / Math.max(1, pricing.roomCount) / nights,
+                      )} avg / room / night`
+                    : ""}
                 </p>
+                {pricing.surcharges > 0 ? (
+                  <div className="my-3 space-y-1.5 border-t border-charcoal/10 pt-3 text-xs text-charcoal/70">
+                    {pricing.occ.extraPersonAmount > 0 ? (
+                      <div className="flex justify-between gap-2">
+                        <span>Extra guests (3rd / 4th)</span>
+                        <span className="font-medium text-charcoal">
+                          {formatInr(pricing.occ.extraPersonAmount)}
+                        </span>
+                      </div>
+                    ) : null}
+                    {pricing.occ.childOver6Amount > 0 ? (
+                      <div className="flex justify-between gap-2">
+                        <span>Children aged 7–12</span>
+                        <span className="font-medium text-charcoal">
+                          {formatInr(pricing.occ.childOver6Amount)}
+                        </span>
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
                 <div className="my-4 border-t border-charcoal/10 pt-4 flex justify-between gap-2 text-sm">
                   <span className="text-charcoal/65">Taxes and fees</span>
                   <span className="font-medium text-charcoal">
@@ -612,22 +680,20 @@ export function BookingCheckoutModal(props: {
                     </p>
                   </div>
                 </div>
-                {(roomOnly > 0 || breakfast > 0) && (
+                {pricing.roomCount > 0 && (
                   <div className="mt-4 space-y-2 text-xs text-charcoal/60 border-t border-charcoal/10 pt-4">
-                    {roomOnly > 0 && (
-                      <p>
-                        Room Only × {roomOnly} × {nights} night
-                        {nights === 1 ? "" : "s"} —{" "}
-                        {formatInr(roomOnly * roomOnlyPerNight * nights)}
-                      </p>
-                    )}
-                    {breakfast > 0 && (
-                      <p>
-                        Breakfast included × {breakfast} × {nights} night
-                        {nights === 1 ? "" : "s"} —{" "}
-                        {formatInr(breakfast * breakfastPerNight * nights)}
-                      </p>
-                    )}
+                    {sel.rooms.map((r) => {
+                      const baseSubtotal = r.quantity * r.baseRatePerNight * nights;
+                      return (
+                        <p key={`bk-base-${r.categoryId}`}>
+                          {r.categoryLabel} room rate × {r.quantity} × {nights}{" "}
+                          night{nights === 1 ? "" : "s"} — {formatInr(baseSubtotal)}
+                        </p>
+                      );
+                    })}
+                    {pricing.mealsSub > 0 ? (
+                      <p>Meals add-on — {formatInr(pricing.mealsSub)}</p>
+                    ) : null}
                   </div>
                 )}
                 <button
@@ -635,7 +701,7 @@ export function BookingCheckoutModal(props: {
                   onClick={props.onClose}
                   className="mt-5 w-full rounded-lg border border-gold/40 bg-transparent py-2.5 text-sm font-medium text-charcoal transition hover:bg-gold/10"
                 >
-                  Add A Room
+                  Edit rooms &amp; categories
                 </button>
               </div>
             </aside>

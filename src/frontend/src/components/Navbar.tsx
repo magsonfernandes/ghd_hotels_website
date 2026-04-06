@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const navLinks = [
   { to: "/", label: "Home", ocid: "nav.home.link" },
   { to: "/about", label: "About", ocid: "nav.about.link" },
-  // Swap brand positioning: Samrāya as 5★ first, Celéstra as 4★ second
+  // Swap brand positioning: Samrāya first, Celéstra second
   { to: "/samraya", label: "Samrāya", ocid: "nav.samraya.link" },
   { to: "/celestra", label: "Celéstra", ocid: "nav.celestra.link" },
   { to: "/nivaara", label: "Nivaãra", ocid: "nav.nivaara.link" },

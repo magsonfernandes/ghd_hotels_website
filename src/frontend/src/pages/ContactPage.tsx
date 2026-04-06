@@ -173,11 +173,11 @@ export function ContactPage() {
                 </p>
                 <div className="flex flex-col gap-3">
                   {[
-                    { to: "/samraya", label: "Samrāya — 5★ Luxury Hotels" },
-                    { to: "/celestra", label: "Celéstra — 4★ Premium Hotels" },
+                    { to: "/samraya", label: "Samrāya — Luxury Hotels" },
+                    { to: "/celestra", label: "Celéstra — Premium Hotels" },
                     {
                       to: "/nivaara",
-                      label: "Nivaãra — 3★ Smart Comfort Hotels",
+                      label: "Nivaãra — Smart Comfort Hotels",
                     },
                   ].map((brand) => (
                     <Link

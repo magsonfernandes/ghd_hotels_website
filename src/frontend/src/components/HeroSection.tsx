@@ -23,6 +23,8 @@ interface HeroSectionProps {
   baseColor?: "charcoal" | "black";
   /** Max width class for the inner content column (default max-w-5xl). */
   contentClassName?: string;
+  /** Allow dropdowns (search bar) to extend past hero bottom; raises stacking above following sections */
+  allowSearchOverflow?: boolean;
 }
 
 export function HeroSection({
@@ -41,6 +43,7 @@ export function HeroSection({
   fadeOnScroll = false,
   baseColor = "charcoal",
   contentClassName = "max-w-5xl",
+  allowSearchOverflow = false,
 }: HeroSectionProps) {
   const [bgOffset, setBgOffset] = useState(0);
   const [bgOpacity, setBgOpacity] = useState(1);
@@ -68,7 +71,7 @@ export function HeroSection({
 
   return (
     <section
-      className={`hero-section snap-section${baseColor === "black" ? " hero-section--black" : ""}`}
+      className={`hero-section snap-section${baseColor === "black" ? " hero-section--black" : ""}${allowSearchOverflow ? " hero-section--search-visible" : ""}`}
     >
       {/* Wrapper so opacity is applied to the whole background layer; fade is impossible to miss */}
       <div

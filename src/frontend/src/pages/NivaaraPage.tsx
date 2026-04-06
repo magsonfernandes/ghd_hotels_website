@@ -62,7 +62,7 @@ export function NivaaraPage() {
   };
 
   useEffect(() => {
-    document.title = "Nivaãra by GHD – Smart Comfort | 3★ Hotels";
+    document.title = "Nivaãra by GHD – Smart Comfort";
   }, []);
 
   useEffect(() => {
@@ -153,10 +153,9 @@ export function NivaaraPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-0">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-16 items-center">
             <div className="lg:col-span-7">
-              <p className="star-rating star-rating--brand mb-2">★★★</p>
               <p
                 className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
-                style={{ color: "#c9a84c" }}
+                style={{ color: "#b8975a" }}
               >
                 The Smart Comfort Brand
               </p>
@@ -164,7 +163,7 @@ export function NivaaraPage() {
                 className="gold-divider gold-divider-left animate-on-scroll delay-100"
                 style={{
                   background:
-                    "linear-gradient(90deg, transparent, #a89070, transparent)",
+                    "linear-gradient(90deg, transparent, #b8975a, transparent)",
                 }}
               />
               <h2
@@ -282,7 +281,7 @@ export function NivaaraPage() {
           <div className="text-center mb-12 sm:mb-16">
             <p
               className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
-              style={{ color: "#c9a84c" }}
+              style={{ color: "#b8975a" }}
             >
               The Philosophy of Nivaãra
             </p>
@@ -290,7 +289,7 @@ export function NivaaraPage() {
               className="gold-divider animate-on-scroll delay-100"
               style={{
                 background:
-                  "linear-gradient(90deg, transparent, #a89070, transparent)",
+                  "linear-gradient(90deg, transparent, #b8975a, transparent)",
               }}
             />
             <h2 className="section-heading animate-on-scroll delay-200">
@@ -455,7 +454,7 @@ export function NivaaraPage() {
           <div className="text-center mb-12 sm:mb-16">
             <p
               className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
-              style={{ color: "#c9a84c" }}
+              style={{ color: "#b8975a" }}
             >
               Nivaãra Offerings
             </p>
@@ -463,7 +462,7 @@ export function NivaaraPage() {
               className="gold-divider animate-on-scroll delay-100"
               style={{
                 background:
-                  "linear-gradient(90deg, transparent, #a89070, transparent)",
+                  "linear-gradient(90deg, transparent, #b8975a, transparent)",
               }}
             />
             <h2 className="section-heading animate-on-scroll delay-200">
@@ -484,7 +483,7 @@ export function NivaaraPage() {
                   }}
                 >
                   <div className="flex-shrink-0 mt-0.5">
-                    <Icon size={18} style={{ color: "#c9a84c" }} />
+                    <Icon size={18} style={{ color: "#b8975a" }} />
                   </div>
                   <div className="min-w-0 text-justify">
                     <h3

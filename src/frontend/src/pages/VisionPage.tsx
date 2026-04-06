@@ -12,7 +12,7 @@ const pillars = [
     title: "Carefully Designed Hotel Architecture",
     description:
       "Every GHD property begins with a vision — not just of a building, but of an experience. Our architectural approach engages the finest design studios to create hotels that are as much cultural landmarks as they are places to stay. Each property responds to its geography, climate, and context, resulting in structures that belong to their location while transcending it.",
-    accentColor: "#c9a84c",
+    accentColor: "#b8975a",
   },
   {
     number: "II",
@@ -36,7 +36,7 @@ const pillars = [
     title: "Long Term Hospitality Vision",
     description:
       "GHD Hotels is building a hospitality portfolio with generational ambition. We are not developing hotels for quick returns but for lasting legacies. Our properties are designed to be iconic, enduring, and continually evolving. The GHD brand is being built to stand among the world's most respected hospitality names — a vision we pursue with patience and conviction.",
-    accentColor: "#c9a84c",
+    accentColor: "#b8975a",
   },
 ];
 
@@ -308,14 +308,14 @@ export function VisionPage() {
                       fontFamily: "General Sans, Helvetica Neue, sans-serif",
                       color:
                         item.status === "In Progress"
-                          ? "#c9a84c"
+                          ? "#b8975a"
                           : item.status === "Coming Soon"
-                            ? "#a89070"
+                            ? "#b8975a"
                             : "rgba(212,207,198,0.4)",
                       borderColor:
                         item.status === "In Progress"
-                          ? "rgba(201, 168, 76, 0.3)"
-                          : "rgba(201, 168, 76, 0.1)",
+                          ? "rgba(184, 151, 90, 0.3)"
+                          : "rgba(184, 151, 90, 0.1)",
                       letterSpacing: "0.1em",
                     }}
                   >

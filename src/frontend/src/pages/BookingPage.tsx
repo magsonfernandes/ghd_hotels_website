@@ -5,6 +5,7 @@ import {
   HomeSearchBar,
   type HomeSearchValues,
   type IsoDate,
+  parseHomeSearchFromStorage,
 } from "../components/HomeSearchBar";
 import {
   BookingCheckoutModal,
@@ -13,6 +14,18 @@ import {
 import { FiltersBar } from "../components/booking/FiltersBar";
 import { RoomCard } from "../components/booking/RoomCard";
 import type { BookingRateSelection } from "../components/booking/bookingRates";
+import {
+  MEAL_PRICE_PER_ADULT,
+  MEAL_PRICE_PER_CHILD,
+  ROOM_CATEGORIES,
+  type MealSelection,
+  type RoomCategoryId,
+} from "../components/booking/bookingRates";
+import {
+  defaultRoomOccupancy,
+  normalizeRoomsList,
+  totalGuestsFromRooms,
+} from "../components/booking/roomOccupancy";
 
 type Hotel = {
   id: string;
@@ -42,7 +55,7 @@ const HOTELS: Hotel[] = [
     name: "Samrāya Goa (Concept)",
     brand: "samraya",
     location: "nerul",
-    tagline: "Samrāya by GHD — 5★ Luxury",
+    tagline: "Samrāya by GHD — Luxury",
     description:
       "Royal hospitality, intuitive privacy, and elevated experiences — conceptual listing while development is underway.",
     image: "/assets/generated/hero-samraya.dim_1920x1080.png",
@@ -53,7 +66,7 @@ const HOTELS: Hotel[] = [
     name: "Celéstra Goa (Concept)",
     brand: "celestra",
     location: "nerul",
-    tagline: "Celéstra by GHD — 4★ Premium",
+    tagline: "Celéstra by GHD — Premium",
     description:
       "Contemporary hospitality with intelligent amenities and refined comfort — conceptual listing while development is underway.",
     image: "/assets/generated/hero-celestra.dim_1920x1080.png",
@@ -66,18 +79,52 @@ const defaultSearch: BookingSearchSnapshot = {
   checkOut: "",
   adults: 2,
   children: 0,
+  rooms: [defaultRoomOccupancy()],
 };
+
+const defaultMeals = (): MealSelection => ({
+  breakfast: true,
+  lunch: false,
+  dinner: false,
+});
+
+function countByCategory(assignments: RoomCategoryId[]): Record<RoomCategoryId, number> {
+  return { "studio-apartment": assignments.length };
+}
+
+function parseISODate(s: string): Date | null {
+  if (!s) return null;
+  const d = new Date(`${s}T12:00:00`);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function nightsBetween(checkIn: string, checkOut: string): number {
+  const a = parseISODate(checkIn);
+  const b = parseISODate(checkOut);
+  if (!a || !b || b <= a) return 1;
+  return Math.max(1, Math.round((b.getTime() - a.getTime()) / 86_400_000));
+}
 
 function readBookingSearch(): BookingSearchSnapshot {
   try {
     const raw = sessionStorage.getItem("ghd_booking_search");
     if (!raw) return defaultSearch;
-    const p = JSON.parse(raw) as Partial<BookingSearchSnapshot>;
+    const p = parseHomeSearchFromStorage(raw);
+    if (!p?.rooms?.length) {
+      return {
+        ...defaultSearch,
+        checkIn: typeof p?.checkIn === "string" ? p.checkIn : "",
+        checkOut: typeof p?.checkOut === "string" ? p.checkOut : "",
+      };
+    }
+    const rooms = normalizeRoomsList(p.rooms);
+    const t = totalGuestsFromRooms(rooms);
     return {
       checkIn: typeof p.checkIn === "string" ? p.checkIn : "",
       checkOut: typeof p.checkOut === "string" ? p.checkOut : "",
-      adults: typeof p.adults === "number" ? p.adults : 2,
-      children: typeof p.children === "number" ? p.children : 0,
+      adults: t.adults,
+      children: t.children,
+      rooms,
     };
   } catch {
     return defaultSearch;
@@ -95,6 +142,8 @@ export function BookingPage() {
   const [liveSearch, setLiveSearch] = useState<BookingSearchSnapshot>(() =>
     readBookingSearch(),
   );
+  const [meals, setMeals] = useState<MealSelection>(defaultMeals);
+  const [roomAssignments, setRoomAssignments] = useState<RoomCategoryId[]>(() => ["studio-apartment"]);
 
   useEffect(() => {
     document.title = "Book a stay | GHD Hotels";
@@ -109,34 +158,84 @@ export function BookingPage() {
   }, [filters.brand, filters.location]);
 
   const handleSearchValuesChange = useCallback((v: HomeSearchValues) => {
+    const t = totalGuestsFromRooms(v.rooms);
     setLiveSearch({
       checkIn: v.checkIn,
       checkOut: v.checkOut,
-      adults: v.adults,
-      children: v.children,
+      adults: t.adults,
+      children: t.children,
+      rooms: v.rooms,
     });
   }, []);
 
-  const openCheckout = useCallback((selection: BookingRateSelection) => {
+  const totalRoomsRequested = Math.max(1, liveSearch.rooms?.length ?? 1);
+  const nights = useMemo(
+    () => nightsBetween(liveSearch.checkIn, liveSearch.checkOut),
+    [liveSearch.checkIn, liveSearch.checkOut],
+  );
+  const inventories: Record<RoomCategoryId, number> = {
+    "studio-apartment": 15,
+  };
+
+  const roomsList = liveSearch.rooms?.length
+    ? liveSearch.rooms
+    : [defaultRoomOccupancy()];
+
+  // Keep per-room assignments aligned with the rooms list length.
+  useEffect(() => {
+    setRoomAssignments((prev) => {
+      const next: RoomCategoryId[] = [];
+      for (let i = 0; i < totalRoomsRequested; i++) {
+        next[i] = prev[i] ?? "studio-apartment";
+      }
+      return next;
+    });
+  }, [totalRoomsRequested]);
+
+  const counts = useMemo(() => countByCategory(roomAssignments), [roomAssignments]);
+  const selectedRoomsTotal = roomAssignments.length;
+
+  const canAssignRoomToCategory = (_index: number, nextId: RoomCategoryId) =>
+    nextId === "studio-apartment";
+
+  const toggleMeal = (key: keyof MealSelection) => {
+    setMeals((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const openCheckout = useCallback(() => {
     setLiveSearch(readBookingSearch());
-    setCheckoutSelection(selection);
+    const rooms = (Object.keys(ROOM_CATEGORIES) as RoomCategoryId[])
+      .map((id) => ({
+        categoryId: id,
+        categoryLabel: ROOM_CATEGORIES[id].label,
+        quantity: counts[id],
+        baseRatePerNight: ROOM_CATEGORIES[id].roomOnly.discounted,
+      }))
+      .filter((r) => r.quantity > 0);
+
+    setCheckoutSelection({
+      rooms,
+      meals: { ...meals },
+    });
     setCheckoutOpen(true);
-  }, []);
+  }, [counts, meals]);
 
   const initialValues = useMemo((): Partial<HomeSearchValues> => {
     try {
       const raw = sessionStorage.getItem("ghd_booking_search");
-      if (!raw) return { adults: 2, children: 0 };
-      const parsed = JSON.parse(raw) as Partial<HomeSearchValues>;
+      if (!raw) return { rooms: [defaultRoomOccupancy()] };
+      const p = parseHomeSearchFromStorage(raw);
+      if (!p) return { rooms: [defaultRoomOccupancy()] };
       return {
-        hotelId: String(parsed.hotelId ?? "nivaara-nerul"),
-        checkIn: (parsed.checkIn as IsoDate) ?? "",
-        checkOut: (parsed.checkOut as IsoDate) ?? "",
-        adults: typeof parsed.adults === "number" ? parsed.adults : 2,
-        children: typeof parsed.children === "number" ? parsed.children : 0,
+        hotelId: String(p.hotelId ?? "nivaara-nerul"),
+        checkIn: (p.checkIn as IsoDate) ?? "",
+        checkOut: (p.checkOut as IsoDate) ?? "",
+        rooms: p.rooms?.length
+          ? normalizeRoomsList(p.rooms)
+          : [defaultRoomOccupancy()],
       };
     } catch {
-      return { adults: 2, children: 0 };
+      return { rooms: [defaultRoomOccupancy()] };
     }
   }, []);
 
@@ -173,16 +272,7 @@ export function BookingPage() {
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
             <div>
-              <p
-                className="font-body text-ivory-muted/70 text-sm"
-                style={{
-                  fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                }}
-              >
-                {filteredHotels.length}{" "}
-                {filteredHotels.length === 1 ? "property" : "properties"}{" "}
-                available
-              </p>
+              <div />
             </div>
             <Link to="/" className="btn-gold w-full sm:w-auto text-center">
               <span>Back to home</span>
@@ -190,14 +280,88 @@ export function BookingPage() {
           </div>
 
           {filteredHotels.some((h) => h.id === "nivaara-nerul") ? (
-            <RoomCard
-              propertyName="Nivaãra Nerul"
-              brandLabel="Nivaãra"
-              roomType="Studio Apartment"
-              image="/assets/generated/hero-nivaara.dim_1920x1080.png"
-              totalInventory={15}
-              onBook={openCheckout}
-            />
+            <div className="space-y-6">
+              <RoomCard
+                propertyName="Nerul"
+                brandLabel="Nivaãra"
+                roomCategoryId="studio-apartment"
+                roomType={ROOM_CATEGORIES["studio-apartment"].label}
+                description={ROOM_CATEGORIES["studio-apartment"].shortDescription}
+                image="/assets/generated/hero-nivaara.dim_1920x1080.png"
+                totalInventory={inventories["studio-apartment"]}
+                baseRateOriginal={ROOM_CATEGORIES["studio-apartment"].roomOnly.original}
+                baseRateDiscounted={
+                  ROOM_CATEGORIES["studio-apartment"].roomOnly.discounted
+                }
+                nights={nights}
+                quantity={totalRoomsRequested}
+                maxSelectable={Math.min(
+                  inventories["studio-apartment"],
+                  totalRoomsRequested,
+                )}
+                onQuantityChange={() => {}}
+                lockQuantity
+                meals={meals}
+                roomRows={roomsList
+                  .slice(0, totalRoomsRequested)
+                  .map((r, index) => ({
+                    index,
+                    adults: r.adults,
+                    children: r.children,
+                    suggestedCategoryId: "studio-apartment" as const,
+                    assignedCategoryId: "studio-apartment" as const,
+                  }))
+                  .filter((row) => row.assignedCategoryId === "studio-apartment")}
+              />
+
+              <div className="rounded-2xl border border-gold/15 bg-white/90 p-5 sm:p-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/55 mb-3">
+                  Meals
+                </p>
+                <p className="text-xs text-charcoal/50 mb-3">
+                  ₹{MEAL_PRICE_PER_ADULT.toLocaleString("en-IN")} per adult and ₹
+                  {MEAL_PRICE_PER_CHILD.toLocaleString("en-IN")} per child, per
+                  meal, per night — add or remove as you like.
+                </p>
+                <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-6">
+                  {(
+                    [
+                      { key: "breakfast", label: "Breakfast" },
+                      { key: "lunch", label: "Lunch" },
+                      { key: "dinner", label: "Dinner" },
+                    ] as const
+                  ).map(({ key, label }) => (
+                    <label
+                      key={key}
+                      className="inline-flex cursor-pointer items-center gap-2.5"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={meals[key]}
+                        onChange={() => toggleMeal(key)}
+                        className="h-4 w-4 rounded border-charcoal/25 text-gold focus:ring-gold/40"
+                      />
+                      <span className="text-sm text-charcoal/85">{label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-end">
+                <button
+                  type="button"
+                  className="btn-gold-filled h-11 px-6 w-full sm:w-auto"
+                  onClick={openCheckout}
+                  disabled={
+                    selectedRoomsTotal !== totalRoomsRequested ||
+                    counts["studio-apartment"] > inventories["studio-apartment"] ||
+                    false
+                  }
+                >
+                  Continue to checkout
+                </button>
+              </div>
+            </div>
           ) : (
             <div className="rounded-2xl border border-gold/10 bg-black/30 p-8 text-center">
               <p className="font-body text-ivory-muted/70">
@@ -215,7 +379,6 @@ export function BookingPage() {
           }}
           search={liveSearch}
           selection={checkoutSelection}
-          roomType="Studio Apartment"
         />
       ) : null}
       <Footer />

@@ -204,7 +204,7 @@ export function AboutPage() {
           <div className="text-center mb-12 sm:mb-20">
             <p
               className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
-              style={{ color: "#c9a84c" }}
+              style={{ color: "#b8975a" }}
             >
               Our Principles
             </p>

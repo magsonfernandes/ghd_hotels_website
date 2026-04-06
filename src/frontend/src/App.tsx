@@ -24,6 +24,7 @@ import { CelestraPage } from "./pages/CelestraPage";
 import { ContactPage } from "./pages/ContactPage";
 import { HomePage } from "./pages/HomePage";
 import { NivaaraPage } from "./pages/NivaaraPage";
+import { PoliciesPage } from "./pages/PoliciesPage";
 import { SamrayaPage } from "./pages/SamrayaPage";
 import { VisionPage } from "./pages/VisionPage";
 
@@ -95,6 +96,12 @@ const bookingRoute = createRoute({
   }),
 });
 
+const policiesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/policies",
+  component: PoliciesPage,
+});
+
 // ── Router ───────────────────────────────────────────────────────────
 const routeTree = rootRoute.addChildren([
   homeRoute,
@@ -105,6 +112,7 @@ const routeTree = rootRoute.addChildren([
   visionRoute,
   contactRoute,
   bookingRoute,
+  policiesRoute,
 ]);
 
 const router = createRouter({ routeTree });

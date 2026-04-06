@@ -76,6 +76,7 @@ export function Footer() {
                 { href: "/about#who-we-are", label: "Our Story" },
                 { href: "/#philosophy", label: "Philosophy" },
                 { to: "/vision", label: "Our Vision" },
+                { to: "/policies", label: "Policies" },
               ].map((item) => (
                 <li key={item.label}>
                   {"href" in item ? (
@@ -114,9 +115,9 @@ export function Footer() {
             </h4>
             <ul className="space-y-3">
               {[
-                { to: "/samraya", label: "Samrāya — 5★ Luxury" },
-                { to: "/celestra", label: "Celéstra — 4★ Premium" },
-                { to: "/nivaara", label: "Nivaãra — 3★ Smart Comfort" },
+                { to: "/samraya", label: "Samrāya — Luxury" },
+                { to: "/celestra", label: "Celéstra — Premium" },
+                { to: "/nivaara", label: "Nivaãra — Smart Comfort" },
               ].map((item) => (
                 <li key={item.label}>
                   <Link

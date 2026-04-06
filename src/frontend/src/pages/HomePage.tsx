@@ -11,13 +11,12 @@ const brands = [
     to: "/nivaara",
     name: "Nivaãra",
     tagline: "by GHD",
-    stars: "★★★",
-    tier: "3★ Smart Comfort Hotels",
+    tier: "Smart Comfort Hotels",
     description:
       "At Nivaãra, rooms and suites are designed as personal sanctuaries — layered lighting, bespoke furnishings, calming palettes, and views that restore perspective. Whether overlooking skyline, water, or landscape, each space invites you to exhale.",
     ocidCard: "brand.nivaara.card",
     ocidBtn: "brand.nivaara.button",
-    accent: "#a89070",
+    accent: "#b8975a",
     image: "/assets/generated/hero-nivaara.dim_1920x1080.png",
   },
   // Swap Celéstra and Samrāya positioning and star tiers
@@ -26,8 +25,7 @@ const brands = [
     to: "/samraya",
     name: "Samrāya",
     tagline: "by GHD",
-    stars: "★★★★★",
-    tier: "5★ Luxury Hotels",
+    tier: "Luxury Hotels",
     description:
       "At Samraya, hospitality is not a service—it is a tradition. Guests are welcomed with the reverence once reserved for royalty, where privacy is respected, comfort is intuitive, and every experience feels personal. Whether it is a serene stay in our premium rooms, an indulgent culinary journey, or a celebration hosted in our grand banquets, Samraya transforms moments into lasting memories.",
     ocidCard: "brand.samraya.card",
@@ -40,13 +38,12 @@ const brands = [
     to: "/celestra",
     name: "Celéstra",
     tagline: "by GHD",
-    stars: "★★★★",
-    tier: "4★ Premium Hotels",
+    tier: "Premium Hotels",
     description:
       "Every Celéstra property is thoughtfully designed as a contemporary hospitality destination — blending modern architecture, intelligent amenities, and refined comfort to meet the needs of today's traveler. With well-appointed spaces for leisure, business, and social gatherings, Celéstra aims to become a preferred destination for vacations, meetings, and everyday stays — where comfort, convenience, and modern hospitality come together seamlessly.",
     ocidCard: "brand.celestra.card",
     ocidBtn: "brand.celestra.button",
-    accent: "#c9a84c",
+    accent: "#b8975a",
     image: "/assets/generated/hero-celestra.dim_1920x1080.png",
   },
 ];
@@ -125,7 +122,7 @@ export function HomePage() {
   };
 
   // Our Hotel Brands — interactive carousel state
-  const [activeBrandIndex, setActiveBrandIndex] = useState(1); // index 1 is Samrāya (5★) after swap
+  const [activeBrandIndex, setActiveBrandIndex] = useState(1); // index 1 is Samrāya after swap
   const [brandsCarouselPaused, setBrandsCarouselPaused] = useState(false);
 
   const BRANDS_AUTO_ADVANCE_MS = 3500;
@@ -267,6 +264,7 @@ export function HomePage() {
         }}
         fadeOnScroll
         contentClassName="max-w-6xl"
+        allowSearchOverflow
       >
         <div>
           <div className="relative z-0 flex flex-col sm:flex-row gap-4 justify-center">
@@ -287,7 +285,7 @@ export function HomePage() {
               Discover Our Brands
             </button>
           </div>
-          <div className="relative z-20 mt-8 sm:mt-10 md:mt-12 w-full text-left">
+          <div className="relative z-[60] mt-8 sm:mt-10 md:mt-12 w-full text-left">
             <HomeSearchBar />
           </div>
         </div>
@@ -461,10 +459,10 @@ export function HomePage() {
                         className="star-rating flex-shrink-0"
                         style={{
                           textShadow:
-                            "0 0 10px rgba(201,168,76,0.8), 0 0 18px rgba(201,168,76,0.6)",
+                            "0 0 10px rgba(184,151,90,0.8), 0 0 18px rgba(184,151,90,0.6)",
                         }}
                       >
-                        {brand.stars}
+                      {/* star rating intentionally removed */}
                       </p>
                     </div>
                     <p

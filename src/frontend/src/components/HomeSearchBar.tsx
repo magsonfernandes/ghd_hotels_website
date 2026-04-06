@@ -2,6 +2,15 @@ import { useNavigate } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { PremiumDateRangePicker } from "./PremiumDateRangePicker";
+import { RoomGuestsSelector } from "./RoomGuestsSelector";
+import {
+  MAX_BOOKING_ROOMS,
+  type RoomOccupancy,
+  defaultRoomOccupancy,
+  migrateLegacyGuestCountsToRooms,
+  normalizeRoomsList,
+  totalGuestsFromRooms,
+} from "./booking/roomOccupancy";
 
 type IsoDate = `${number}-${string}-${string}` | "";
 
@@ -9,14 +18,75 @@ type HomeSearchValues = {
   hotelId: string;
   checkIn: IsoDate;
   checkOut: IsoDate;
-  adults: number;
-  children: number;
+  rooms: RoomOccupancy[];
 };
 
 export type { HomeSearchValues, IsoDate };
+export type { RoomOccupancy };
+
+function parseInitialRooms(
+  init?: Partial<HomeSearchValues> & { adults?: number; children?: number },
+): RoomOccupancy[] {
+  if (init?.rooms?.length) {
+    return normalizeRoomsList(init.rooms).slice(0, MAX_BOOKING_ROOMS);
+  }
+  if (init?.adults !== undefined || init?.children !== undefined) {
+    return migrateLegacyGuestCountsToRooms(
+      init.adults ?? 2,
+      init.children ?? 0,
+    );
+  }
+  return [defaultRoomOccupancy()];
+}
+
+/** Restore search from session JSON (supports legacy adults/children). */
+export function parseHomeSearchFromStorage(
+  raw: string,
+): Partial<HomeSearchValues> | null {
+  try {
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    const hotelId =
+      typeof parsed.hotelId === "string" ? parsed.hotelId : "nivaara-nerul";
+    const checkIn = typeof parsed.checkIn === "string" ? parsed.checkIn : "";
+    const checkOut = typeof parsed.checkOut === "string" ? parsed.checkOut : "";
+
+    let rooms: RoomOccupancy[];
+    if (Array.isArray(parsed.rooms)) {
+      const raw: RoomOccupancy[] = [];
+      for (const item of parsed.rooms) {
+        if (!item || typeof item !== "object") continue;
+        const o = item as Record<string, unknown>;
+        raw.push({
+          adults: Number(o.adults) || 1,
+          children: Number(o.children) || 0,
+          childAges: Array.isArray(o.childAges)
+            ? o.childAges.map((x) => Number(x) || 0)
+            : [],
+        });
+      }
+      rooms = raw.length
+        ? normalizeRoomsList(raw).slice(0, MAX_BOOKING_ROOMS)
+        : [defaultRoomOccupancy()];
+    } else {
+      rooms = migrateLegacyGuestCountsToRooms(
+        Number(parsed.adults) || 2,
+        Number(parsed.children) || 0,
+      );
+    }
+
+    return {
+      hotelId,
+      checkIn: checkIn as IsoDate,
+      checkOut: checkOut as IsoDate,
+      rooms,
+    };
+  } catch {
+    return null;
+  }
+}
 
 export function HomeSearchBar(props?: {
-  initial?: Partial<HomeSearchValues>;
+  initial?: Partial<HomeSearchValues> & { adults?: number; children?: number };
   onSearch?: (values: HomeSearchValues) => void;
   /** Fires whenever dates, guests, or hotel change — use to keep checkout totals in sync */
   onValuesChange?: (values: HomeSearchValues) => void;
@@ -31,9 +101,8 @@ export function HomeSearchBar(props?: {
   const [checkOut, setCheckOut] = useState<IsoDate>(
     props?.initial?.checkOut ?? "",
   );
-  const [adults, setAdults] = useState<number>(props?.initial?.adults ?? 2);
-  const [children, setChildren] = useState<number>(
-    props?.initial?.children ?? 0,
+  const [rooms, setRooms] = useState<RoomOccupancy[]>(() =>
+    parseInitialRooms(props?.initial),
   );
 
   useEffect(() => {
@@ -42,8 +111,13 @@ export function HomeSearchBar(props?: {
     if (init.hotelId !== undefined) setHotelId(init.hotelId);
     if (init.checkIn !== undefined) setCheckIn(init.checkIn);
     if (init.checkOut !== undefined) setCheckOut(init.checkOut);
-    if (init.adults !== undefined) setAdults(init.adults);
-    if (init.children !== undefined) setChildren(init.children);
+    if (
+      init.rooms !== undefined ||
+      init.adults !== undefined ||
+      init.children !== undefined
+    ) {
+      setRooms(parseInitialRooms(init));
+    }
   }, [props?.initial]);
 
   const todayISO = useMemo(() => {
@@ -54,14 +128,15 @@ export function HomeSearchBar(props?: {
     return `${y}-${m}-${day}` as IsoDate;
   }, []);
 
+  const guestTotals = useMemo(() => totalGuestsFromRooms(rooms), [rooms]);
+
   // Persist the current selection so it can be reused on the Reserve page.
   useEffect(() => {
     const payload: HomeSearchValues = {
       hotelId,
       checkIn,
       checkOut,
-      adults,
-      children,
+      rooms,
     };
     try {
       sessionStorage.setItem("ghd_booking_search", JSON.stringify(payload));
@@ -69,7 +144,7 @@ export function HomeSearchBar(props?: {
       // Ignore (private mode / blocked storage)
     }
     props?.onValuesChange?.(payload);
-  }, [hotelId, checkIn, checkOut, adults, children, props?.onValuesChange]);
+  }, [hotelId, checkIn, checkOut, rooms, props?.onValuesChange]);
 
   useEffect(() => {
     if (checkIn && checkOut && checkOut < checkIn) {
@@ -83,8 +158,7 @@ export function HomeSearchBar(props?: {
       hotelId,
       checkIn,
       checkOut,
-      adults,
-      children,
+      rooms,
     };
 
     if (props?.onSearch) {
@@ -98,10 +172,14 @@ export function HomeSearchBar(props?: {
         hotelId,
         checkIn,
         checkOut,
-        adults: String(adults),
-        children: String(children),
+        adults: String(guestTotals.adults),
+        children: String(guestTotals.children),
       },
     });
+  };
+
+  const setRoomsSafe = (next: RoomOccupancy[]) => {
+    setRooms(normalizeRoomsList(next).slice(0, MAX_BOOKING_ROOMS));
   };
 
   return (
@@ -130,7 +208,6 @@ export function HomeSearchBar(props?: {
             checkIn={checkIn}
             checkOut={checkOut}
             onChange={({ checkIn: ci, checkOut: co }) => {
-              // Guard against past dates coming in (dropdown already prevents this)
               if (ci && ci < todayISO) return;
               if (co && co < todayISO) return;
               setCheckIn(ci);
@@ -139,44 +216,7 @@ export function HomeSearchBar(props?: {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-3 lg:w-[220px]">
-          <label className="flex min-w-0 flex-col gap-1 text-left">
-            <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold">
-              Adults
-            </span>
-            <input
-              type="number"
-              min={1}
-              max={30}
-              value={adults}
-              onChange={(e) =>
-                setAdults(
-                  Math.max(1, Math.min(30, Number(e.target.value) || 1)),
-                )
-              }
-              className="h-11 w-full rounded-lg border border-gold/45 bg-white px-3 text-sm text-charcoal outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/30"
-              aria-label="Adults"
-            />
-          </label>
-          <label className="flex min-w-0 flex-col gap-1 text-left">
-            <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold">
-              Children
-            </span>
-            <input
-              type="number"
-              min={0}
-              max={30}
-              value={children}
-              onChange={(e) =>
-                setChildren(
-                  Math.max(0, Math.min(30, Number(e.target.value) || 0)),
-                )
-              }
-              className="h-11 w-full rounded-lg border border-gold/45 bg-white px-3 text-sm text-charcoal outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/30"
-              aria-label="Children"
-            />
-          </label>
-        </div>
+        <RoomGuestsSelector rooms={rooms} onChange={setRoomsSafe} />
 
         <div className="flex items-end lg:shrink-0">
           <button

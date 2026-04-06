@@ -52,9 +52,10 @@
     --color-charcoal: #0f0f0f;
     --color-charcoal-mid: #1a1a1a;
     --color-charcoal-light: #2a2a2a;
-    --color-gold: #c9a84c;
-    --color-gold-light: #e4c87a;
-    --color-gold-dim: #a08332;
+    /* Accent (gold) unified site-wide */
+    --color-gold: #b8975a;
+    --color-gold-light: #b8975a;
+    --color-gold-dim: #b8975a;
     --color-ivory: #f5f0e8;
     --color-ivory-muted: #d4cfc6;
   }
@@ -207,7 +208,7 @@ section {
 .gold-divider {
   width: 48px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  background: linear-gradient(90deg, transparent, #b8975a, transparent);
   margin: 2rem auto;
 }
 
@@ -220,12 +221,12 @@ section {
   background: rgba(26, 26, 26, 0.6);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(201, 168, 76, 0.15);
+  border: 1px solid rgba(184, 151, 90, 0.15);
 }
 
 .glass-card:hover {
-  border-color: rgba(201, 168, 76, 0.45);
-  box-shadow: 0 0 40px rgba(201, 168, 76, 0.12);
+  border-color: rgba(184, 151, 90, 0.45);
+  box-shadow: 0 0 40px rgba(184, 151, 90, 0.12);
 }
 
 /* ─── Hero Sections ──────────────────────────────────────────────── */
@@ -246,6 +247,12 @@ section {
 
 .hero-section--black {
   background-color: #000;
+}
+
+/* Home: search / room picker / date popovers extend below hero without clipping */
+.hero-section.hero-section--search-visible {
+  overflow: visible;
+  z-index: 40;
 }
 
 @media (min-width: 480px) {
@@ -288,14 +295,14 @@ section {
   background: rgba(15, 15, 15, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+  border-bottom: 1px solid rgba(184, 151, 90, 0.15);
 }
 
 .nav-solid {
   background: rgba(15, 15, 15, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+  border-bottom: 1px solid rgba(184, 151, 90, 0.15);
 }
 
 /* ─── Buttons ────────────────────────────────────────────────────── */
@@ -305,8 +312,8 @@ section {
   justify-content: center;
   padding: 0.875rem 1.5rem;
   min-height: 44px;
-  border: 1px solid #c9a84c;
-  color: #c9a84c;
+  border: 1px solid #b8975a;
+  color: #b8975a;
   font-family: 'General Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 0.7rem;
   font-weight: 500;
@@ -332,7 +339,7 @@ section {
   content: '';
   position: absolute;
   inset: 0;
-  background: #c9a84c;
+  background: #b8975a;
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.35s ease;
@@ -360,7 +367,7 @@ section {
   justify-content: center;
   padding: 0.875rem 1.5rem;
   min-height: 44px;
-  background: #c9a84c;
+  background: #b8975a;
   color: #0f0f0f;
   font-family: 'General Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 0.7rem;
@@ -368,7 +375,7 @@ section {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
-  border: 1px solid #c9a84c;
+  border: 1px solid #b8975a;
   cursor: pointer;
   transition: all 0.35s ease;
 }
@@ -382,8 +389,8 @@ section {
 }
 
 .btn-gold-filled:hover {
-  background: #e4c87a;
-  border-color: #e4c87a;
+  background: #b8975a;
+  border-color: #b8975a;
 }
 
 /* ─── Section Padding ────────────────────────────────────────────── */
@@ -421,7 +428,7 @@ section {
   align-items: flex-start;
   gap: 0.75rem;
   padding: 1rem 1.25rem;
-  border: 1px solid rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(184, 151, 90, 0.12);
   transition: border-color 0.3s ease, background 0.3s ease;
 }
 
@@ -433,24 +440,24 @@ section {
 }
 
 .feature-item:hover {
-  border-color: rgba(201, 168, 76, 0.35);
-  background: rgba(201, 168, 76, 0.04);
+  border-color: rgba(184, 151, 90, 0.35);
+  background: rgba(184, 151, 90, 0.04);
 }
 
 /* ─── Nav Hover Glow ─────────────────────────────────────────────── */
 .nav-link:hover {
   text-shadow:
-    0 0 8px rgba(201, 168, 76, 0.9),
-    0 0 14px rgba(201, 168, 76, 0.7);
+    0 0 8px rgba(184, 151, 90, 0.9),
+    0 0 14px rgba(184, 151, 90, 0.7);
 }
 
 /* ─── Text Styles ────────────────────────────────────────────────── */
 .text-gold {
-  color: #c9a84c;
+  color: #b8975a;
 }
 
 .text-gold-light {
-  color: #e4c87a;
+  color: #b8975a;
 }
 
 .text-ivory {
@@ -467,7 +474,7 @@ section {
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #c9a84c;
+  color: #b8975a;
 }
 
 @media (min-width: 640px) {
@@ -480,9 +487,9 @@ section {
 /* Gold glow + light stroke for section eyebrows (e.g. home page labels) */
 .eyebrow--gold-emphasis {
   text-shadow:
-    0 0 10px rgba(201, 168, 76, 0.95),
-    0 0 22px rgba(201, 168, 76, 0.65),
-    0 0 36px rgba(201, 168, 76, 0.38),
+    0 0 10px rgba(184, 151, 90, 0.95),
+    0 0 22px rgba(184, 151, 90, 0.65),
+    0 0 36px rgba(184, 151, 90, 0.38),
     0 1px 3px rgba(0, 0, 0, 0.6);
   -webkit-text-stroke: 0.45px rgba(62, 50, 24, 0.55);
   paint-order: stroke fill;
@@ -520,7 +527,7 @@ footer.footer-shell .footer-bottom-bar {
 .ghd-input {
   width: 100%;
   background: rgba(42, 42, 42, 0.6);
-  border: 1px solid rgba(201, 168, 76, 0.2);
+  border: 1px solid rgba(184, 151, 90, 0.2);
   color: #f5f0e8;
   padding: 0.875rem 1.25rem;
   font-family: 'General Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -530,8 +537,8 @@ footer.footer-shell .footer-bottom-bar {
 }
 
 .ghd-input:focus {
-  border-color: #c9a84c;
-  box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.3);
+  border-color: #b8975a;
+  box-shadow: 0 0 0 1px rgba(184, 151, 90, 0.3);
 }
 
 .ghd-input::placeholder {
@@ -562,7 +569,7 @@ footer.footer-shell .footer-bottom-bar {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c9a84c;
+  background: #b8975a;
   border-radius: 2px;
 }
 
@@ -635,13 +642,13 @@ footer.footer-shell .footer-bottom-bar {
 }
 
 /* ─── Brand-specific accent colors ───────────────────────────────── */
-.celestra-accent { color: #c9a84c; }
+.celestra-accent { color: #b8975a; }
 .samraya-accent { color: #b8975a; }
-.nivaara-accent  { color: #a89070; }
+.nivaara-accent  { color: #b8975a; }
 
 /* ─── Vision pillars ─────────────────────────────────────────────── */
 .pillar-card {
-  border: 1px solid rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(184, 151, 90, 0.12);
   padding: 1.5rem;
   position: relative;
   overflow: hidden;
@@ -667,14 +674,14 @@ footer.footer-shell .footer-bottom-bar {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  background: linear-gradient(90deg, transparent, #b8975a, transparent);
   opacity: 0;
   transition: opacity 0.4s ease;
 }
 
 .pillar-card:hover {
-  border-color: rgba(201, 168, 76, 0.3);
-  background: rgba(201, 168, 76, 0.03);
+  border-color: rgba(184, 151, 90, 0.3);
+  background: rgba(184, 151, 90, 0.03);
 }
 
 .pillar-card:hover::before {
@@ -683,20 +690,20 @@ footer.footer-shell .footer-bottom-bar {
 
 /* About page: make principle card number glow on card hover */
 .pillar-number {
-  color: rgba(201, 168, 76, 0.12);
+  color: rgba(184, 151, 90, 0.12);
   transition: color 0.35s ease, text-shadow 0.35s ease;
 }
 
 .pillar-card:hover .pillar-number {
-  color: rgba(201, 168, 76, 0.9);
+  color: rgba(184, 151, 90, 0.9);
   text-shadow:
-    0 0 12px rgba(201, 168, 76, 0.7),
-    0 0 24px rgba(201, 168, 76, 0.35);
+    0 0 12px rgba(184, 151, 90, 0.7),
+    0 0 24px rgba(184, 151, 90, 0.35);
 }
 
 /* ─── Star rating ─────────────────────────────────────────────────── */
 .star-rating {
-  color: #c9a84c;
+  color: #b8975a;
   letter-spacing: 0.1em;
   font-size: 0.875rem;
 }
