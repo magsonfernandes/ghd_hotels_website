@@ -2,11 +2,11 @@ import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   MAX_BOOKING_ROOMS,
-  MAX_CHILDREN_PER_ROOM,
   MAX_CHILD_AGE,
   MAX_GUESTS_PER_ROOM,
   type RoomOccupancy,
   defaultRoomOccupancy,
+  maxChildrenForAdults,
   normalizeRoomOccupancy,
   syncChildAges,
   totalGuestsFromRooms,
@@ -96,18 +96,11 @@ export function RoomGuestsSelector({ rooms, onChange }: Props) {
         >
           <div className="flex flex-col gap-3">
             {rooms.map((room, index) => {
-              // Any children → at most 2 adults; 3+ adults → no children
-              const maxAdults =
-                room.children > 0
-                  ? Math.min(2, MAX_GUESTS_PER_ROOM - room.children)
-                  : MAX_GUESTS_PER_ROOM;
-              const maxChildren =
-                room.adults >= 3
-                  ? 0
-                  : Math.min(
-                      MAX_CHILDREN_PER_ROOM,
-                      MAX_GUESTS_PER_ROOM - room.adults,
-                    );
+              const maxAdults = Math.min(
+                MAX_GUESTS_PER_ROOM,
+                Math.max(1, MAX_GUESTS_PER_ROOM - room.children),
+              );
+              const maxChildren = maxChildrenForAdults(room.adults);
               return (
                 <div
                   // biome-ignore lint/suspicious/noArrayIndexKey: controlled list; rows have no stable server id

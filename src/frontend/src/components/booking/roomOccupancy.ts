@@ -23,8 +23,22 @@ export const defaultRoomOccupancy = (): RoomOccupancy => ({
 });
 
 /**
- * Enforce: max 4 guests, max 2 children, min 1 adult.
- * With 3 or 4 adults, children must be 0; if children are set while adults > 2, adults drop to 2.
+ * Max children selectable for a given adult count (matches {@link normalizeRoomOccupancy}).
+ * Total guests per room never exceed {@link MAX_GUESTS_PER_ROOM}.
+ */
+export function maxChildrenForAdults(adults: number): number {
+  const a = Math.max(1, Math.min(MAX_GUESTS_PER_ROOM, Math.floor(adults)));
+  const space = Math.max(0, MAX_GUESTS_PER_ROOM - a);
+  let cap = Math.min(MAX_CHILDREN_PER_ROOM, space);
+  if (a >= 3) {
+    cap = Math.min(cap, 1);
+  }
+  return cap;
+}
+
+/**
+ * Enforce: max 4 guests total per room, max 2 children, min 1 adult.
+ * 1 adult may have up to 2 children (3 guests). 3 adults → at most 1 child (4 guests max).
  */
 export function normalizeRoomOccupancy(
   adults: number,
@@ -33,19 +47,13 @@ export function normalizeRoomOccupancy(
   let c = Math.max(0, Math.min(MAX_CHILDREN_PER_ROOM, Math.floor(children)));
   let a = Math.max(1, Math.min(MAX_GUESTS_PER_ROOM, Math.floor(adults)));
 
-  if (c > 0 && a > 2) {
-    a = 2;
-  }
-  if (a >= 3) {
-    c = 0;
-  }
-
-  c = Math.min(c, Math.max(0, MAX_GUESTS_PER_ROOM - a));
+  c = Math.min(c, MAX_CHILDREN_PER_ROOM, Math.max(0, MAX_GUESTS_PER_ROOM - a));
   a = Math.min(Math.max(1, a), MAX_GUESTS_PER_ROOM - c);
   c = Math.min(c, MAX_CHILDREN_PER_ROOM, Math.max(0, MAX_GUESTS_PER_ROOM - a));
+  a = Math.min(Math.max(1, a), MAX_GUESTS_PER_ROOM - c);
 
   if (a >= 3) {
-    c = 0;
+    c = Math.min(c, 1);
   }
 
   return { adults: a, children: c };
