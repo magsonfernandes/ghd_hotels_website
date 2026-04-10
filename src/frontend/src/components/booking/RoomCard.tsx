@@ -135,8 +135,8 @@ export function RoomCard(props: {
           <div className="mt-6 rounded-xl border border-gold/15 bg-white/80 px-4 py-4">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_auto_auto] lg:items-center lg:gap-6">
               <div className="min-w-0">
-                <p className="font-body text-sm font-medium text-charcoal/90">
-                  Room rate
+                <p className="font-body text-sm font-bold text-charcoal/90">
+                  Room Rate
                 </p>
               </div>
               <label className="flex items-center justify-between gap-3 lg:justify-start lg:gap-2">
