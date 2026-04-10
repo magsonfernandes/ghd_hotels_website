@@ -7,16 +7,16 @@ import {
   createRouter,
   useLocation,
 } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { Navbar } from "./components/Navbar";
 import { StickyBookNow } from "./components/StickyBookNow";
 
-// Scroll to top when the route pathname changes (e.g. clicking a nav link).
+/** Scroll to top on every in-app navigation (links, buttons using navigate, etc.). */
 function ScrollToTop() {
-  useLocation();
-  useEffect(() => {
+  const { pathname, search } = useLocation();
+  useLayoutEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [pathname, search]);
   return null;
 }
 import { AboutPage } from "./pages/AboutPage";

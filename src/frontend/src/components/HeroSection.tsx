@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
 interface HeroSectionProps {
-  bgImage: string;
+  /** Background photo URL. Omit or leave empty for a neutral gradient until an asset is added. */
+  bgImage?: string;
   eyebrow?: string;
   title: React.ReactNode;
   subtitle?: string;
@@ -45,6 +46,7 @@ export function HeroSection({
   contentClassName = "max-w-5xl",
   allowSearchOverflow = false,
 }: HeroSectionProps) {
+  const hasPhoto = Boolean(bgImage?.trim());
   const [bgOffset, setBgOffset] = useState(0);
   const [bgOpacity, setBgOpacity] = useState(1);
 
@@ -85,14 +87,19 @@ export function HeroSection({
         <div
           className="hero-bg"
           style={{
-            backgroundImage: `url(${bgImage})`,
-            transform: `translateY(${bgOffset * -1}px)`,
-            filter: (() => {
-              const parts: string[] = [];
-              if (bgBlurPx) parts.push(`blur(${bgBlurPx}px)`);
-              if (bgBrightness !== 1) parts.push(`brightness(${bgBrightness})`);
-              return parts.length ? parts.join(" ") : undefined;
-            })(),
+            backgroundImage: hasPhoto
+              ? `url(${bgImage})`
+              : "linear-gradient(145deg, #1a1917 0%, #252220 38%, #1c1a18 72%, #141312 100%)",
+            transform: hasPhoto ? `translateY(${bgOffset * -1}px)` : undefined,
+            filter: hasPhoto
+              ? (() => {
+                  const parts: string[] = [];
+                  if (bgBlurPx) parts.push(`blur(${bgBlurPx}px)`);
+                  if (bgBrightness !== 1)
+                    parts.push(`brightness(${bgBrightness})`);
+                  return parts.length ? parts.join(" ") : undefined;
+                })()
+              : undefined,
           }}
         />
       </div>
