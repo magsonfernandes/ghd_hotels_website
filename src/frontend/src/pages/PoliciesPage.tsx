@@ -5,13 +5,16 @@ export function PoliciesPage() {
     document.title = "Policies | GHD Hotels";
   }, []);
 
+  const cardShell =
+    "rounded-2xl border border-gold/25 bg-white/70 shadow-xl shadow-black/20 p-5 sm:p-7";
   const sectionTitle =
-    "font-body text-sm font-semibold uppercase tracking-[0.2em] text-ivory border-b border-gold/25 pb-2 mb-4";
+    "font-body text-sm font-semibold uppercase tracking-[0.2em] text-charcoal border-b border-gold/25 pb-2 mb-4";
   const subTitle =
-    "font-body text-xs font-semibold uppercase tracking-[0.18em] text-ivory/85 mt-5 mb-2";
+    "font-body text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/75 mt-5 mb-2";
   const p =
-    "font-body text-sm sm:text-[0.95rem] text-ivory-muted/70 leading-relaxed";
-  const li = "font-body text-sm sm:text-[0.95rem] text-ivory-muted/70 leading-relaxed";
+    "font-body text-sm sm:text-[0.95rem] text-charcoal/70 leading-relaxed";
+  const li =
+    "font-body text-sm sm:text-[0.95rem] text-charcoal/70 leading-relaxed";
 
   return (
     <div className="bg-charcoal min-h-screen flex flex-col">
@@ -29,7 +32,7 @@ export function PoliciesPage() {
           </div>
 
           <div className="space-y-10">
-            <section className="rounded-2xl border border-gold/15 bg-black/25 p-5 sm:p-7">
+            <section className={cardShell}>
               <h2 className={sectionTitle}>Hotel booking required details</h2>
 
               <h3 className={subTitle}>1. Guest information</h3>
@@ -84,7 +87,7 @@ export function PoliciesPage() {
               </ul>
             </section>
 
-            <section className="rounded-2xl border border-gold/15 bg-black/25 p-5 sm:p-7">
+            <section className={cardShell}>
               <h2 className={sectionTitle}>Hotel cancellation policy</h2>
 
               <h3 className={subTitle}>1. Standard cancellation policy</h3>
@@ -143,7 +146,7 @@ export function PoliciesPage() {
               </ul>
             </section>
 
-            <section className="rounded-2xl border border-gold/15 bg-black/25 p-5 sm:p-7">
+            <section className={cardShell}>
               <h2 className={sectionTitle}>Hotel child policy</h2>
 
               <h3 className={subTitle}>1. Child age definition</h3>
