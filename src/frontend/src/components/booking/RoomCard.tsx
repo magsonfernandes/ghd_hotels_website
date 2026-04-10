@@ -138,9 +138,6 @@ export function RoomCard(props: {
                 <p className="font-body text-sm font-medium text-charcoal/90">
                   Room rate
                 </p>
-                <p className="text-xs text-charcoal/50 mt-0.5">
-                  Base rate per room, per night
-                </p>
               </div>
               <label className="flex items-center justify-between gap-3 lg:justify-start lg:gap-2">
                 <span className="text-xs uppercase tracking-[0.18em] text-charcoal/55 whitespace-nowrap">
