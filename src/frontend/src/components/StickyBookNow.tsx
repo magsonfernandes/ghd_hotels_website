@@ -4,8 +4,8 @@ export function StickyBookNow() {
   const navigate = useNavigate();
   const loc = useLocation();
 
-  // Hide on Reserve page to avoid redundancy.
-  if (loc.pathname === "/booking") return null;
+  // Hide on Reserve page to avoid redundancy; hide on Careers so it does not cover the form.
+  if (loc.pathname === "/booking" || loc.pathname === "/careers") return null;
 
   return (
     <button

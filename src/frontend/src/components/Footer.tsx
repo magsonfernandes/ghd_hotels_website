@@ -146,6 +146,7 @@ export function Footer() {
               {[
                 { href: "/vision#development-status", label: "Development Status" },
                 { to: "/contact", label: "Contact Us" },
+                { to: "/careers", label: "Careers" },
               ].map((item) => (
                 <li key={item.label}>
                   {"href" in item ? (
@@ -165,6 +166,9 @@ export function Footer() {
                       style={{
                         fontFamily: "General Sans, Helvetica Neue, sans-serif",
                       }}
+                      data-ocid={
+                        item.to === "/careers" ? "footer.careers" : undefined
+                      }
                     >
                       {item.label}
                     </Link>
@@ -172,13 +176,6 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-            <Link
-              to="/careers"
-              className="btn-gold mt-5 inline-flex w-full sm:w-auto justify-center text-center px-5 py-2.5"
-              data-ocid="footer.careers"
-            >
-              <span>Careers</span>
-            </Link>
             <div className="mt-6 pt-6 border-t border-gold/10">
               <p
                 className="font-body text-sm text-ivory-muted/50 leading-relaxed text-left"
