@@ -16,7 +16,7 @@ export type RoomCategory = {
 export const ROOM_CATEGORIES: Record<RoomCategoryId, RoomCategory> = {
   "studio-apartment": {
     id: "studio-apartment",
-    label: "Studio Apartment",
+    label: "Royal Studio",
     shortDescription: "Modern smart comfort — ideal for 2 guests.",
     roomOnly: { original: 7500, discounted: 5999 },
   },

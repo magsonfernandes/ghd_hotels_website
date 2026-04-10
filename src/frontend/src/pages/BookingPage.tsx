@@ -211,7 +211,7 @@ export function BookingPage() {
 
   const roomDetails = useMemo(() => {
     return {
-      roomName: "Studio Apartment",
+      roomName: "Royal Studio",
       image: "/assets/generated/hero-nivaara.dim_1920x1080.png",
       bedInfo: "1 King Bed",
       sleepsInfo: "Sleeps 2",
@@ -227,7 +227,7 @@ export function BookingPage() {
         "Daily Housekeeping",
       ],
       description:
-        "Designed for modern comfort, the Studio Apartment at Nivaãra offers a spacious and thoughtfully curated stay experience. Featuring a king-sized bed, a functional workspace, and clean contemporary interiors, the room is ideal for both short stays and extended visits. Natural lighting, an efficient layout, and essential amenities ensure a seamless and comfortable stay.",
+        "Designed for modern comfort, the Royal Studio at Nivaãra offers a spacious and thoughtfully curated stay experience. Featuring a king-sized bed, a functional workspace, and clean contemporary interiors, the room is ideal for both short stays and extended visits. Natural lighting, an efficient layout, and essential amenities ensure a seamless and comfortable stay.",
       transport: {
         airports: [
           {
