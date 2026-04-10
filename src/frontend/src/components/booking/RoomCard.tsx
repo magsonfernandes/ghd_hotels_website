@@ -271,11 +271,11 @@ export function RoomCard(props: {
               </span>{" "}
               room{props.quantity === 1 ? "" : "s"}
             </p>
-            <span className="text-xs text-charcoal/50">
-              {props.lockQuantity
-                ? "Room count comes from your search."
-                : "Choose how many rooms of this category you want."}
-            </span>
+            {!props.lockQuantity ? (
+              <span className="text-xs text-charcoal/50">
+                Choose how many rooms of this category you want.
+              </span>
+            ) : null}
           </div>
         </div>
       </div>
