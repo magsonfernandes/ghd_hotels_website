@@ -90,6 +90,7 @@ export function HomeSearchBar(props?: {
   onSearch?: (values: HomeSearchValues) => void;
   /** Fires whenever dates, guests, or hotel change — use to keep checkout totals in sync */
   onValuesChange?: (values: HomeSearchValues) => void;
+  embedded?: boolean;
 }) {
   const navigate = useNavigate();
   const [hotelId, setHotelId] = useState(
@@ -185,10 +186,20 @@ export function HomeSearchBar(props?: {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-6xl mx-auto rounded-xl sm:rounded-2xl bg-white text-charcoal shadow-xl shadow-black/25 border-2 border-gold px-3 py-3 sm:px-5 sm:py-4"
+      className={
+        props?.embedded
+          ? "w-full"
+          : "w-full max-w-6xl mx-auto rounded-xl sm:rounded-2xl bg-white text-charcoal shadow-xl shadow-black/25 border-2 border-gold px-3 py-3 sm:px-5 sm:py-4"
+      }
       data-ocid="home.search.bar"
     >
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-3">
+      <div
+        className={
+          props?.embedded
+            ? "flex flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-3"
+            : "flex flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-3"
+        }
+      >
         <div className="flex min-w-0 flex-1 flex-col gap-1 text-left">
           <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold">
             Hotel

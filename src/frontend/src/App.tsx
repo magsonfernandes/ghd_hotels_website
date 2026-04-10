@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Navbar } from "./components/Navbar";
+import { StickyBookNow } from "./components/StickyBookNow";
 
 // Scroll to top when the route pathname changes (e.g. clicking a nav link).
 function ScrollToTop() {
@@ -36,6 +37,7 @@ const rootRoute = createRootRoute({
       <ScrollRestoration />
       <ScrollToTop />
       <Outlet />
+      <StickyBookNow />
     </>
   ),
 });

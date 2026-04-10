@@ -11,6 +11,27 @@
   background: rgba(0, 0, 0, 0.65);
 }
 
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Hide scrollbar but keep scroll */
+.scrollbar-invisible {
+  -ms-overflow-style: none; /* IE/Edge legacy */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-invisible::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 @layer base {
   :root {
     --radius: 0.25rem;
@@ -699,6 +720,65 @@ footer.footer-shell .footer-bottom-bar {
   text-shadow:
     0 0 12px rgba(184, 151, 90, 0.7),
     0 0 24px rgba(184, 151, 90, 0.35);
+}
+
+/* ─── Vision: circular / pie layout ──────────────────────────────── */
+.vision-pie {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  aspect-ratio: 1 / 1;
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(184, 151, 90, 0.18);
+  background:
+    radial-gradient(circle at center, rgba(184, 151, 90, 0.06), rgba(0,0,0,0) 55%),
+    rgba(0, 0, 0, 0.25);
+}
+
+.vision-pie-grid {
+  position: absolute;
+  /* Inset the quadrants so text never hits the clipped circle corners */
+  inset: 7%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.vision-pie-slice {
+  padding: 2.25rem 2.25rem;
+  background: rgba(26, 26, 26, 0.55);
+  border: 1px solid rgba(184, 151, 90, 0.12);
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184, 151, 90, 0.35) rgba(0, 0, 0, 0);
+}
+
+.vision-pie-slice:hover {
+  background: rgba(26, 26, 26, 0.62);
+  border-color: rgba(184, 151, 90, 0.28);
+}
+
+.vision-pie-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 38%;
+  height: 38%;
+  border-radius: 9999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid rgba(184, 151, 90, 0.18);
+  background: rgba(15, 15, 15, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 0 60px rgba(184, 151, 90, 0.08);
+  pointer-events: none;
 }
 
 /* ─── Star rating ─────────────────────────────────────────────────── */

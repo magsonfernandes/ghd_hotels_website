@@ -11,8 +11,8 @@ import {
   BookingCheckoutModal,
   type BookingSearchSnapshot,
 } from "../components/booking/BookingCheckoutModal";
-import { FiltersBar } from "../components/booking/FiltersBar";
 import { RoomCard } from "../components/booking/RoomCard";
+import { RoomDetailsModal } from "../components/booking/RoomDetailsModal";
 import type { BookingRateSelection } from "../components/booking/bookingRates";
 import {
   MEAL_PRICE_PER_ADULT,
@@ -132,10 +132,6 @@ function readBookingSearch(): BookingSearchSnapshot {
 }
 
 export function BookingPage() {
-  const [filters, setFilters] = useState<{ location: string; brand: string }>({
-    location: "",
-    brand: "",
-  });
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [checkoutSelection, setCheckoutSelection] =
     useState<BookingRateSelection | null>(null);
@@ -144,18 +140,11 @@ export function BookingPage() {
   );
   const [meals, setMeals] = useState<MealSelection>(defaultMeals);
   const [roomAssignments, setRoomAssignments] = useState<RoomCategoryId[]>(() => ["studio-apartment"]);
+  const [roomDetailsOpen, setRoomDetailsOpen] = useState(false);
 
   useEffect(() => {
     document.title = "Book a stay | GHD Hotels";
   }, []);
-
-  const filteredHotels = useMemo(() => {
-    return HOTELS.filter((h) => {
-      if (filters.brand && h.brand !== filters.brand) return false;
-      if (filters.location && h.location !== filters.location) return false;
-      return true;
-    });
-  }, [filters.brand, filters.location]);
 
   const handleSearchValuesChange = useCallback((v: HomeSearchValues) => {
     const t = totalGuestsFromRooms(v.rooms);
@@ -220,6 +209,77 @@ export function BookingPage() {
     setCheckoutOpen(true);
   }, [counts, meals]);
 
+  const roomDetails = useMemo(() => {
+    return {
+      roomName: "Studio Apartment",
+      image: "/assets/generated/hero-nivaara.dim_1920x1080.png",
+      bedInfo: "1 King Bed",
+      sleepsInfo: "Sleeps 2",
+      amenities: [
+        "Wi‑Fi",
+        "Air Conditioning",
+        "Smart TV",
+        "Work Desk",
+        "Tea/Coffee Maker",
+        "Wardrobe",
+        "Bathroom Amenities",
+        "Fresh Linen",
+        "Daily Housekeeping",
+      ],
+      description:
+        "Designed for modern comfort, the Studio Apartment at Nivaãra offers a spacious and thoughtfully curated stay experience. Featuring a king-sized bed, a functional workspace, and clean contemporary interiors, the room is ideal for both short stays and extended visits. Natural lighting, an efficient layout, and essential amenities ensure a seamless and comfortable stay.",
+      transport: {
+        airports: [
+          {
+            name: "Goa International Airport (Dabolim)",
+            distanceKm: 32,
+            timeMinsRange: [45, 60] as const,
+            note: "Main airport, closer to South Goa side",
+          },
+          {
+            name: "Manohar International Airport (Mopa)",
+            distanceKm: 30,
+            timeMinsRange: [40, 50] as const,
+            note: "New North Goa airport (better option from Nerul)",
+          },
+        ],
+        railways: [
+          {
+            name: "Thivim Railway Station",
+            distanceKm: 18,
+            timeMinsRange: [30, 40] as const,
+            note: "Best station for North Goa",
+          },
+          {
+            name: "Madgaon Railway Station",
+            distanceKm: 40,
+            timeMinsRange: [60, 75] as const,
+            note: "Major railway hub (more trains available)",
+          },
+        ],
+        buses: [
+          {
+            name: "Mapusa Bus Stand",
+            distanceKm: 9,
+            timeMinsRange: [20, 25] as const,
+            note: "Main bus stand for North Goa routes",
+          },
+          {
+            name: "Kadamba Bus Stand Panaji",
+            distanceKm: 7,
+            timeMinsRange: [15, 20] as const,
+            note: "Good for city & intercity buses",
+          },
+        ],
+        quickTipLines: [
+          "Nearest Airport: Mopa (faster from Nerul)",
+          "Nearest Railway Station: Thivim",
+          "Nearest Bus Stand: Panaji (Kadamba)",
+        ],
+      },
+    };
+  }, []);
+
   const initialValues = useMemo((): Partial<HomeSearchValues> => {
     try {
       const raw = sessionStorage.getItem("ghd_booking_search");
@@ -254,19 +314,12 @@ export function BookingPage() {
             </h1>
           </div>
 
-          <div className="mb-8">
-            <FiltersBar
-              location={filters.location}
-              brand={filters.brand}
-              onChange={setFilters}
-            />
-          </div>
-
-          <div className="mb-12">
+          <div className="mb-12 w-full rounded-2xl bg-white/95 border border-gold/25 shadow-xl shadow-black/20 px-4 py-4 sm:px-6 sm:py-5">
             <HomeSearchBar
               initial={initialValues}
               onSearch={() => {}}
               onValuesChange={handleSearchValuesChange}
+              embedded
             />
           </div>
 
@@ -279,96 +332,83 @@ export function BookingPage() {
             </Link>
           </div>
 
-          {filteredHotels.some((h) => h.id === "nivaara-nerul") ? (
-            <div className="space-y-6">
-              <RoomCard
-                propertyName="Nerul"
-                brandLabel="Nivaãra"
-                roomCategoryId="studio-apartment"
-                roomType={ROOM_CATEGORIES["studio-apartment"].label}
-                description={ROOM_CATEGORIES["studio-apartment"].shortDescription}
-                image="/assets/generated/hero-nivaara.dim_1920x1080.png"
-                totalInventory={inventories["studio-apartment"]}
-                baseRateOriginal={ROOM_CATEGORIES["studio-apartment"].roomOnly.original}
-                baseRateDiscounted={
-                  ROOM_CATEGORIES["studio-apartment"].roomOnly.discounted
-                }
-                nights={nights}
-                quantity={totalRoomsRequested}
-                maxSelectable={Math.min(
-                  inventories["studio-apartment"],
-                  totalRoomsRequested,
-                )}
-                onQuantityChange={() => {}}
-                lockQuantity
-                meals={meals}
-                roomRows={roomsList
-                  .slice(0, totalRoomsRequested)
-                  .map((r, index) => ({
-                    index,
-                    adults: r.adults,
-                    children: r.children,
-                    suggestedCategoryId: "studio-apartment" as const,
-                    assignedCategoryId: "studio-apartment" as const,
-                  }))
-                  .filter((row) => row.assignedCategoryId === "studio-apartment")}
-              />
+          <div className="space-y-6">
+            <RoomCard
+              propertyName="Nerul"
+              brandLabel="Nivaãra"
+              roomCategoryId="studio-apartment"
+              roomType={ROOM_CATEGORIES["studio-apartment"].label}
+              description={ROOM_CATEGORIES["studio-apartment"].shortDescription}
+              image="/assets/generated/hero-nivaara.dim_1920x1080.png"
+              totalInventory={inventories["studio-apartment"]}
+              baseRateOriginal={ROOM_CATEGORIES["studio-apartment"].roomOnly.original}
+              baseRateDiscounted={ROOM_CATEGORIES["studio-apartment"].roomOnly.discounted}
+              nights={nights}
+              quantity={totalRoomsRequested}
+              maxSelectable={Math.min(inventories["studio-apartment"], totalRoomsRequested)}
+              onQuantityChange={() => {}}
+              lockQuantity
+              meals={meals}
+              roomRows={roomsList
+                .slice(0, totalRoomsRequested)
+                .map((r, index) => ({
+                  index,
+                  adults: r.adults,
+                  children: r.children,
+                  suggestedCategoryId: "studio-apartment" as const,
+                  assignedCategoryId: "studio-apartment" as const,
+                }))
+                .filter((row) => row.assignedCategoryId === "studio-apartment")}
+              onRoomDetails={() => setRoomDetailsOpen(true)}
+            />
 
-              <div className="rounded-2xl border border-gold/15 bg-white/90 p-5 sm:p-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/55 mb-3">
-                  Meals
-                </p>
-                <p className="text-xs text-charcoal/50 mb-3">
-                  ₹{MEAL_PRICE_PER_ADULT.toLocaleString("en-IN")} per adult and ₹
-                  {MEAL_PRICE_PER_CHILD.toLocaleString("en-IN")} per child, per
-                  meal, per night — add or remove as you like.
-                </p>
-                <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-6">
-                  {(
-                    [
-                      { key: "breakfast", label: "Breakfast" },
-                      { key: "lunch", label: "Lunch" },
-                      { key: "dinner", label: "Dinner" },
-                    ] as const
-                  ).map(({ key, label }) => (
-                    <label
-                      key={key}
-                      className="inline-flex cursor-pointer items-center gap-2.5"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={meals[key]}
-                        onChange={() => toggleMeal(key)}
-                        className="h-4 w-4 rounded border-charcoal/25 text-gold focus:ring-gold/40"
-                      />
-                      <span className="text-sm text-charcoal/85">{label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-end">
-                <button
-                  type="button"
-                  className="btn-gold-filled h-11 px-6 w-full sm:w-auto"
-                  onClick={openCheckout}
-                  disabled={
-                    selectedRoomsTotal !== totalRoomsRequested ||
-                    counts["studio-apartment"] > inventories["studio-apartment"] ||
-                    false
-                  }
-                >
-                  Continue to checkout
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="rounded-2xl border border-gold/10 bg-black/30 p-8 text-center">
-              <p className="font-body text-ivory-muted/70">
-                No rooms match your selected filters.
+            <div className="rounded-2xl border border-gold/15 bg-white/90 p-5 sm:p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/55 mb-3">
+                Meals
               </p>
+              <p className="text-xs text-charcoal/50 mb-3">
+                ₹{MEAL_PRICE_PER_ADULT.toLocaleString("en-IN")} per adult and ₹
+                {MEAL_PRICE_PER_CHILD.toLocaleString("en-IN")} per child, per meal,
+                per night — add or remove as you like.
+              </p>
+              <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-6">
+                {(
+                  [
+                    { key: "breakfast", label: "Breakfast" },
+                    { key: "lunch", label: "Lunch" },
+                    { key: "dinner", label: "Dinner" },
+                  ] as const
+                ).map(({ key, label }) => (
+                  <label
+                    key={key}
+                    className="inline-flex cursor-pointer items-center gap-2.5"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={meals[key]}
+                      onChange={() => toggleMeal(key)}
+                      className="h-4 w-4 rounded border-charcoal/25 text-gold focus:ring-gold/40"
+                    />
+                    <span className="text-sm text-charcoal/85">{label}</span>
+                  </label>
+                ))}
+              </div>
             </div>
-          )}
+
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-end">
+              <button
+                type="button"
+                className="btn-gold-filled h-11 px-6 w-full sm:w-auto"
+                onClick={openCheckout}
+                disabled={
+                  selectedRoomsTotal !== totalRoomsRequested ||
+                  counts["studio-apartment"] > inventories["studio-apartment"]
+                }
+              >
+                Continue to checkout
+              </button>
+            </div>
+          </div>
         </div>
       </section>
       {checkoutOpen && checkoutSelection ? (
@@ -381,6 +421,17 @@ export function BookingPage() {
           selection={checkoutSelection}
         />
       ) : null}
+      <RoomDetailsModal
+        isOpen={roomDetailsOpen}
+        onClose={() => setRoomDetailsOpen(false)}
+        roomName={roomDetails.roomName}
+        image={roomDetails.image}
+        amenities={roomDetails.amenities}
+        description={roomDetails.description}
+        bedInfo={roomDetails.bedInfo}
+        sleepsInfo={roomDetails.sleepsInfo}
+        transport={roomDetails.transport}
+      />
       <Footer />
     </div>
   );

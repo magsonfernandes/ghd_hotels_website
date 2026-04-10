@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Clock, Laptop, Moon, Tv2, Utensils, Wifi } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, Laptop, Moon, Tv2, Utensils, Wifi } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
@@ -51,6 +51,35 @@ export function NivaaraPage() {
   const [flowerParallax, setFlowerParallax] = useState(0);
   const [textParallax, setTextParallax] = useState(0);
   const [philosophyBgOpacity, setPhilosophyBgOpacity] = useState(0);
+  const [propertiesImageIndex, setPropertiesImageIndex] = useState(0);
+  const [propertiesCarouselPaused, setPropertiesCarouselPaused] = useState(false);
+  const [propertiesFading, setPropertiesFading] = useState(false);
+  const propertiesFadeTimerRef = useRef<number | null>(null);
+
+  const PROPERTIES_IMAGES = Array.from(
+    { length: 6 },
+    () => "/assets/generated/hero-nivaara.dim_1920x1080.png",
+  );
+  const PROPERTIES_AUTO_ADVANCE_MS = 3000;
+  const PROPERTIES_FADE_MS = 260;
+
+  const requestPropertiesIndex = (nextIndex: number) => {
+    const total = PROPERTIES_IMAGES.length;
+    const next = ((nextIndex % total) + total) % total;
+    if (next === propertiesImageIndex) return;
+
+    if (propertiesFadeTimerRef.current) {
+      window.clearTimeout(propertiesFadeTimerRef.current);
+      propertiesFadeTimerRef.current = null;
+    }
+
+    setPropertiesFading(true);
+    propertiesFadeTimerRef.current = window.setTimeout(() => {
+      setPropertiesImageIndex(next);
+      setPropertiesFading(false);
+      propertiesFadeTimerRef.current = null;
+    }, PROPERTIES_FADE_MS);
+  };
 
   // Smooth opacity fade for decorative layers (Buddha + flowers) when entering/leaving Philosophy.
   // Uses rect.top/rect.bottom so it naturally fades as the section transitions into/out of view.
@@ -63,6 +92,28 @@ export function NivaaraPage() {
 
   useEffect(() => {
     document.title = "Nivaãra by GHD – Smart Comfort";
+  }, []);
+
+  useEffect(() => {
+    if (propertiesCarouselPaused) return;
+    const id = window.setInterval(() => {
+      requestPropertiesIndex(propertiesImageIndex + 1);
+    }, PROPERTIES_AUTO_ADVANCE_MS);
+    return () => window.clearInterval(id);
+  }, [
+    propertiesCarouselPaused,
+    PROPERTIES_AUTO_ADVANCE_MS,
+    PROPERTIES_IMAGES.length,
+    propertiesImageIndex,
+  ]);
+
+  useEffect(() => {
+    return () => {
+      if (propertiesFadeTimerRef.current) {
+        window.clearTimeout(propertiesFadeTimerRef.current);
+        propertiesFadeTimerRef.current = null;
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -513,7 +564,7 @@ export function NivaaraPage() {
 
       {/* Properties */}
       <section className="py-12 sm:py-16 bg-black border-t border-gold/10">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
           <p className="eyebrow eyebrow--gold-emphasis mb-4">Properties</p>
           <div
             className="gold-divider mx-auto mb-8"
@@ -522,66 +573,89 @@ export function NivaaraPage() {
                 "linear-gradient(90deg, transparent, #b8975a, transparent)",
             }}
           />
-          <ul className="text-left max-w-md mx-auto space-y-4">
+          <ul className="text-left mx-auto space-y-4">
             <li
-              className="font-body text-ivory/90 border border-gold/15 rounded-lg px-5 py-4"
+              className="font-body text-ivory/90 border border-gold/15 rounded-2xl px-6 py-6 sm:px-8 sm:py-8 w-full bg-black/30"
               style={{
                 fontFamily: "General Sans, Helvetica Neue, sans-serif",
               }}
             >
-              <span className="font-display text-gold-light text-lg block mb-1">
+              <span className="font-display text-gold-light text-2xl block mb-2">
                 Nivaara Nerul
               </span>
               <span className="text-ivory-muted/70 text-sm tracking-wide">
                 Location: Nerul
               </span>
+
+              <div className="mt-6">
+                <div
+                  className="relative rounded-2xl overflow-hidden border border-gold/15 bg-black/30"
+                  onMouseEnter={() => setPropertiesCarouselPaused(true)}
+                  onMouseLeave={() => setPropertiesCarouselPaused(false)}
+                  onFocusCapture={() => setPropertiesCarouselPaused(true)}
+                  onBlurCapture={(e) => {
+                    const next = e.relatedTarget as Node | null;
+                    if (!next || !e.currentTarget.contains(next)) {
+                      setPropertiesCarouselPaused(false);
+                    }
+                  }}
+                >
+                  <img
+                    src={PROPERTIES_IMAGES[propertiesImageIndex] ?? PROPERTIES_IMAGES[0]}
+                    alt={`Nivaara Nerul photo ${propertiesImageIndex + 1}`}
+                    className={`w-full h-[340px] sm:h-[420px] lg:h-[520px] object-cover transition-opacity duration-300 ${
+                      propertiesFading ? "opacity-0" : "opacity-100"
+                    }`}
+                    loading="lazy"
+                    draggable={false}
+                  />
+
+                  {/* Left / right arrows */}
+                  <div className="absolute inset-y-0 left-0 flex items-center px-3">
+                    <button
+                      type="button"
+                      className="h-10 w-10 rounded-full bg-black/45 border border-white/10 text-ivory/90 flex items-center justify-center hover:bg-black/55 transition"
+                      aria-label="Previous photo"
+                      onClick={() =>
+                        requestPropertiesIndex(propertiesImageIndex - 1)
+                      }
+                    >
+                      <ChevronLeft className="h-5 w-5" aria-hidden />
+                    </button>
+                  </div>
+                  <div className="absolute inset-y-0 right-0 flex items-center px-3">
+                    <button
+                      type="button"
+                      className="h-10 w-10 rounded-full bg-black/45 border border-white/10 text-ivory/90 flex items-center justify-center hover:bg-black/55 transition"
+                      aria-label="Next photo"
+                      onClick={() =>
+                        requestPropertiesIndex(propertiesImageIndex + 1)
+                      }
+                    >
+                      <ChevronRight className="h-5 w-5" aria-hidden />
+                    </button>
+                  </div>
+
+                  {/* Dots */}
+                  <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center gap-2">
+                    {PROPERTIES_IMAGES.map((_, i) => (
+                      <button
+                        key={`prop-dot-${i}`}
+                        type="button"
+                        className={`h-2.5 w-2.5 rounded-full border border-white/25 transition ${
+                          i === propertiesImageIndex
+                            ? "bg-gold/90"
+                            : "bg-white/15 hover:bg-white/25"
+                        }`}
+                        aria-label={`Show photo ${i + 1}`}
+                        onClick={() => requestPropertiesIndex(i)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
             </li>
           </ul>
-        </div>
-      </section>
-
-      {/* Under Development Banner */}
-      <section className="py-10 sm:py-14 lg:py-16 bg-black">
-        <div className="max-w-3xl mx-auto text-center px-4 sm:px-6">
-          <div
-            className="p-6 sm:p-8 lg:p-12 animate-on-scroll"
-            style={{ border: "1px solid rgba(184, 151, 90, 0.25)" }}
-          >
-            <div
-              className="gold-divider"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, #b8975a, transparent)",
-              }}
-            />
-            <h3
-              className="font-display text-xl sm:text-2xl mt-4 sm:mt-6 mb-3 sm:mb-4"
-              style={{
-                fontFamily: "Instrument Serif, Georgia, serif",
-                fontWeight: 400,
-                color: "#b8975a",
-              }}
-            >
-              Coming Soon
-            </h3>
-            <p
-              className="font-body text-ivory-muted/65 text-sm sm:text-base leading-relaxed mb-6 sm:mb-8"
-              style={{
-                fontWeight: 300,
-              }}
-            >
-              Nivaãra properties are being developed at strategic transit and
-              business locations across India, built for the modern traveler's
-              pace of life.
-            </p>
-            <Link
-              to="/contact"
-              className="btn-gold text-sm w-full sm:w-auto inline-block text-center"
-              style={{ borderColor: "#b8975a", color: "#b8975a" }}
-            >
-              <span>Register Your Interest</span>
-            </Link>
-          </div>
         </div>
       </section>
 

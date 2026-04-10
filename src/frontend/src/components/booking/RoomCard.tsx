@@ -42,6 +42,7 @@ export function RoomCard(props: {
   }>;
   onAssignRoomCategory?: (roomIndex: number, nextCategoryId: RoomCategoryId) => void;
   canAssignRoomToCategory?: (roomIndex: number, nextCategoryId: RoomCategoryId) => boolean;
+  onRoomDetails?: () => void;
 }) {
   const roomQtyOptions = useMemo(
     () =>
@@ -119,12 +120,15 @@ export function RoomCard(props: {
               <p className="font-body text-charcoal/70 text-sm leading-relaxed mt-2 max-w-2xl">
                 {props.description}
               </p>
-              <Link
-                to="/nivaara"
-                className="inline-block mt-3 text-sm text-gold underline underline-offset-4 hover:text-gold-light transition"
-              >
-                More info
-              </Link>
+              {props.onRoomDetails ? (
+                <button
+                  type="button"
+                  onClick={props.onRoomDetails}
+                  className="inline-block mt-3 text-sm text-charcoal/70 underline underline-offset-4 hover:text-charcoal transition"
+                >
+                  Room Details
+                </button>
+              ) : null}
             </div>
           </div>
 
