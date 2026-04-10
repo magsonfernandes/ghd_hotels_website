@@ -21,6 +21,7 @@ function ScrollToTop() {
 }
 import { AboutPage } from "./pages/AboutPage";
 import { BookingPage } from "./pages/BookingPage";
+import { CareersPage } from "./pages/CareersPage";
 import { CelestraPage } from "./pages/CelestraPage";
 import { ContactPage } from "./pages/ContactPage";
 import { HomePage } from "./pages/HomePage";
@@ -104,6 +105,12 @@ const policiesRoute = createRoute({
   component: PoliciesPage,
 });
 
+const careersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/careers",
+  component: CareersPage,
+});
+
 // ── Router ───────────────────────────────────────────────────────────
 const routeTree = rootRoute.addChildren([
   homeRoute,
@@ -115,6 +122,7 @@ const routeTree = rootRoute.addChildren([
   contactRoute,
   bookingRoute,
   policiesRoute,
+  careersRoute,
 ]);
 
 const router = createRouter({ routeTree });

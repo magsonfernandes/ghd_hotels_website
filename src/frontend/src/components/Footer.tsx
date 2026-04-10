@@ -172,6 +172,13 @@ export function Footer() {
                 </li>
               ))}
             </ul>
+            <Link
+              to="/careers"
+              className="btn-gold mt-5 inline-flex w-full sm:w-auto justify-center text-center px-5 py-2.5"
+              data-ocid="footer.careers"
+            >
+              <span>Careers</span>
+            </Link>
             <div className="mt-6 pt-6 border-t border-gold/10">
               <p
                 className="font-body text-sm text-ivory-muted/50 leading-relaxed text-left"
