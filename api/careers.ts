@@ -86,7 +86,15 @@ export default async function handler(req: Request): Promise<Response> {
     if (err instanceof Error && /Missing SMTP_PASS/i.test(err.message)) {
       return badRequest("Missing SMTP_PASS");
     }
-    return json(500, { ok: false, error: "Failed to send email" });
+    // Surface SMTP failures to speed up configuration/debugging.
+    // Examples: "Invalid login", "Connection timeout", "Blocked by network", etc.
+    const msg =
+      err instanceof Error
+        ? err.message
+        : typeof err === "string"
+          ? err
+          : "Failed to send email";
+    return json(500, { ok: false, error: msg });
   }
 
   return json(200, { ok: true });

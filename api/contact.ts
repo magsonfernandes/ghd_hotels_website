@@ -65,7 +65,13 @@ export default async function handler(req: Request): Promise<Response> {
     if (err instanceof Error && /Missing SMTP_PASS/i.test(err.message)) {
       return badRequest("Missing SMTP_PASS");
     }
-    return new Response(JSON.stringify({ ok: false, error: "Failed to send email" }), {
+    const msg =
+      err instanceof Error
+        ? err.message
+        : typeof err === "string"
+          ? err
+          : "Failed to send email";
+    return new Response(JSON.stringify({ ok: false, error: msg }), {
       status: 500,
       headers: { "content-type": "application/json" },
     });
