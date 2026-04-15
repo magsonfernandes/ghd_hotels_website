@@ -31,7 +31,7 @@ const values = [
 ];
 
 const ABOUT_COUPLE_HERO_IMAGE =
-  "/assets/generated/couple%20laughing.png";
+  "/assets/generated/lady%20by%20the%20pool.png";
 
 const ABOUT_SECTION_FADE = {
   fadeInStartVh: 0.9,

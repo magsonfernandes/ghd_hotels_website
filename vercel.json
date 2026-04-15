@@ -5,6 +5,7 @@
   "outputDirectory": "src/frontend/dist",
   "rewrites": [
     { "source": "/contact-submit", "destination": "/api/contact" },
+    { "source": "/careers-apply", "destination": "/api/careers" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

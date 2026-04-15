@@ -1,11 +1,11 @@
-import { Resend } from "resend";
-
 type Body = {
   name?: string;
   email?: string;
   phone?: string;
   message?: string;
 };
+
+import { createSmtpTransport, getSmtpConfigFromEnv } from "./_smtp";
 
 function badRequest(message: string) {
   return new Response(JSON.stringify({ ok: false, error: message }), {
@@ -22,12 +22,8 @@ export default async function handler(req: Request): Promise<Response> {
     });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return badRequest("Missing RESEND_API_KEY");
-
   const to = process.env.CONTACT_TO || "ghdhotels@gmail.com";
-  const from = process.env.CONTACT_FROM;
-  if (!from) return badRequest("Missing CONTACT_FROM");
+  const from = process.env.CONTACT_FROM || "krupashrikoli@gmail.com";
 
   let body: Body;
   try {
@@ -45,7 +41,6 @@ export default async function handler(req: Request): Promise<Response> {
     return badRequest("Missing required fields");
   }
 
-  const resend = new Resend(apiKey);
   const subject = `New enquiry from ${name}`;
   const text = [
     `Name: ${name}`,
@@ -57,14 +52,19 @@ export default async function handler(req: Request): Promise<Response> {
   ].join("\n");
 
   try {
-    await resend.emails.send({
+    const cfg = getSmtpConfigFromEnv();
+    const transport = createSmtpTransport(cfg);
+    await transport.sendMail({
       from,
       to,
       subject,
       text,
       replyTo: email,
     });
-  } catch {
+  } catch (err) {
+    if (err instanceof Error && /Missing SMTP_PASS/i.test(err.message)) {
+      return badRequest("Missing SMTP_PASS");
+    }
     return new Response(JSON.stringify({ ok: false, error: "Failed to send email" }), {
       status: 500,
       headers: { "content-type": "application/json" },

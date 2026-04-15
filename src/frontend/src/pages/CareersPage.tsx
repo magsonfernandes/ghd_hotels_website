@@ -58,7 +58,9 @@ export function CareersPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState<FormState>(initialForm);
   const [cvFile, setCvFile] = useState<File | null>(null);
-  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [formError, setFormError] = useState("");
 
   useEffect(() => {
@@ -84,7 +86,7 @@ export function CareersPage() {
     setFormError("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError("");
     if (!form.fullName.trim() || !form.email.trim()) {
@@ -100,12 +102,42 @@ export function CareersPage() {
       return;
     }
     setStatus("loading");
-    window.setTimeout(() => {
+
+    try {
+      const selected =
+        JOB_POSTINGS.find((j) => j.id === form.roleId)?.title ??
+        (form.roleId === "general" ? "General interest" : "Role");
+
+      const payload = new FormData();
+      payload.set("fullName", form.fullName);
+      payload.set("email", form.email);
+      payload.set("phone", form.phone);
+      payload.set("roleLabel", selected);
+      payload.set("message", form.message);
+      payload.set("cv", cvFile);
+
+      const res = await fetch("/careers-apply", {
+        method: "POST",
+        body: payload,
+      });
+
+      if (!res.ok) {
+        const body = (await res.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        throw new Error(body?.error || "Failed to submit application.");
+      }
+
       setStatus("success");
       setForm(initialForm());
       setCvFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
-    }, 600);
+    } catch (err) {
+      setStatus("error");
+      setFormError(
+        err instanceof Error ? err.message : "Failed to submit application.",
+      );
+    }
   };
 
   const resetApplication = () => {
@@ -183,12 +215,9 @@ export function CareersPage() {
                   className="font-display text-gold text-xl mt-6 mb-3"
                   style={{ fontFamily: "Instrument Serif, Georgia, serif" }}
                 >
-                  Application received (demo)
+                  Application received
                 </p>
-                <p className={p}>
-                  In a live site, this would email HR or save to your ATS. For
-                  now nothing is stored or transmitted.
-                </p>
+                <p className={p}>Thank you. Our team will review and respond.</p>
                 <button
                   type="button"
                   className="btn-gold mt-8 text-sm"
