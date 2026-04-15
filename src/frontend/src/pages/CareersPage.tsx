@@ -122,10 +122,22 @@ export function CareersPage() {
       });
 
       if (!res.ok) {
-        const body = (await res.json().catch(() => null)) as {
-          error?: string;
-        } | null;
-        throw new Error(body?.error || "Failed to submit application.");
+        const contentType = res.headers.get("content-type") || "";
+        const isJson = contentType.includes("application/json");
+        const maybeJson = isJson
+          ? ((await res.json().catch(() => null)) as { error?: string } | null)
+          : null;
+        const maybeText = !isJson
+          ? await res.text().catch(() => "")
+          : "";
+
+        const detail =
+          maybeJson?.error ||
+          (maybeText ? maybeText.slice(0, 240) : "") ||
+          res.statusText ||
+          "Unknown error";
+
+        throw new Error(`Submit failed (${res.status}): ${detail}`);
       }
 
       setStatus("success");
