@@ -6,7 +6,7 @@ import { HeroSection } from "../components/HeroSection";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 /** Add your hero image under `public/` and set this, e.g. `"/assets/contact/hero.jpg"`. */
-const CONTACT_HERO_IMAGE: string | undefined = undefined;
+const CONTACT_HERO_IMAGE: string | undefined = "/assets/generated/contact.png";
 
 interface FormState {
   name: string;
@@ -84,7 +84,6 @@ export function ContactPage() {
         bgImage={CONTACT_HERO_IMAGE}
         eyebrow="GHD Hotels"
         title="Contact Us"
-        description="Corporate office, partnerships, media, and guest support—we look forward to hearing from you."
         overlay="dark"
         titleStyle={{
           WebkitTextStroke: "1px rgba(0, 0, 0, 0.55)",

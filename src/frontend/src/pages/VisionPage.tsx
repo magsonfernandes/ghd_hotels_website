@@ -167,8 +167,8 @@ export function VisionPage() {
             </h2>
           </div>
 
-          {/* Mobile / tablet: cards grid */}
-          <div className="grid grid-cols-1 lg:hidden gap-6 sm:gap-8">
+          {/* Cards grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             {pillars.map((pillar, i) => {
               const Icon = pillar.icon;
               return (
@@ -218,71 +218,6 @@ export function VisionPage() {
                 </div>
               );
             })}
-          </div>
-
-          {/* Desktop: circular / pie layout */}
-          <div className="hidden lg:block">
-            <div className="vision-pie animate-on-scroll">
-              <div className="vision-pie-grid">
-                {pillars.map((pillar, i) => {
-                  const Icon = pillar.icon;
-                  return (
-                    <div
-                      key={pillar.number}
-                      className="vision-pie-slice"
-                      style={{ transitionDelay: `${0.1 + i * 0.12}s` }}
-                    >
-                      <div className="flex items-start gap-4 mb-4">
-                        <span
-                          className="pillar-number font-display text-5xl leading-none flex-shrink-0"
-                          style={{
-                            fontFamily: "Instrument Serif, Georgia, serif",
-                            color: `${pillar.accentColor}30`,
-                          }}
-                        >
-                          {pillar.number}
-                        </span>
-                        <div className="pt-2">
-                          <Icon size={22} style={{ color: pillar.accentColor }} />
-                        </div>
-                      </div>
-
-                      <h3
-                        className="font-display text-ivory text-xl mb-3"
-                        style={{
-                          fontFamily: "Instrument Serif, Georgia, serif",
-                          fontWeight: 400,
-                        }}
-                      >
-                        {pillar.title}
-                      </h3>
-                      <p
-                        className="font-body text-sm text-ivory-muted/70 leading-relaxed text-justify"
-                        style={{
-                          fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                          fontWeight: 300,
-                        }}
-                      >
-                        {pillar.description}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="vision-pie-center" aria-hidden>
-                <p className="eyebrow eyebrow--gold-emphasis mb-3">
-                  Four Cornerstones
-                </p>
-                <div className="gold-divider mx-auto my-0" />
-                <p
-                  className="font-display text-ivory mt-4"
-                  style={{ fontFamily: "Instrument Serif, Georgia, serif" }}
-                >
-                  of Excellence
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
