@@ -96,7 +96,25 @@ export function AboutPage() {
     <div className="bg-charcoal min-h-screen">
       <HeroSection
         bgImage={ABOUT_COUPLE_HERO_IMAGE}
-        title="About GHD Hotels"
+        title={
+          <>
+            — GHD Hotels —
+            <span
+              className="block mt-6 sm:mt-8"
+              style={{
+                fontFamily:
+                  '"Zapfino", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Brush Script MT", cursive',
+                fontSize: "clamp(1.02rem, 2.2vw, 1.8rem)",
+                fontWeight: 400,
+                letterSpacing: "0.02em",
+                textTransform: "none",
+                WebkitTextStroke: "0px transparent",
+              }}
+            >
+              Where stays become experiences.
+            </span>
+          </>
+        }
         overlay="dark"
         fadeOnScroll
         titleStyle={{
