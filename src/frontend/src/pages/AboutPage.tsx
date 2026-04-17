@@ -111,7 +111,7 @@ export function AboutPage() {
                 WebkitTextStroke: "0px transparent",
               }}
             >
-              Where stays become experiences.
+              Where stays become experiences
             </span>
           </>
         }
