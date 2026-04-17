@@ -26,7 +26,7 @@ export function Footer() {
               </Link>
             </div>
             <p
-              className="font-body text-sm text-ivory-muted/70 leading-relaxed text-left mb-8"
+              className="font-body text-sm text-ivory-muted/70 leading-relaxed text-justify max-w-[14rem] mb-10 sm:mb-12 mt-2"
               style={{ fontFamily: "General Sans, Helvetica Neue, sans-serif" }}
             >
               Crafting extraordinary hospitality experiences across luxury,
