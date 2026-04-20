@@ -8,14 +8,27 @@
   },
   "scripts": {
     "build": "pnpm -r --if-present run build",
+    "build:web": "pnpm --filter @caffeine/template-frontend build",
+    "mail:serve": "tsx server/index.ts",
+    "dev:stack": "concurrently -k \"pnpm mail:serve\" \"pnpm --filter @caffeine/template-frontend dev\"",
+    "start": "tsx server/index.ts",
     "typecheck": "pnpm -r --if-present run typecheck",
     "check": "pnpm -r --if-present run check",
     "fix": "pnpm -r --if-present run fix"
   },
   "devDependencies": {
-    "sharp": "^0.34.4"
+    "concurrently": "^9.1.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/multer": "^1.4.12",
+    "sharp": "^0.34.4",
+    "tsx": "^4.19.2"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "multer": "^2.0.0",
     "nodemailer": "^8.0.5",
     "resend": "^6.9.4"
   }

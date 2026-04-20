@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useId, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
+import { mailApiUrl } from "../lib/mailApi";
 
 const JOB_POSTINGS = [
   {
@@ -116,7 +117,7 @@ export function CareersPage() {
       payload.set("message", form.message);
       payload.set("cv", cvFile);
 
-      const res = await fetch("/careers-apply", {
+      const res = await fetch(mailApiUrl("/api/careers"), {
         method: "POST",
         body: payload,
       });

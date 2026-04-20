@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
+import { mailApiUrl } from "../lib/mailApi";
 
 /** Add your hero image under `public/` and set this, e.g. `"/assets/contact/hero.jpg"`. */
 const CONTACT_HERO_IMAGE: string | undefined = "/assets/generated/contact.png";
@@ -50,7 +51,7 @@ export function ContactPage() {
     setErrorMsg("");
 
     try {
-      const res = await fetch("/contact-submit", {
+      const res = await fetch(mailApiUrl("/api/contact"), {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
@@ -61,11 +62,29 @@ export function ContactPage() {
         }),
       });
 
+      const contentType = res.headers.get("content-type") || "";
+      const raw = await res.text();
+      let data: { ok?: boolean; error?: string } = {};
+      if (contentType.includes("application/json")) {
+        try {
+          data = JSON.parse(raw) as { ok?: boolean; error?: string };
+        } catch {
+          data = {};
+        }
+      }
+
       if (!res.ok) {
-        const payload = (await res.json().catch(() => null)) as {
-          error?: string;
-        } | null;
-        throw new Error(payload?.error || "Failed to send message.");
+        const detail =
+          data.error ||
+          (raw && !contentType.includes("application/json")
+            ? raw.slice(0, 200)
+            : "") ||
+          res.statusText ||
+          "Request failed";
+        throw new Error(detail);
+      }
+      if (data.ok === false) {
+        throw new Error(data.error || "Failed to send message.");
       }
 
       setForm({ name: "", email: "", phone: "", message: "" });

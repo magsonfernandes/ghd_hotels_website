@@ -38,8 +38,12 @@ export default defineConfig({
       interval: 100,
     },
     proxy: {
-      "/api": {
-        target: "http://127.0.0.1:4943",
+      "/api/contact": {
+        target: process.env.MAIL_SERVER_URL || "http://127.0.0.1:8788",
+        changeOrigin: true,
+      },
+      "/api/careers": {
+        target: process.env.MAIL_SERVER_URL || "http://127.0.0.1:8788",
         changeOrigin: true,
       },
     },
