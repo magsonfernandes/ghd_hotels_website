@@ -584,6 +584,12 @@ export function NivaaraPage() {
               }}
             >
               <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
+                <div className="min-w-0 flex-1 text-left">
+                  <span className="font-display text-gold-light text-2xl block">
+                    Nivaara Nerul
+                  </span>
+                </div>
+
                 <div
                   className="w-full lg:max-w-sm shrink-0 rounded-2xl border border-gold/20 bg-black/40 px-4 py-4 sm:px-5 sm:py-5 text-left"
                   role="group"
@@ -612,15 +618,6 @@ export function NivaaraPage() {
                       Survey No. 98, Nerul, North Goa – 403114
                     </p>
                   </div>
-                </div>
-
-                <div className="min-w-0 flex-1 text-left lg:text-right">
-                  <span className="font-display text-gold-light text-2xl block mb-2">
-                    Nivaara Nerul
-                  </span>
-                  <span className="text-ivory-muted/70 text-sm tracking-wide">
-                    Location: Nerul
-                  </span>
                 </div>
               </div>
 
