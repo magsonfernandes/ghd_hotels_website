@@ -169,14 +169,14 @@ export function ContactPage() {
                   <div>
                     <p className="eyebrow eyebrow--gold-emphasis mb-2">Email</p>
                     <a
-                      href="mailto:info@ghdhotels.in"
+                      href="mailto:reservation@ghdhotels.in"
                       className="font-body text-ivory-muted/70 text-base hover:text-gold transition-colors duration-300"
                       style={{
                         fontFamily: "General Sans, Helvetica Neue, sans-serif",
                         fontWeight: 300,
                       }}
                     >
-                      info@ghdhotels.in
+                      reservation@ghdhotels.in
                     </a>
                   </div>
                 </div>
