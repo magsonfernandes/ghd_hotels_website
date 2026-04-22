@@ -112,12 +112,12 @@ export function RoomCard(props: {
               {props.propertyLinkTo ? (
                 <Link
                   to={props.propertyLinkTo}
-                  className="inline-block text-gold/90 text-xs uppercase tracking-[0.28em] hover:text-gold transition-colors"
+                  className="block w-full text-left text-gold/90 text-xs uppercase tracking-[0.28em] hover:text-gold transition-colors"
                 >
                   {props.brandLabel} • {props.propertyName}
                 </Link>
               ) : (
-                <p className="text-gold/90 text-xs uppercase tracking-[0.28em]">
+                <p className="block w-full text-left text-gold/90 text-xs uppercase tracking-[0.28em]">
                   {props.brandLabel} • {props.propertyName}
                 </p>
               )}
@@ -125,14 +125,14 @@ export function RoomCard(props: {
                 <button
                   type="button"
                   onClick={props.onRoomDetails}
-                  className="text-left w-fit font-display text-charcoal text-2xl sm:text-3xl mt-2 hover:text-charcoal/80 transition-colors"
+                  className="block w-full text-left font-display text-charcoal text-2xl sm:text-3xl mt-1 hover:text-charcoal/80 transition-colors"
                   style={{ fontFamily: "Instrument Serif, Georgia, serif" }}
                 >
                   {props.roomType}
                 </button>
               ) : (
                 <h2
-                  className="font-display text-charcoal text-2xl sm:text-3xl mt-2"
+                  className="block w-full text-left font-display text-charcoal text-2xl sm:text-3xl mt-1"
                   style={{ fontFamily: "Instrument Serif, Georgia, serif" }}
                 >
                   {props.roomType}
