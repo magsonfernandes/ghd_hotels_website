@@ -135,6 +135,7 @@ export function BookingPage() {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [checkoutSelection, setCheckoutSelection] =
     useState<BookingRateSelection | null>(null);
+  const [selectedHotelId, setSelectedHotelId] = useState<string>("nivaara-nerul");
   const [liveSearch, setLiveSearch] = useState<BookingSearchSnapshot>(() =>
     readBookingSearch(),
   );
@@ -148,6 +149,7 @@ export function BookingPage() {
 
   const handleSearchValuesChange = useCallback((v: HomeSearchValues) => {
     const t = totalGuestsFromRooms(v.rooms);
+    setSelectedHotelId(v.hotelId);
     setLiveSearch({
       checkIn: v.checkIn,
       checkOut: v.checkOut,
@@ -299,6 +301,14 @@ export function BookingPage() {
     }
   }, []);
 
+  useEffect(() => {
+    if (typeof initialValues.hotelId === "string" && initialValues.hotelId) {
+      setSelectedHotelId(initialValues.hotelId);
+    }
+  }, [initialValues.hotelId]);
+
+  const isNivaaraNerulSelected = selectedHotelId === "nivaara-nerul";
+
   return (
     <div className="bg-charcoal min-h-screen flex flex-col">
       <section className="flex-1 section-pad pt-28 sm:pt-32">
@@ -327,8 +337,11 @@ export function BookingPage() {
             <div>
               <div />
             </div>
-            <Link to="/" className="btn-gold w-full sm:w-auto text-center">
-              <span>Back to home</span>
+            <Link
+              to={isNivaaraNerulSelected ? "/nivaara" : "/"}
+              className="btn-gold w-full sm:w-auto text-center"
+            >
+              <span>{isNivaaraNerulSelected ? "Visit Nivaara" : "Back to home"}</span>
             </Link>
           </div>
 
@@ -336,6 +349,7 @@ export function BookingPage() {
             <RoomCard
               propertyName="Nerul"
               brandLabel="Nivaãra"
+              propertyLinkTo="/nivaara#properties"
               roomCategoryId="studio-apartment"
               roomType={ROOM_CATEGORIES["studio-apartment"].label}
               description={ROOM_CATEGORIES["studio-apartment"].shortDescription}

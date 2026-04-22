@@ -1,24 +1,40 @@
-import { useEffect } from "react";
+import { useEffect, type CSSProperties } from "react";
 
 export function PoliciesPage() {
   useEffect(() => {
     document.title = "Policies | GHD Hotels";
   }, []);
 
-  const cardShell =
-    "rounded-2xl border border-gold/25 bg-white/70 shadow-xl shadow-black/20 p-5 sm:p-7";
   const sectionTitle =
-    "font-body text-sm font-semibold uppercase tracking-[0.2em] text-charcoal border-b border-gold/25 pb-2 mb-4";
+    "font-body text-sm font-semibold uppercase tracking-[0.2em] text-ivory border-b border-gold/30 pb-2 mb-4";
   const subTitle =
-    "font-body text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/75 mt-5 mb-2";
+    "font-body text-xs font-semibold uppercase tracking-[0.18em] text-ivory/75 mt-6 mb-2";
   const p =
-    "font-body text-sm sm:text-[0.95rem] text-charcoal/70 leading-relaxed";
+    "font-body text-sm sm:text-[0.95rem] text-ivory/80 leading-relaxed";
   const li =
-    "font-body text-sm sm:text-[0.95rem] text-charcoal/70 leading-relaxed";
+    "font-body text-sm sm:text-[0.95rem] text-ivory/80 leading-relaxed";
+
+  const policiesBgStyle: CSSProperties = {
+    backgroundImage: 'url("/assets/generated/bg%20image.png")',
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundAttachment: "fixed",
+  };
 
   return (
-    <div className="bg-charcoal min-h-screen flex flex-col">
-      <section className="flex-1 section-pad pt-28 sm:pt-32">
+    <div className="min-h-screen flex flex-col relative bg-charcoal">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          ...policiesBgStyle,
+          filter: "brightness(1.12)",
+        }}
+      />
+      <div className="absolute inset-0 bg-black/55" />
+
+      <section className="relative z-10 flex-1 section-pad pt-28 sm:pt-32">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10">
           <div className="text-center mb-10 sm:mb-12">
             <p className="eyebrow eyebrow--gold-emphasis mb-4">Policies</p>
@@ -31,8 +47,8 @@ export function PoliciesPage() {
             </h1>
           </div>
 
-          <div className="space-y-10">
-            <section className={cardShell}>
+          <div className="space-y-12">
+            <section>
               <h2 className={sectionTitle}>Hotel booking required details</h2>
 
               <h3 className={subTitle}>1. Guest information</h3>
@@ -87,7 +103,7 @@ export function PoliciesPage() {
               </ul>
             </section>
 
-            <section className={cardShell}>
+            <section>
               <h2 className={sectionTitle}>Hotel cancellation policy</h2>
 
               <h3 className={subTitle}>1. Standard cancellation policy</h3>
@@ -146,7 +162,7 @@ export function PoliciesPage() {
               </ul>
             </section>
 
-            <section className={cardShell}>
+            <section>
               <h2 className={sectionTitle}>Hotel child policy</h2>
 
               <h3 className={subTitle}>1. Child age definition</h3>

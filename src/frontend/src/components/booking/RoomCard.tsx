@@ -20,6 +20,7 @@ function currency(n: number) {
 export function RoomCard(props: {
   propertyName: string;
   brandLabel: string;
+  propertyLinkTo?: string;
   roomType: string;
   roomCategoryId: RoomCategoryId;
   image: string;
@@ -108,15 +109,35 @@ export function RoomCard(props: {
         <div className="p-5 sm:p-7 lg:p-8">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
-              <p className="text-gold/90 text-xs uppercase tracking-[0.28em]">
-                {props.brandLabel} • {props.propertyName}
-              </p>
-              <h2
-                className="font-display text-charcoal text-2xl sm:text-3xl mt-2"
-                style={{ fontFamily: "Instrument Serif, Georgia, serif" }}
-              >
-                {props.roomType}
-              </h2>
+              {props.propertyLinkTo ? (
+                <Link
+                  to={props.propertyLinkTo}
+                  className="inline-block text-gold/90 text-xs uppercase tracking-[0.28em] hover:text-gold transition-colors"
+                >
+                  {props.brandLabel} • {props.propertyName}
+                </Link>
+              ) : (
+                <p className="text-gold/90 text-xs uppercase tracking-[0.28em]">
+                  {props.brandLabel} • {props.propertyName}
+                </p>
+              )}
+              {props.onRoomDetails ? (
+                <button
+                  type="button"
+                  onClick={props.onRoomDetails}
+                  className="text-left w-fit font-display text-charcoal text-2xl sm:text-3xl mt-2 hover:text-charcoal/80 transition-colors"
+                  style={{ fontFamily: "Instrument Serif, Georgia, serif" }}
+                >
+                  {props.roomType}
+                </button>
+              ) : (
+                <h2
+                  className="font-display text-charcoal text-2xl sm:text-3xl mt-2"
+                  style={{ fontFamily: "Instrument Serif, Georgia, serif" }}
+                >
+                  {props.roomType}
+                </h2>
+              )}
               <p className="font-body text-charcoal/70 text-sm leading-relaxed mt-2 max-w-2xl">
                 {props.description}
               </p>

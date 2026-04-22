@@ -563,7 +563,10 @@ export function NivaaraPage() {
       </section>
 
       {/* Properties */}
-      <section className="py-12 sm:py-16 bg-black border-t border-gold/10">
+      <section
+        id="properties"
+        className="py-12 sm:py-16 bg-black border-t border-gold/10"
+      >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
           <p className="eyebrow eyebrow--gold-emphasis mb-4">Properties</p>
           <div
