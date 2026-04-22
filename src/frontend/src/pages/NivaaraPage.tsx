@@ -583,15 +583,15 @@ export function NivaaraPage() {
                 fontFamily: "General Sans, Helvetica Neue, sans-serif",
               }}
             >
-              <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
-                <div className="min-w-0 flex-1 text-left">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-stretch lg:gap-8">
+                <div className="min-w-0 shrink-0 text-left lg:flex lg:flex-col lg:justify-center">
                   <span className="font-display text-gold-light text-2xl block">
                     Nivaara Nerul
                   </span>
                 </div>
 
                 <div
-                  className="w-full lg:max-w-sm shrink-0 rounded-2xl border border-gold/20 bg-black/40 px-4 py-4 sm:px-5 sm:py-5 text-left"
+                  className="w-full min-w-0 flex-1 self-stretch rounded-2xl border border-gold/20 bg-black/40 px-4 py-4 sm:px-5 sm:py-5 text-left"
                   role="group"
                   aria-label="Nivaara Nerul contact details"
                 >
