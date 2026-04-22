@@ -593,7 +593,7 @@ export function NivaaraPage() {
                 <div
                   className="w-full min-w-0 flex-1 self-stretch rounded-2xl border border-gold/20 bg-black/40 px-4 py-4 sm:px-5 sm:py-5 text-left"
                   role="group"
-                  aria-label="Nivaara Nerul contact details"
+                  aria-label="Nivaara - Nerul contact details"
                 >
                   <div className="space-y-2.5 text-sm text-ivory/85 leading-relaxed">
                     <p>
@@ -637,7 +637,7 @@ export function NivaaraPage() {
                 >
                   <img
                     src={PROPERTIES_IMAGES[propertiesImageIndex] ?? PROPERTIES_IMAGES[0]}
-                    alt={`Nivaara Nerul photo ${propertiesImageIndex + 1}`}
+                    alt={`Nivaara - Nerul photo ${propertiesImageIndex + 1}`}
                     className={`w-full h-[340px] sm:h-[420px] lg:h-[520px] object-cover transition-opacity duration-300 ${
                       propertiesFading ? "opacity-0" : "opacity-100"
                     }`}
