@@ -586,7 +586,7 @@ export function NivaaraPage() {
               <div className="flex flex-col gap-5 lg:flex-row lg:items-stretch lg:gap-8">
                 <div className="min-w-0 shrink-0 text-left lg:flex lg:flex-col lg:justify-center">
                   <span className="font-display text-gold-light text-2xl block">
-                    Nivaara Nerul
+                    Nivaara - Nerul
                   </span>
                 </div>
 
@@ -615,6 +615,7 @@ export function NivaaraPage() {
                       </a>
                     </p>
                     <p className="text-ivory-muted/80">
+                      <span className="text-ivory-muted/70">Address :</span>{" "}
                       Survey No. 98, Nerul, North Goa – 403114
                     </p>
                   </div>
