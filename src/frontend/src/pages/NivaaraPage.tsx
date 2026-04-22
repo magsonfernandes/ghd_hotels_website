@@ -583,12 +583,46 @@ export function NivaaraPage() {
                 fontFamily: "General Sans, Helvetica Neue, sans-serif",
               }}
             >
-              <span className="font-display text-gold-light text-2xl block mb-2">
-                Nivaara Nerul
-              </span>
-              <span className="text-ivory-muted/70 text-sm tracking-wide">
-                Location: Nerul
-              </span>
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
+                <div
+                  className="w-full lg:max-w-sm shrink-0 rounded-2xl border border-gold/20 bg-black/40 px-4 py-4 sm:px-5 sm:py-5 text-left"
+                  role="group"
+                  aria-label="Nivaara Nerul contact details"
+                >
+                  <div className="space-y-2.5 text-sm text-ivory/85 leading-relaxed">
+                    <p>
+                      <span className="text-ivory-muted/70">Reception :</span>{" "}
+                      <a
+                        href="tel:+918390020408"
+                        className="text-ivory hover:text-gold transition-colors"
+                      >
+                        +91 8390020408
+                      </a>
+                    </p>
+                    <p>
+                      <span className="text-ivory-muted/70">Reception Email :</span>{" "}
+                      <a
+                        href="mailto:info.nerul@ghdhotels.in"
+                        className="text-ivory hover:text-gold transition-colors break-all"
+                      >
+                        info.nerul@ghdhotels.in
+                      </a>
+                    </p>
+                    <p className="text-ivory-muted/80">
+                      Survey No. 98, Nerul, North Goa – 403114
+                    </p>
+                  </div>
+                </div>
+
+                <div className="min-w-0 flex-1 text-left lg:text-right">
+                  <span className="font-display text-gold-light text-2xl block mb-2">
+                    Nivaara Nerul
+                  </span>
+                  <span className="text-ivory-muted/70 text-sm tracking-wide">
+                    Location: Nerul
+                  </span>
+                </div>
+              </div>
 
               <div className="mt-6">
                 <div
