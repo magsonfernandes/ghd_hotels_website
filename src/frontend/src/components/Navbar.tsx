@@ -5,10 +5,10 @@ import { useEffect, useState } from "react";
 const navLinks = [
   { to: "/", label: "Home", ocid: "nav.home.link" },
   { to: "/about", label: "About", ocid: "nav.about.link" },
-  // Swap brand positioning: Samrāya first, Celéstra second
-  { to: "/samraya", label: "Samrāya", ocid: "nav.samraya.link" },
-  { to: "/celestra", label: "Celéstra", ocid: "nav.celestra.link" },
+  // Brand order: Nivaãra → Celéstra → Samrāya
   { to: "/nivaara", label: "Nivaãra", ocid: "nav.nivaara.link" },
+  { to: "/celestra", label: "Celéstra", ocid: "nav.celestra.link" },
+  { to: "/samraya", label: "Samrāya", ocid: "nav.samraya.link" },
   { to: "/vision", label: "Development Vision", ocid: "nav.vision.link" },
   { to: "/contact", label: "Contact", ocid: "nav.contact.link" },
 ];
