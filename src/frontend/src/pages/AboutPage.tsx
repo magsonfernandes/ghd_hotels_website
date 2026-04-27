@@ -209,6 +209,19 @@ export function AboutPage() {
                   Celéstra, Samrāya, and Nivaãra brand logos moving continuously.
                 </div>
               </div>
+
+              <p
+                className="mt-6 font-body text-xs sm:text-sm text-ivory-muted/60 leading-relaxed max-w-4xl mx-auto animate-on-scroll-right delay-300"
+                style={{
+                  fontFamily: "General Sans, Helvetica Neue, sans-serif",
+                  fontWeight: 300,
+                }}
+              >
+                IPR Disclaimer: “All brands, names, logos, and associated assets
+                of GHD Hotels LLP are protected under Intellectual Property Rights
+                (IPR) laws of India. Any unauthorized use, reproduction, or
+                imitation will be subject to legal action.”
+              </p>
           </div>
         </div>
       </section>
