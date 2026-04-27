@@ -211,7 +211,7 @@ export function AboutPage() {
               </div>
 
               <p
-                className="mt-6 font-body text-xs sm:text-sm text-ivory-muted/60 leading-relaxed max-w-4xl mx-auto animate-on-scroll-right delay-300"
+                className="mt-6 font-body text-[0.7rem] sm:text-xs text-ivory-muted/60 leading-relaxed max-w-4xl mx-auto animate-on-scroll-right delay-300"
                 style={{
                   fontFamily: "General Sans, Helvetica Neue, sans-serif",
                   fontWeight: 300,
