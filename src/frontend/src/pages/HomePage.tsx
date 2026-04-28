@@ -245,7 +245,7 @@ export function HomePage() {
     <div className="bg-charcoal min-h-screen home-test-font">
       {/* ── Hero ─────────────────────────────────────────────── */}
       <HeroSection
-        bgImage="/assets/generated/hero-home.dim_1920x1080.png"
+        bgVideo="/assets/generated/WhatsApp%20Video%202026-04-27%20at%2017.02.37.mp4"
         title={
           <>
             Crafted Experiences.

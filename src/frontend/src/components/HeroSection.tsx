@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 interface HeroSectionProps {
   /** Background photo URL. Omit or leave empty for a neutral gradient until an asset is added. */
   bgImage?: string;
+  /** Background video URL (e.g. mp4). When provided, it takes precedence over bgImage. */
+  bgVideo?: string;
+  /** Optional poster image for bgVideo (shown while video loads). */
+  bgVideoPoster?: string;
   eyebrow?: string;
   title: React.ReactNode;
   subtitle?: string;
@@ -30,6 +34,8 @@ interface HeroSectionProps {
 
 export function HeroSection({
   bgImage,
+  bgVideo,
+  bgVideoPoster,
   eyebrow,
   title,
   subtitle,
@@ -47,6 +53,7 @@ export function HeroSection({
   allowSearchOverflow = false,
 }: HeroSectionProps) {
   const hasPhoto = Boolean(bgImage?.trim());
+  const hasVideo = Boolean(bgVideo?.trim());
   const [bgOffset, setBgOffset] = useState(0);
   const [bgOpacity, setBgOpacity] = useState(1);
 
@@ -87,11 +94,12 @@ export function HeroSection({
         <div
           className="hero-bg"
           style={{
-            backgroundImage: hasPhoto
-              ? `url(${bgImage})`
-              : "linear-gradient(145deg, #1a1917 0%, #252220 38%, #1c1a18 72%, #141312 100%)",
-            transform: hasPhoto ? `translateY(${bgOffset * -1}px)` : undefined,
-            filter: hasPhoto
+            backgroundImage:
+              !hasVideo && hasPhoto
+                ? `url(${bgImage})`
+                : "linear-gradient(145deg, #1a1917 0%, #252220 38%, #1c1a18 72%, #141312 100%)",
+            transform: hasVideo || hasPhoto ? `translateY(${bgOffset * -1}px)` : undefined,
+            filter: !hasVideo && hasPhoto
               ? (() => {
                   const parts: string[] = [];
                   if (bgBlurPx) parts.push(`blur(${bgBlurPx}px)`);
@@ -102,6 +110,24 @@ export function HeroSection({
               : undefined,
           }}
         />
+        {hasVideo && (
+          <video
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+            style={{
+              transform: `translateY(${bgOffset * -1}px)`,
+              filter:
+                bgBrightness !== 1 ? `brightness(${bgBrightness})` : undefined,
+            }}
+            src={bgVideo}
+            poster={bgVideoPoster}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden
+          />
+        )}
       </div>
 
       {/* Layer 1: Bottom-weighted directional gradient for text legibility */}
