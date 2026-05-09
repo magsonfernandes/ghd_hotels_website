@@ -63,6 +63,15 @@ export function HomePage() {
     document.title = "GHD Hotels – Crafted Experiences. Defined Excellence";
   }, []);
 
+  const [isMobileHero, setIsMobileHero] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)");
+    const apply = () => setIsMobileHero(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
   const philosophySectionRef = useRef<HTMLElement | null>(null);
   const brandsSectionRef = useRef<HTMLElement | null>(null);
   const visionSectionRef = useRef<HTMLElement | null>(null);
@@ -245,7 +254,11 @@ export function HomePage() {
     <div className="bg-charcoal min-h-screen home-test-font">
       {/* ── Hero ─────────────────────────────────────────────── */}
       <HeroSection
-        bgVideo="/assets/generated/WhatsApp%20Video%202026-04-27%20at%2017.02.37.mp4"
+        bgVideo={
+          isMobileHero
+            ? "/assets/generated/MainPage.mov"
+            : "/assets/generated/WhatsApp%20Video%202026-04-27%20at%2017.02.37.mp4"
+        }
         title={
           <>
             Crafted Experiences.
@@ -258,6 +271,7 @@ export function HomePage() {
         titleStyle={{
           fontSize: "clamp(2.45rem, 5.8vw, 5.25rem)",
           fontWeight: 100,
+          marginTop: "0.65rem",
           WebkitTextStroke: "1.3px rgba(0, 0, 0, 0.8)",
           textShadow:
             "0 0 20px rgba(0,0,0,0.75), 0 0 40px rgba(0,0,0,0.6), 0 0 70px rgba(0,0,0,0.85)",

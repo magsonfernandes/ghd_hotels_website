@@ -13,7 +13,7 @@ dotenv.config({ path: path.join(repoRoot, ".env") });
 dotenv.config({ path: path.join(repoRoot, ".env.local"), override: true });
 const distDir = path.join(repoRoot, "src/frontend/dist");
 
-const mailbox = "test@ghdhotels.in";
+const mailbox = String(process.env.MAILBOX || "test@ghdhotels.in").trim();
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 },
@@ -22,11 +22,18 @@ const upload = multer({
 const app = express();
 app.use(
   cors({
-    origin: true,
+    origin:
+      process.env.CORS_ORIGIN && process.env.CORS_ORIGIN.trim() !== ""
+        ? process.env.CORS_ORIGIN.split(",").map((s) => s.trim())
+        : true,
     credentials: true,
   }),
 );
 app.use(express.json({ limit: "256kb" }));
+
+app.get("/api/health", (_req, res) => {
+  return res.status(200).json({ ok: true });
+});
 
 app.post("/api/contact", async (req, res) => {
   const name = String(req.body?.name ?? "").trim();
