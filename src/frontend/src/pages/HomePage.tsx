@@ -259,22 +259,15 @@ export function HomePage() {
             ? "/assets/generated/MainPage.mov"
             : "/assets/generated/WhatsApp%20Video%202026-04-27%20at%2017.02.37.mp4"
         }
-        title={
-          <>
-            Crafted Experiences.
-            <br />
-            Defined Excellence.
-          </>
-        }
+        title="Crafted Experiences. Defined Excellence."
         overlay="medium"
-        titleClass="max-w-4xl mx-auto"
+        titleClass="max-w-6xl mx-auto px-2 sm:px-0"
         titleStyle={{
-          fontSize: "clamp(2.45rem, 5.8vw, 5.25rem)",
+          fontSize: "clamp(1.85rem, 4vw, 3.85rem)",
           fontWeight: 100,
           marginTop: "0.65rem",
-          WebkitTextStroke: "1.3px rgba(0, 0, 0, 0.8)",
-          textShadow:
-            "0 0 20px rgba(0,0,0,0.75), 0 0 40px rgba(0,0,0,0.6), 0 0 70px rgba(0,0,0,0.85)",
+          lineHeight: 1.12,
+          WebkitTextStroke: "1px rgba(0, 0, 0, 0.75)",
         }}
         fadeOnScroll
         contentClassName="max-w-6xl"
