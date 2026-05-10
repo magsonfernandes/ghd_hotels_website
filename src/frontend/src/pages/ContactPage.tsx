@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
+import {
+  formatContactFetchFailure,
+  formatContactSubmitFailure,
+  parseContactResponseJson,
+} from "../lib/contactFormDiagnostics";
 import { mailApiUrl } from "../lib/mailApi";
 
 /** Add your hero image under `public/` and set this, e.g. `"/assets/contact/hero.jpg"`. */
@@ -50,8 +55,13 @@ export function ContactPage() {
     setStatus("loading");
     setErrorMsg("");
 
+    const url = mailApiUrl("/api/contact");
+    const controller = new AbortController();
+    const timeoutMs = 45_000;
+    const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+
     try {
-      const res = await fetch(mailApiUrl("/api/contact"), {
+      const res = await fetch(url, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
@@ -60,40 +70,52 @@ export function ContactPage() {
           phone: form.phone,
           message: form.message,
         }),
+        signal: controller.signal,
       });
 
       const contentType = res.headers.get("content-type") || "";
       const raw = await res.text();
-      let data: { ok?: boolean; error?: string } = {};
-      if (contentType.includes("application/json")) {
-        try {
-          data = JSON.parse(raw) as { ok?: boolean; error?: string };
-        } catch {
-          data = {};
-        }
-      }
+      const data =
+        parseContactResponseJson(raw, contentType) ?? ({} as { ok?: boolean; error?: string });
 
-      if (!res.ok) {
-        const detail =
-          data.error ||
-          (raw && !contentType.includes("application/json")
-            ? raw.slice(0, 200)
-            : "") ||
-          res.statusText ||
-          "Request failed";
+      const success = res.ok && data.ok === true;
+      if (!success) {
+        const detail = formatContactSubmitFailure({
+          requestUrl: url,
+          response: res,
+          rawBody: raw,
+        });
+        console.error("[contact form] submit failed", {
+          url,
+          status: res.status,
+          statusText: res.statusText,
+          contentType,
+          parsed: data,
+          rawPrefix: raw.slice(0, 1500),
+        });
         throw new Error(detail);
-      }
-      if (data.ok === false) {
-        throw new Error(data.error || "Failed to send message.");
       }
 
       setForm({ name: "", email: "", phone: "", message: "" });
       setStatus("success");
     } catch (err) {
-      setErrorMsg(
-        err instanceof Error ? err.message : "Failed to send message.",
-      );
+      const isNetwork =
+        err instanceof TypeError ||
+        (err instanceof DOMException && err.name === "AbortError") ||
+        (err instanceof Error &&
+          /failed to fetch|networkerror|load failed|aborted/i.test(err.message));
+
+      const message = isNetwork
+        ? formatContactFetchFailure(url, err)
+        : err instanceof Error
+          ? err.message
+          : "Failed to send message.";
+
+      console.error("[contact form] error", { url, isNetwork, err });
+      setErrorMsg(message);
       setStatus("error");
+    } finally {
+      window.clearTimeout(timeoutId);
     }
   };
 
@@ -375,17 +397,34 @@ export function ContactPage() {
 
                       {status === "error" && errorMsg && (
                         <div
-                          className="border border-red-500/30 px-4 py-3"
+                          className="border border-red-500/30 px-4 py-3 text-left"
                           data-ocid="contact.error_state"
                         >
                           <p
-                            className="font-body text-red-400 text-sm"
+                            className="font-body text-red-300 text-sm font-medium mb-2"
                             style={{
                               fontFamily:
                                 "General Sans, Helvetica Neue, sans-serif",
                             }}
                           >
+                            Could not send your message. Details:
+                          </p>
+                          <pre
+                            className="font-mono text-xs text-red-200/90 whitespace-pre-wrap break-words leading-relaxed max-h-64 overflow-y-auto"
+                            data-ocid="contact.error_details"
+                          >
                             {errorMsg}
+                          </pre>
+                          <p
+                            className="font-body text-red-400/70 text-xs mt-3"
+                            style={{
+                              fontFamily:
+                                "General Sans, Helvetica Neue, sans-serif",
+                            }}
+                          >
+                            Open the browser developer console (F12 → Console) for
+                            the same log entry{" "}
+                            <span className="font-mono">[contact form]</span>.
                           </p>
                         </div>
                       )}
