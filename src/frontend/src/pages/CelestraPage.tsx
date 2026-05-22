@@ -10,6 +10,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
+import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 const features = [
@@ -206,15 +207,10 @@ export function CelestraPage() {
           <>
             — Celéstra —
             <span
-              className="block mt-6 sm:mt-8"
+              className="hero-tagline block mt-6 sm:mt-8"
               style={{
                 fontFamily:
                   '"Zapfino", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Brush Script MT", cursive',
-                fontSize: "clamp(1.02rem, 2.2vw, 1.8rem)",
-                fontWeight: 400,
-                letterSpacing: "0.02em",
-                textTransform: "none",
-                WebkitTextStroke: "0px transparent",
               }}
             >
               Where Earth Meets the Extraordinary
@@ -223,28 +219,25 @@ export function CelestraPage() {
         }
         overlay="dark"
         fadeOnScroll
+        contentPlacement="below-center"
         baseColor="black"
-        titleStyle={{
-          WebkitTextStroke: "1.3px rgba(0, 0, 0, 0.8)",
-          textShadow:
-            "0 0 20px rgba(0,0,0,0.75), 0 0 40px rgba(0,0,0,0.6), 0 0 70px rgba(0,0,0,0.85)",
-        }}
+        titleStyle={heroImageTitleStyle}
       />
 
       {/* Brand Introduction */}
       <section
-        className="section-pad bg-black pt-12 sm:pt-16 md:pt-20 lg:pt-24"
+        className="home-section-pad bg-black"
         style={{ backgroundColor: "#000" }}
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-0">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 items-start">
             <div className="lg:col-span-7">
               <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll">
                 The Premium Brand
               </p>
               <div className="gold-divider gold-divider-left animate-on-scroll delay-100" />
               <h2
-                className="section-subheading animate-on-scroll delay-200 text-justify"
+                className="section-lead animate-on-scroll delay-200 text-justify"
                 style={{ marginBottom: "1.5rem" }}
               >
                 A Celestial Expression of Refined Hospitality
@@ -268,23 +261,14 @@ export function CelestraPage() {
                   balance, and modern luxury.
                 </p>
 
-                <p
-                  className="font-display text-ivory/90 italic mt-3 text-justify"
-                  style={{
-                    fontFamily: "Instrument Serif, Georgia, serif",
-                    fontWeight: 400,
-                    fontSize: "clamp(1.1rem, 2.2vw, 1.5rem)",
-                    letterSpacing: "0.02em",
-                    lineHeight: 1.5,
-                  }}
-                >
+                <p className="section-quote text-ivory/90 mt-3 text-justify">
                   Celéstra by GHD Hotels — Where Comfort Meets Celestial
                   Elegance.
                 </p>
               </div>
             </div>
 
-            <div className="lg:col-span-5 lg:self-start lg:pt-12 animate-on-scroll-right delay-200">
+            <div className="lg:col-span-5 lg:self-start animate-on-scroll-right delay-200">
               <div className="border border-gold/20 p-5 sm:p-8">
                 <p className="eyebrow eyebrow--gold-emphasis mb-4 text-justify">
                   The Celéstra Promise
@@ -302,14 +286,7 @@ export function CelestraPage() {
                     return (
                       <li key={item} className="flex items-start gap-3">
                         <span className="w-5 h-px bg-gold flex-shrink-0 mt-[0.65em]" />
-                        <span
-                          className="font-body text-base text-ivory-muted/70 min-w-0 flex-1 text-justify"
-                          style={{
-                            fontFamily:
-                              "General Sans, Helvetica Neue, sans-serif",
-                            fontWeight: 300,
-                          }}
-                        >
+                        <span className="body-refined text-ivory-muted/70 min-w-0 flex-1 text-justify">
                           <strong className="text-ivory/90 font-semibold">
                             {label}
                           </strong>
@@ -328,7 +305,7 @@ export function CelestraPage() {
       {/* The Philosophy of Celéstra */}
       <section
         ref={philosophyRef}
-        className="section-pad bg-black relative overflow-hidden"
+        className="home-section-pad bg-black relative overflow-hidden"
         style={{ backgroundColor: "#000" }}
       >
         {/* Background image layer (use <img> so it always loads/paints reliably) */}
@@ -378,28 +355,22 @@ export function CelestraPage() {
             willChange: "transform",
           }}
         >
-          <div className="text-center mb-12 sm:mb-16">
+          <div className="text-center mb-8 sm:mb-10">
             <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll">
               The Philosophy of Celéstra
             </p>
             <div className="gold-divider mx-auto animate-on-scroll delay-100" />
-            <h2 className="section-heading animate-on-scroll delay-200">
+            <h2 className="section-lead animate-on-scroll delay-200">
               Designed for ease, crafted for memorable stays
             </h2>
           </div>
-          <div className="space-y-6 animate-on-scroll delay-300 text-center max-w-3xl mx-auto">
-            <p
-              className="body-refined-lg text-ivory-muted/70"
-              style={{ fontWeight: 700 }}
-            >
+          <div className="space-y-4 animate-on-scroll delay-300 text-center max-w-3xl mx-auto">
+            <p className="body-refined-lg text-ivory-muted/70">
               True hospitality is not displayed; it is experienced — felt
               quietly and remembered naturally. A hotel should never overwhelm
               the traveler, but instead welcome them with ease and intention.
             </p>
-            <p
-              className="body-refined-lg text-ivory-muted/70"
-              style={{ fontWeight: 700 }}
-            >
+            <p className="body-refined-lg text-ivory-muted/70">
               At Celéstra, this belief shapes every detail, where balanced
               design, warm service, and a deep sense of place come together to
               create environments in which journeys slow down and moments become
@@ -412,16 +383,16 @@ export function CelestraPage() {
       {/* Features Grid (Celéstra Offerings) */}
       <section
         ref={offeringsRef}
-        className="section-pad bg-black"
+        className="home-section-pad bg-black"
         style={{ backgroundColor: "#000" }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-0">
-          <div className="text-center mb-12 sm:mb-20">
+          <div className="text-center mb-8 sm:mb-10">
             <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll">
               Celéstra Offerings
             </p>
             <div className="gold-divider animate-on-scroll delay-100" />
-            <h2 className="section-heading animate-on-scroll delay-200">
+            <h2 className="section-lead animate-on-scroll delay-200">
               The Celéstra Experience
             </h2>
             <p className="body-refined-lg text-ivory-muted/70 mt-4 max-w-xl mx-auto animate-on-scroll delay-300">
@@ -442,22 +413,10 @@ export function CelestraPage() {
                     <Icon size={18} className="text-gold" />
                   </div>
                   <div className="min-w-0 text-justify">
-                    <h3
-                      className="font-display text-ivory text-base mb-2"
-                      style={{
-                        fontFamily: "Instrument Serif, Georgia, serif",
-                        fontWeight: 400,
-                      }}
-                    >
+                    <h3 className="pillar-title text-ivory mb-2">
                       {feature.label}
                     </h3>
-                    <p
-                      className="font-body text-sm text-ivory-muted/60 leading-relaxed"
-                      style={{
-                        fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                        fontWeight: 300,
-                      }}
-                    >
+                    <p className="body-refined text-ivory-muted/60">
                       {feature.description}
                     </p>
                   </div>
@@ -469,9 +428,9 @@ export function CelestraPage() {
       </section>
 
       {/* Under Development Banner */}
-      <section className="py-16 bg-black">
+      <section className="py-10 sm:py-12 bg-black">
         <div className="max-w-3xl mx-auto text-center px-6">
-          <div className="border border-gold/25 p-12 animate-on-scroll">
+          <div className="border border-gold/25 p-8 sm:p-10 animate-on-scroll">
             <div className="gold-divider" />
             <h3
               className="font-display text-gold text-2xl mt-6 mb-4"
@@ -501,9 +460,9 @@ export function CelestraPage() {
       </section>
 
       {/* Cross Navigation */}
-      <section className="py-16 bg-black border-t border-gold/10">
+      <section className="py-10 sm:py-12 bg-black border-t border-gold/10">
         <div className="max-w-4xl mx-auto text-center px-6">
-          <p className="eyebrow mb-8 animate-on-scroll">
+          <p className="eyebrow mb-6 animate-on-scroll">
             Explore Our Portfolio
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-on-scroll delay-200">

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
+import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 const values = [
@@ -100,15 +101,10 @@ export function AboutPage() {
           <>
             — GHD Hotels —
             <span
-              className="block mt-6 sm:mt-8"
+              className="hero-tagline block mt-6 sm:mt-8"
               style={{
                 fontFamily:
                   '"Zapfino", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Brush Script MT", cursive',
-                fontSize: "clamp(1.02rem, 2.2vw, 1.8rem)",
-                fontWeight: 400,
-                letterSpacing: "0.02em",
-                textTransform: "none",
-                WebkitTextStroke: "0px transparent",
               }}
             >
               Where stays become experiences
@@ -117,36 +113,33 @@ export function AboutPage() {
         }
         overlay="dark"
         fadeOnScroll
-        titleStyle={{
-          WebkitTextStroke: "1.3px rgba(0, 0, 0, 0.8)",
-          textShadow:
-            "0 0 20px rgba(0,0,0,0.75), 0 0 40px rgba(0,0,0,0.6), 0 0 70px rgba(0,0,0,0.85)",
-        }}
+        contentPlacement="below-center"
+        titleStyle={heroImageTitleStyle}
       />
 
       {/* Mission Section */}
       <section
         id="who-we-are"
         ref={missionRef}
-        className="section-pad bg-charcoal-mid"
+        className="home-section-pad bg-charcoal-mid"
       >
         <div
           className="max-w-5xl mx-auto px-2 sm:px-0"
           style={{ opacity: missionFade, willChange: "opacity" }}
         >
-          <div className="grid grid-cols-1 gap-12 items-start">
+          <div className="grid grid-cols-1 gap-8 items-start">
             <div className="text-center">
               <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll-left">
                 Who We Are
               </p>
               <div className="gold-divider animate-on-scroll-left delay-100" />
               <h2
-                className="section-subheading animate-on-scroll-left delay-200"
-                style={{ marginBottom: "2.5rem" }}
+                className="section-lead animate-on-scroll-left delay-200"
+                style={{ marginBottom: "1.5rem" }}
               >
                 A Vision Born from Passion for Hospitality
               </h2>
-              <div className="space-y-6 animate-on-scroll-left delay-300">
+              <div className="space-y-4 animate-on-scroll-left delay-300">
                 <p className="body-refined-lg">
                   GHD Hotels was conceived with a clear and ambitious vision —
                   to create a hospitality brand that seamlessly serves the full
@@ -227,12 +220,12 @@ export function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section ref={valuesRef} className="section-pad bg-charcoal">
+      <section ref={valuesRef} className="home-section-pad bg-charcoal">
         <div
           className="max-w-6xl mx-auto px-2 sm:px-0"
           style={{ opacity: valuesFade, willChange: "opacity" }}
         >
-          <div className="text-center mb-12 sm:mb-20">
+          <div className="text-center mb-8 sm:mb-10">
             <p
               className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
               style={{ color: "#b8975a" }}
@@ -240,7 +233,7 @@ export function AboutPage() {
               Our Principles
             </p>
             <div className="gold-divider animate-on-scroll delay-100" />
-            <h2 className="section-heading animate-on-scroll delay-200">
+            <h2 className="section-lead animate-on-scroll delay-200">
               The Pillars of GHD
             </h2>
           </div>
@@ -264,15 +257,7 @@ export function AboutPage() {
                     {value.number}
                   </span>
                   <div className="pt-1 sm:pt-2 min-w-0 text-justify">
-                    <h3
-                      className="font-display text-ivory mb-3"
-                      style={{
-                        fontFamily: "Instrument Serif, Georgia, serif",
-                        fontWeight: 400,
-                        fontSize: "1.35rem",
-                        letterSpacing: "0.03em",
-                      }}
-                    >
+                    <h3 className="pillar-title text-ivory mb-3">
                       {value.title}
                     </h3>
                     <p className="body-refined">{value.description}</p>
@@ -287,7 +272,7 @@ export function AboutPage() {
       {/* Quote section */}
       <section
         ref={quoteRef}
-        className="section-pad parallax-section relative text-center"
+        className="home-section-pad parallax-section relative text-center"
         style={{
           backgroundImage: `url(${ABOUT_COUPLE_HERO_IMAGE})`,
         }}
@@ -305,16 +290,7 @@ export function AboutPage() {
           style={{ opacity: quoteFade, willChange: "opacity" }}
         >
           <div className="gold-divider animate-on-scroll" />
-          <blockquote
-            className="font-display text-ivory italic animate-on-scroll delay-200"
-            style={{
-              fontFamily: "Instrument Serif, Georgia, serif",
-              fontSize: "clamp(1.6rem, 3.2vw, 2.6rem)",
-              lineHeight: 1.4,
-              letterSpacing: "0.02em",
-              margin: "3rem 0",
-            }}
-          >
+          <blockquote className="section-lead text-ivory italic animate-on-scroll delay-200" style={{ margin: "1.5rem 0" }}>
             "Hospitality is not an amenity. It is an art form — one that we at
             GHD Hotels are dedicated to mastering, one property at a time."
           </blockquote>

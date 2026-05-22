@@ -13,19 +13,20 @@ import {
 } from "../components/booking/BookingCheckoutModal";
 import { RoomCard } from "../components/booking/RoomCard";
 import { RoomDetailsModal } from "../components/booking/RoomDetailsModal";
-import type { BookingRateSelection } from "../components/booking/bookingRates";
-import {
-  MEAL_PRICE_PER_ADULT,
-  MEAL_PRICE_PER_CHILD,
-  ROOM_CATEGORIES,
-  type MealSelection,
-  type RoomCategoryId,
+import type {
+  BookingRateSelection,
+  MealSelection,
+  RoomCategoryId,
 } from "../components/booking/bookingRates";
 import {
   defaultRoomOccupancy,
   normalizeRoomsList,
   totalGuestsFromRooms,
 } from "../components/booking/roomOccupancy";
+import { useRates, useRatesStatus } from "../lib/rates";
+
+/** Fallback per-category inventory when not yet configurable via the API. */
+const DEFAULT_INVENTORY_PER_CATEGORY = 15;
 
 type Hotel = {
   id: string;
@@ -88,8 +89,14 @@ const defaultMeals = (): MealSelection => ({
   dinner: false,
 });
 
-function countByCategory(assignments: RoomCategoryId[]): Record<RoomCategoryId, number> {
-  return { "studio-apartment": assignments.length };
+function countByCategory(
+  assignments: RoomCategoryId[],
+): Record<RoomCategoryId, number> {
+  const counts: Record<RoomCategoryId, number> = {};
+  for (const id of assignments) {
+    counts[id] = (counts[id] ?? 0) + 1;
+  }
+  return counts;
 }
 
 function parseISODate(s: string): Date | null {
@@ -132,15 +139,22 @@ function readBookingSearch(): BookingSearchSnapshot {
 }
 
 export function BookingPage() {
+  const rates = useRates();
+  const { isLoading: ratesLoading } = useRatesStatus();
+  const primaryCategoryId = rates.roomCategories[0]?.id ?? "studio-apartment";
+
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [checkoutSelection, setCheckoutSelection] =
     useState<BookingRateSelection | null>(null);
-  const [selectedHotelId, setSelectedHotelId] = useState<string>("nivaara-nerul");
+  const [selectedHotelId, setSelectedHotelId] =
+    useState<string>("nivaara-nerul");
   const [liveSearch, setLiveSearch] = useState<BookingSearchSnapshot>(() =>
     readBookingSearch(),
   );
   const [meals, setMeals] = useState<MealSelection>(defaultMeals);
-  const [roomAssignments, setRoomAssignments] = useState<RoomCategoryId[]>(() => ["studio-apartment"]);
+  const [roomAssignments, setRoomAssignments] = useState<RoomCategoryId[]>(
+    () => [primaryCategoryId],
+  );
   const [roomDetailsOpen, setRoomDetailsOpen] = useState(false);
 
   useEffect(() => {
@@ -164,30 +178,51 @@ export function BookingPage() {
     () => nightsBetween(liveSearch.checkIn, liveSearch.checkOut),
     [liveSearch.checkIn, liveSearch.checkOut],
   );
-  const inventories: Record<RoomCategoryId, number> = {
-    "studio-apartment": 15,
-  };
+
+  const knownCategoryIds = useMemo(
+    () => new Set(rates.roomCategories.map((c) => c.id)),
+    [rates.roomCategories],
+  );
+  const inventoryFor = (_categoryId: RoomCategoryId): number =>
+    DEFAULT_INVENTORY_PER_CATEGORY;
 
   const roomsList = liveSearch.rooms?.length
     ? liveSearch.rooms
     : [defaultRoomOccupancy()];
 
-  // Keep per-room assignments aligned with the rooms list length.
+  // Keep per-room assignments aligned with the rooms list length, and snap
+  // any assignment to a category that no longer exists back to the primary.
   useEffect(() => {
     setRoomAssignments((prev) => {
       const next: RoomCategoryId[] = [];
       for (let i = 0; i < totalRoomsRequested; i++) {
-        next[i] = prev[i] ?? "studio-apartment";
+        const current = prev[i];
+        next[i] =
+          current && knownCategoryIds.has(current)
+            ? current
+            : primaryCategoryId;
       }
       return next;
     });
-  }, [totalRoomsRequested]);
+  }, [totalRoomsRequested, primaryCategoryId, knownCategoryIds]);
 
-  const counts = useMemo(() => countByCategory(roomAssignments), [roomAssignments]);
+  const counts = useMemo(
+    () => countByCategory(roomAssignments),
+    [roomAssignments],
+  );
   const selectedRoomsTotal = roomAssignments.length;
 
   const canAssignRoomToCategory = (_index: number, nextId: RoomCategoryId) =>
-    nextId === "studio-apartment";
+    knownCategoryIds.has(nextId);
+
+  const assignRoomCategory = (roomIndex: number, nextId: RoomCategoryId) => {
+    if (!knownCategoryIds.has(nextId)) return;
+    setRoomAssignments((prev) => {
+      const next = prev.slice();
+      next[roomIndex] = nextId;
+      return next;
+    });
+  };
 
   const toggleMeal = (key: keyof MealSelection) => {
     setMeals((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -195,12 +230,12 @@ export function BookingPage() {
 
   const openCheckout = useCallback(() => {
     setLiveSearch(readBookingSearch());
-    const rooms = (Object.keys(ROOM_CATEGORIES) as RoomCategoryId[])
-      .map((id) => ({
-        categoryId: id,
-        categoryLabel: ROOM_CATEGORIES[id].label,
-        quantity: counts[id],
-        baseRatePerNight: ROOM_CATEGORIES[id].roomOnly.discounted,
+    const rooms = rates.roomCategories
+      .map((cat) => ({
+        categoryId: cat.id,
+        categoryLabel: cat.label,
+        quantity: counts[cat.id] ?? 0,
+        baseRatePerNight: cat.roomOnly.discounted,
       }))
       .filter((r) => r.quantity > 0);
 
@@ -209,7 +244,7 @@ export function BookingPage() {
       meals: { ...meals },
     });
     setCheckoutOpen(true);
-  }, [counts, meals]);
+  }, [counts, meals, rates.roomCategories]);
 
   const roomDetails = useMemo(() => {
     return {
@@ -341,49 +376,75 @@ export function BookingPage() {
               to={isNivaaraNerulSelected ? "/nivaara" : "/"}
               className="btn-gold w-full sm:w-auto text-center"
             >
-              <span>{isNivaaraNerulSelected ? "Visit Nivaara" : "Back to home"}</span>
+              <span>
+                {isNivaaraNerulSelected ? "Visit Nivaara" : "Back to home"}
+              </span>
             </Link>
           </div>
 
           <div className="space-y-6">
-            <RoomCard
-              propertyName="Nerul"
-              brandLabel="Nivaãra"
-              propertyLinkTo="/nivaara#properties"
-              roomCategoryId="studio-apartment"
-              roomType={ROOM_CATEGORIES["studio-apartment"].label}
-              description={ROOM_CATEGORIES["studio-apartment"].shortDescription}
-              image="/assets/generated/hero-nivaara.dim_1920x1080.png"
-              totalInventory={inventories["studio-apartment"]}
-              baseRateOriginal={ROOM_CATEGORIES["studio-apartment"].roomOnly.original}
-              baseRateDiscounted={ROOM_CATEGORIES["studio-apartment"].roomOnly.discounted}
-              nights={nights}
-              quantity={totalRoomsRequested}
-              maxSelectable={Math.min(inventories["studio-apartment"], totalRoomsRequested)}
-              onQuantityChange={() => {}}
-              lockQuantity
-              meals={meals}
-              roomRows={roomsList
-                .slice(0, totalRoomsRequested)
-                .map((r, index) => ({
-                  index,
-                  adults: r.adults,
-                  children: r.children,
-                  suggestedCategoryId: "studio-apartment" as const,
-                  assignedCategoryId: "studio-apartment" as const,
-                }))
-                .filter((row) => row.assignedCategoryId === "studio-apartment")}
-              onRoomDetails={() => setRoomDetailsOpen(true)}
-            />
+            {ratesLoading && rates.roomCategories.length === 0 ? (
+              <div
+                aria-hidden="true"
+                className="h-[320px] w-full rounded-3xl border border-gold/15 bg-white/40 animate-pulse"
+              />
+            ) : (
+              rates.roomCategories.map((cat, catIndex) => {
+                const inventory = inventoryFor(cat.id);
+                const rowsForCategory = roomsList
+                  .slice(0, totalRoomsRequested)
+                  .map((r, index) => ({
+                    index,
+                    adults: r.adults,
+                    children: r.children,
+                    suggestedCategoryId: primaryCategoryId,
+                    assignedCategoryId:
+                      roomAssignments[index] ?? primaryCategoryId,
+                  }))
+                  .filter((row) => row.assignedCategoryId === cat.id);
+                const quantityForCategory = rowsForCategory.length;
+                return (
+                  <RoomCard
+                    key={cat.id}
+                    propertyName="Nerul"
+                    brandLabel="Nivaãra"
+                    propertyLinkTo={
+                      catIndex === 0 ? "/nivaara#properties" : undefined
+                    }
+                    roomCategoryId={cat.id}
+                    roomType={cat.label}
+                    description={cat.shortDescription}
+                    image="/assets/generated/hero-nivaara.dim_1920x1080.png"
+                    totalInventory={inventory}
+                    baseRateOriginal={cat.roomOnly.original}
+                    baseRateDiscounted={cat.roomOnly.discounted}
+                    nights={nights}
+                    quantity={quantityForCategory}
+                    maxSelectable={Math.min(inventory, totalRoomsRequested)}
+                    onQuantityChange={() => {}}
+                    lockQuantity
+                    meals={meals}
+                    roomRows={rowsForCategory}
+                    onAssignRoomCategory={assignRoomCategory}
+                    canAssignRoomToCategory={canAssignRoomToCategory}
+                    onRoomDetails={
+                      catIndex === 0
+                        ? () => setRoomDetailsOpen(true)
+                        : undefined
+                    }
+                  />
+                );
+              })
+            )}
 
             <div className="rounded-2xl border border-gold/15 bg-white/90 p-5 sm:p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/55 mb-3">
                 Meals
               </p>
               <p className="text-xs text-charcoal/50 mb-3">
-                ₹{MEAL_PRICE_PER_ADULT.toLocaleString("en-IN")} per adult and ₹
-                {MEAL_PRICE_PER_CHILD.toLocaleString("en-IN")} per child, per meal,
-                per night — add or remove as you like.
+                ₹{rates.mealPrices.perAdult.toLocaleString("en-IN")} per adult
+                and ₹{rates.mealPrices.perChild.toLocaleString("en-IN")} per
+                child, per meal, per night — add or remove as you like.
               </p>
               <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-6">
                 {(
@@ -416,7 +477,9 @@ export function BookingPage() {
                 onClick={openCheckout}
                 disabled={
                   selectedRoomsTotal !== totalRoomsRequested ||
-                  counts["studio-apartment"] > inventories["studio-apartment"]
+                  rates.roomCategories.some(
+                    (cat) => (counts[cat.id] ?? 0) > inventoryFor(cat.id),
+                  )
                 }
               >
                 Continue to checkout

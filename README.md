@@ -75,3 +75,32 @@ pnpm approve-builds
 pnpm install
 ```
 
+## Admin pricing portal
+
+Room rates, meal add-ons, and the tax rate are no longer hard-coded — the
+public booking page reads them at runtime from this server. Edits happen in a
+separate dashboard that lives in the `admin-portal` repo (see
+`/Users/krupashrikoli/Documents/admin-portal` locally).
+
+How it connects:
+
+- The server exposes:
+  - `GET /api/rates` — public payload consumed by the booking page.
+  - `GET /api/admin/rates` and `PUT /api/admin/rates` — protected by an admin
+    bearer token; used by the portal.
+- Persistence is a single JSON file at `data/rates.json`. The file is seeded
+  with the day-one defaults on first boot. The `data/` folder is gitignored.
+
+Required env vars (set in `.env` or `.env.local`):
+
+- `ADMIN_TOKEN` — shared secret the portal must send as `Authorization: Bearer
+  <token>`. If unset, `/api/admin/*` responds with `503` and writes are
+  refused; the public page keeps serving the last saved rates.
+- `CORS_ORIGIN` — if the portal is deployed on a different origin, add it to
+  this comma-separated allowlist (e.g.
+  `https://your-domain.com,https://admin.your-domain.com`). Leave empty in
+  development for permissive CORS.
+
+To run the portal locally against this server, see the README in
+`admin-portal/`.
+

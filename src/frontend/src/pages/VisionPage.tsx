@@ -3,6 +3,7 @@ import { Building2, Leaf, TrendingUp, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
+import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 const pillars = [
@@ -59,8 +60,7 @@ export function VisionPage() {
   const [ctaFade, setCtaFade] = useState(0);
 
   useEffect(() => {
-    document.title =
-      "Development Vision – GHD Hotels | Building the Future of Hospitality";
+    document.title = "Development Vision – GHD Hotels";
   }, []);
 
   useEffect(() => {
@@ -107,19 +107,29 @@ export function VisionPage() {
     <div className="bg-charcoal min-h-screen nivaara-test-font">
       <HeroSection
         bgImage="/assets/generated/hero-vision.dim_1920x1080.png"
-        title="Building the Future of Hospitality"
+        title={
+          <>
+            — Development Vision —
+            <span
+              className="hero-tagline block mt-6 sm:mt-8"
+              style={{
+                fontFamily:
+                  '"Zapfino", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Brush Script MT", cursive',
+              }}
+            >
+              Building the Future of Hospitality
+            </span>
+          </>
+        }
         overlay="dark"
+        contentPlacement="below-center"
         bgBlurPx={1}
         bgBrightness={0.65}
-        titleStyle={{
-          WebkitTextStroke: "1.3px rgba(0, 0, 0, 0.8)",
-          textShadow:
-            "0 0 20px rgba(0,0,0,0.75), 0 0 40px rgba(0,0,0,0.6), 0 0 70px rgba(0,0,0,0.85)",
-        }}
+        titleStyle={heroImageTitleStyle}
       />
 
       {/* Intro Section */}
-      <section ref={introRef} className="section-pad bg-charcoal-mid">
+      <section ref={introRef} className="home-section-pad bg-charcoal-mid">
         <div
           className="max-w-4xl mx-auto text-center px-4 sm:px-0"
           style={{ opacity: introFade, willChange: "opacity" }}
@@ -129,19 +139,19 @@ export function VisionPage() {
           </p>
           <div className="gold-divider animate-on-scroll delay-100" />
           <h2
-            className="section-heading animate-on-scroll delay-200"
-            style={{ marginBottom: "3rem" }}
+            className="section-lead animate-on-scroll delay-200"
+            style={{ marginBottom: "1.5rem" }}
           >
             A New Hospitality Ecosystem
           </h2>
-          <div className="space-y-6">
-            <p className="body-refined-lg">
+          <div className="space-y-4 max-w-3xl mx-auto">
+            <p className="body-refined-lg text-ivory-muted/70">
               GHD Hotels is not merely building hotels. We are developing a
               comprehensive hospitality ecosystem — one that offers remarkable
               experiences at every tier, from the most discerning luxury
               traveler to the efficiency-focused business guest.
             </p>
-            <p className="body-refined">
+            <p className="body-refined text-ivory-muted/70">
               Our development approach is guided by four core principles that
               inform every aspect of how we select locations, design properties,
               and create the operational culture that will define the GHD guest
@@ -152,17 +162,17 @@ export function VisionPage() {
       </section>
 
       {/* Four Pillars */}
-      <section ref={pillarsRef} className="section-pad bg-charcoal">
+      <section ref={pillarsRef} className="home-section-pad bg-charcoal">
         <div
           className="max-w-6xl mx-auto px-4 sm:px-0"
           style={{ opacity: pillarsFade, willChange: "opacity" }}
         >
-          <div className="text-center mb-12 sm:mb-20">
+          <div className="text-center mb-8 sm:mb-10">
             <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll">
               Development Pillars
             </p>
             <div className="gold-divider animate-on-scroll delay-100" />
-            <h2 className="section-heading animate-on-scroll delay-200">
+            <h2 className="section-lead animate-on-scroll delay-200">
               Four Cornerstones of Excellence
             </h2>
           </div>
@@ -196,22 +206,10 @@ export function VisionPage() {
                   </div>
 
                   <div className="min-w-0 text-justify">
-                    <h3
-                      className="font-display text-ivory text-xl md:text-2xl mb-4"
-                      style={{
-                        fontFamily: "Instrument Serif, Georgia, serif",
-                        fontWeight: 400,
-                      }}
-                    >
+                    <h3 className="pillar-title text-ivory mb-4">
                       {pillar.title}
                     </h3>
-                    <p
-                      className="font-body text-base text-ivory-muted/65 leading-relaxed"
-                      style={{
-                        fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                        fontWeight: 300,
-                      }}
-                    >
+                    <p className="body-refined text-ivory-muted/65">
                       {pillar.description}
                     </p>
                   </div>
@@ -226,7 +224,7 @@ export function VisionPage() {
       <section
         id="development-status"
         ref={statusRef}
-        className="section-pad parallax-section relative"
+        className="home-section-pad parallax-section relative"
         style={{
           backgroundImage:
             "url(/assets/generated/hero-vision.dim_1920x1080.png)",
@@ -244,24 +242,20 @@ export function VisionPage() {
           className="relative z-10 max-w-4xl mx-auto px-4 sm:px-0"
           style={{ opacity: statusFade, willChange: "opacity" }}
         >
-          <div className="text-center mb-12 sm:mb-20">
+          <div className="text-center mb-8 sm:mb-10">
             <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll">
               Development Status
             </p>
             <div className="gold-divider animate-on-scroll delay-100" />
             <h2
-              className="section-heading animate-on-scroll delay-200"
-              style={{
-                WebkitTextStroke: "1.3px rgba(0, 0, 0, 0.8)",
-                textShadow:
-                  "0 0 20px rgba(0,0,0,0.75), 0 0 40px rgba(0,0,0,0.6), 0 0 70px rgba(0,0,0,0.85)",
-              }}
+              className="section-lead animate-on-scroll delay-200"
+              style={{ WebkitTextStroke: "0", textShadow: "none" }}
             >
               The Journey Ahead
             </h2>
           </div>
 
-          <div className="space-y-6 animate-on-scroll delay-300">
+          <div className="space-y-4 animate-on-scroll delay-300">
             {[
               {
                 phase: "Phase I",
@@ -323,22 +317,10 @@ export function VisionPage() {
                   </p>
                 </div>
                 <div>
-                  <h4
-                    className="font-display text-ivory text-lg mb-2"
-                    style={{
-                      fontFamily: "Instrument Serif, Georgia, serif",
-                      fontWeight: 400,
-                    }}
-                  >
+                  <h4 className="pillar-title text-ivory mb-2">
                     {item.title}
                   </h4>
-                  <p
-                    className="font-body text-base text-ivory-muted/60"
-                    style={{
-                      fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                      fontWeight: 300,
-                    }}
-                  >
+                  <p className="body-refined text-ivory-muted/60">
                     {item.detail}
                   </p>
                 </div>
@@ -358,22 +340,10 @@ export function VisionPage() {
           style={{ opacity: ctaFade, willChange: "opacity" }}
         >
           <div className="gold-divider animate-on-scroll" />
-          <h3
-            className="font-display text-ivory text-3xl mt-8 mb-4 animate-on-scroll delay-200"
-            style={{
-              fontFamily: "Instrument Serif, Georgia, serif",
-              fontWeight: 400,
-            }}
-          >
+          <h3 className="section-lead text-ivory mt-8 mb-4 animate-on-scroll delay-200">
             Join the GHD Journey
           </h3>
-          <p
-            className="font-body text-ivory-muted/65 text-base leading-relaxed mb-10 animate-on-scroll delay-300"
-            style={{
-              fontFamily: "General Sans, Helvetica Neue, sans-serif",
-              fontWeight: 300,
-            }}
-          >
+          <p className="body-refined-lg text-ivory-muted/65 mb-10 animate-on-scroll delay-300">
             We welcome partnerships, investment inquiries, and expressions of
             interest from those who share our vision for the future of
             hospitality.

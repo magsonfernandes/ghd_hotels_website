@@ -10,6 +10,7 @@ import {
 import { useLayoutEffect } from "react";
 import { Navbar } from "./components/Navbar";
 import { StickyBookNow } from "./components/StickyBookNow";
+import { RatesProvider } from "./lib/rates";
 
 /** Scroll to top on every in-app navigation (links, buttons using navigate, etc.). */
 function ScrollToTop() {
@@ -135,5 +136,9 @@ declare module "@tanstack/react-router" {
 
 // ── App ──────────────────────────────────────────────────────────────
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <RatesProvider>
+      <RouterProvider router={router} />
+    </RatesProvider>
+  );
 }

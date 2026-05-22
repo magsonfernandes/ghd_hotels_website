@@ -1,13 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo } from "react";
-import {
-  type RoomCategoryId,
-  countSelectedMeals,
-  MEAL_PRICE_PER_ADULT,
-  MEAL_PRICE_PER_CHILD,
-  ROOM_CATEGORIES,
-} from "./bookingRates";
+import { useRates } from "../../lib/rates";
+import { type RoomCategoryId, countSelectedMeals } from "./bookingRates";
 
 function currency(n: number) {
   return n.toLocaleString("en-IN", {
@@ -41,10 +36,17 @@ export function RoomCard(props: {
     suggestedCategoryId: RoomCategoryId;
     assignedCategoryId: RoomCategoryId;
   }>;
-  onAssignRoomCategory?: (roomIndex: number, nextCategoryId: RoomCategoryId) => void;
-  canAssignRoomToCategory?: (roomIndex: number, nextCategoryId: RoomCategoryId) => boolean;
+  onAssignRoomCategory?: (
+    roomIndex: number,
+    nextCategoryId: RoomCategoryId,
+  ) => void;
+  canAssignRoomToCategory?: (
+    roomIndex: number,
+    nextCategoryId: RoomCategoryId,
+  ) => boolean;
   onRoomDetails?: () => void;
 }) {
+  const rates = useRates();
   const roomQtyOptions = useMemo(
     () =>
       Array.from({ length: props.maxSelectable + 1 }, (_, quantity) => ({
@@ -55,18 +57,24 @@ export function RoomCard(props: {
   const nights = Math.max(1, Math.floor(props.nights || 1));
   const baseSubtotal = props.quantity * props.baseRateDiscounted * nights;
   const mealsSelected = props.meals ? countSelectedMeals(props.meals) : 0;
-  const assignedAdults =
-    props.roomRows?.reduce((s, r) => s + r.adults, 0) ?? 0;
+  const assignedAdults = props.roomRows?.reduce((s, r) => s + r.adults, 0) ?? 0;
   const assignedChildren =
     props.roomRows?.reduce((s, r) => s + r.children, 0) ?? 0;
   const mealsSubtotal =
     mealsSelected > 0
       ? mealsSelected *
-        (assignedAdults * MEAL_PRICE_PER_ADULT +
-          assignedChildren * MEAL_PRICE_PER_CHILD) *
+        (assignedAdults * rates.mealPrices.perAdult +
+          assignedChildren * rates.mealPrices.perChild) *
         nights
       : 0;
   const totalSubtotal = baseSubtotal + mealsSubtotal;
+  const categoryById = useMemo(() => {
+    const m = new Map<string, { label: string }>();
+    for (const c of rates.roomCategories) m.set(c.id, { label: c.label });
+    return m;
+  }, [rates.roomCategories]);
+  const labelFor = (id: RoomCategoryId): string =>
+    categoryById.get(id)?.label ?? id;
 
   return (
     <div className="rounded-3xl overflow-hidden border border-gold/15 bg-white/90 shadow-2xl shadow-black/25">
@@ -166,7 +174,9 @@ export function RoomCard(props: {
                 </span>
                 <select
                   value={props.quantity}
-                  onChange={(e) => props.onQuantityChange(Number(e.target.value))}
+                  onChange={(e) =>
+                    props.onQuantityChange(Number(e.target.value))
+                  }
                   className="h-10 w-[120px] sm:w-[140px] lg:w-[92px] rounded-lg border border-gold/30 bg-white px-3 text-sm text-charcoal outline-none focus:border-gold focus:ring-2 focus:ring-gold/25"
                   aria-label={`Number of rooms for ${props.roomType}`}
                   disabled={props.lockQuantity}
@@ -234,7 +244,7 @@ export function RoomCard(props: {
                           <p className="text-[0.7rem] text-charcoal/55 mt-1">
                             Suggested:{" "}
                             <span className="font-semibold text-charcoal">
-                              {ROOM_CATEGORIES[row.suggestedCategoryId].label}
+                              {labelFor(row.suggestedCategoryId)}
                             </span>
                           </p>
                         </div>
@@ -255,21 +265,22 @@ export function RoomCard(props: {
                               className="h-10 w-[240px] max-w-full rounded-lg border border-gold/30 bg-white px-3 text-sm text-charcoal outline-none focus:border-gold focus:ring-2 focus:ring-gold/25"
                               aria-label={`${roomLabel} category`}
                             >
-                              {(Object.keys(ROOM_CATEGORIES) as RoomCategoryId[]).map(
-                                (id) => (
-                                  <option
-                                    key={`assigned-room-${row.index}-cat-${id}`}
-                                    value={id}
-                                    disabled={
-                                      props.canAssignRoomToCategory
-                                        ? !props.canAssignRoomToCategory(row.index, id)
-                                        : false
-                                    }
-                                  >
-                                    {ROOM_CATEGORIES[id].label}
-                                  </option>
-                                ),
-                              )}
+                              {rates.roomCategories.map((cat) => (
+                                <option
+                                  key={`assigned-room-${row.index}-cat-${cat.id}`}
+                                  value={cat.id}
+                                  disabled={
+                                    props.canAssignRoomToCategory
+                                      ? !props.canAssignRoomToCategory(
+                                          row.index,
+                                          cat.id,
+                                        )
+                                      : false
+                                  }
+                                >
+                                  {cat.label}
+                                </option>
+                              ))}
                             </select>
                           </label>
                         ) : null}

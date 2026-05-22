@@ -1,11 +1,13 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import multer from "multer";
 import { sendMailViaSmtp } from "../mail/smtp.ts";
+import { loadRates, saveRates } from "./rates.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
@@ -33,6 +35,101 @@ app.use(express.json({ limit: "256kb" }));
 
 app.get("/api/health", (_req, res) => {
   return res.status(200).json({ ok: true });
+});
+
+// ─── Rates API (public read + admin write) ───────────────────────────
+const adminTokenEnv = (): string => String(process.env.ADMIN_TOKEN || "").trim();
+
+function timingSafeStringEquals(a: string, b: string): boolean {
+  const aBuf = Buffer.from(a, "utf8");
+  const bBuf = Buffer.from(b, "utf8");
+  // crypto.timingSafeEqual requires equal length; pad shorter to equal length.
+  const len = Math.max(aBuf.length, bBuf.length, 1);
+  const aPadded = Buffer.alloc(len, 0);
+  const bPadded = Buffer.alloc(len, 0);
+  aBuf.copy(aPadded);
+  bBuf.copy(bPadded);
+  const eq = crypto.timingSafeEqual(aPadded, bPadded);
+  return eq && aBuf.length === bBuf.length;
+}
+
+function requireAdmin(
+  req: express.Request,
+  res: express.Response,
+): boolean {
+  const token = adminTokenEnv();
+  if (!token) {
+    res.status(503).json({ error: "ADMIN_TOKEN not configured" });
+    return false;
+  }
+  const auth = String(req.headers.authorization || "");
+  const m = /^Bearer\s+(.+)$/i.exec(auth);
+  const provided = m?.[1]?.trim() ?? "";
+  if (!provided || !timingSafeStringEquals(provided, token)) {
+    res.status(401).json({ error: "Invalid or missing token" });
+    return false;
+  }
+  return true;
+}
+
+// Tiny in-memory rate limiter: 30 requests / 60s / IP.
+const rateBuckets = new Map<string, { count: number; resetAt: number }>();
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 30;
+
+function rateLimitWrite(
+  req: express.Request,
+  res: express.Response,
+): boolean {
+  const now = Date.now();
+  const ip = String(req.ip || req.socket?.remoteAddress || "unknown");
+  const bucket = rateBuckets.get(ip);
+  if (!bucket || bucket.resetAt <= now) {
+    rateBuckets.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return true;
+  }
+  if (bucket.count >= RATE_MAX) {
+    const retryAfter = Math.max(1, Math.ceil((bucket.resetAt - now) / 1000));
+    res.setHeader("Retry-After", String(retryAfter));
+    res.status(429).json({ error: "Too many requests" });
+    return false;
+  }
+  bucket.count += 1;
+  return true;
+}
+
+app.get("/api/rates", (_req, res) => {
+  try {
+    return res.status(200).json(loadRates());
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Failed to load rates";
+    return res.status(500).json({ error: msg });
+  }
+});
+
+app.get("/api/admin/rates", (req, res) => {
+  if (!requireAdmin(req, res)) return;
+  try {
+    return res.status(200).json(loadRates());
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Failed to load rates";
+    return res.status(500).json({ error: msg });
+  }
+});
+
+app.put("/api/admin/rates", (req, res) => {
+  if (!requireAdmin(req, res)) return;
+  if (!rateLimitWrite(req, res)) return;
+  try {
+    const result = saveRates(req.body);
+    if (!result.ok) {
+      return res.status(400).json({ error: result.error, details: result.details });
+    }
+    return res.status(200).json(result.value);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Failed to save rates";
+    return res.status(500).json({ error: msg });
+  }
 });
 
 app.post("/api/contact", async (req, res) => {
@@ -154,7 +251,18 @@ if (fs.existsSync(distDir)) {
 
 const port = Number(process.env.PORT || 8788);
 app.listen(port, () => {
+  // Ensure data/rates.json exists (and is valid) before serving traffic.
+  try {
+    loadRates();
+  } catch (err) {
+    console.warn("[rates] Initial load failed", err);
+  }
   console.log(`Mail + site server listening on http://127.0.0.1:${port}`);
+  if (!adminTokenEnv()) {
+    console.warn(
+      "[rates] ADMIN_TOKEN is not set — /api/admin/rates will respond with 503.",
+    );
+  }
   if (!fs.existsSync(distDir)) {
     console.warn(
       `No frontend build at ${distDir}. Run: pnpm --filter @caffeine/template-frontend build`,

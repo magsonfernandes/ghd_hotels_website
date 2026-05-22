@@ -11,6 +11,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
+import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 const features = [
@@ -141,22 +142,17 @@ export function SamrayaPage() {
   }, []);
 
   return (
-    <div className="bg-black min-h-screen overflow-x-clip">
+    <div className="bg-black min-h-screen overflow-x-clip samraya-test-font">
       <HeroSection
         bgImage="/assets/generated/hero-samraya.dim_1920x1080.png"
         title={
           <>
             — Samrāya —
             <span
-              className="block mt-6 sm:mt-8"
+              className="hero-tagline block mt-6 sm:mt-8"
               style={{
                 fontFamily:
                   '"Zapfino", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Brush Script MT", cursive',
-                fontSize: "clamp(1.02rem, 2.2vw, 1.8rem)",
-                fontWeight: 400,
-                letterSpacing: "0.02em",
-                textTransform: "none",
-                WebkitTextStroke: "0px transparent",
               }}
             >
               A Realm of Refined Grandeur
@@ -166,18 +162,14 @@ export function SamrayaPage() {
         overlay="dark"
         baseColor="black"
         fadeOnScroll
-        titleStyle={{
-          fontSize: "clamp(4.85rem, 8.4vw, 9.25rem)",
-          WebkitTextStroke: "1.3px rgba(0, 0, 0, 0.8)",
-          textShadow:
-            "0 0 20px rgba(0,0,0,0.75), 0 0 40px rgba(0,0,0,0.6), 0 0 70px rgba(0,0,0,0.85)",
-        }}
+        contentPlacement="below-center"
+        titleStyle={heroImageTitleStyle}
       />
 
       {/* Brand Introduction */}
-      <section className="section-pad relative z-0 bg-black pt-12 sm:pt-16 md:pt-20 lg:pt-24">
+      <section className="home-section-pad relative z-0 bg-black">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-0">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 items-center">
             <div className="lg:col-span-7 text-justify">
               <p
                 className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
@@ -193,8 +185,8 @@ export function SamrayaPage() {
                 }}
               />
               <h2
-                className="section-subheading animate-on-scroll delay-200"
-                style={{ marginBottom: "2.5rem" }}
+                className="section-lead animate-on-scroll delay-200"
+                style={{ marginBottom: "1.5rem" }}
               >
                 A Quieter Power, Rooted in Heritage
               </h2>
@@ -217,23 +209,13 @@ export function SamrayaPage() {
                   brand reinterprets these influences through contemporary
                   design and modern hospitality standards.
                 </p>
-                <p
-                  className="font-display text-ivory/90 italic"
-                  style={{
-                    fontFamily: "Instrument Serif, Georgia, serif",
-                    fontWeight: 400,
-                    fontSize: "clamp(1.1rem, 2.2vw, 1.5rem)",
-                    letterSpacing: "0.02em",
-                    lineHeight: 1.5,
-                    marginTop: "0.75rem",
-                  }}
-                >
+                <p className="section-quote text-ivory/90" style={{ marginTop: "0.75rem" }}>
                   Samrāya — A Kingdom of Comfort. A Legacy of Luxury.
                 </p>
               </div>
             </div>
 
-            <div className="lg:col-span-5 lg:self-start lg:pt-12 animate-on-scroll-right delay-200">
+            <div className="lg:col-span-5 lg:self-start animate-on-scroll-right delay-200">
               <div
                 className="border border-gold/15 p-5 sm:p-8"
                 style={{ borderColor: "rgba(184, 151, 90, 0.2)" }}
@@ -260,7 +242,7 @@ export function SamrayaPage() {
                           className="w-5 h-px flex-shrink-0 mt-[0.65em]"
                           style={{ background: "#b8975a" }}
                         />
-                        <span className="font-body text-base text-ivory-muted/70 min-w-0 flex-1 text-justify">
+                        <span className="body-refined text-ivory-muted/70 min-w-0 flex-1 text-justify">
                           <strong className="text-ivory/90 font-semibold">
                             {bold}
                           </strong>
@@ -279,7 +261,7 @@ export function SamrayaPage() {
       {/* Philosophy + Offerings: green.png overflows visually into Offerings (no overflow clip on section). */}
       <section
         ref={philosophyRef}
-        className="section-pad relative z-10 overflow-x-clip overflow-y-visible bg-black"
+        className="home-section-pad relative z-10 overflow-x-clip overflow-y-visible bg-black"
         style={{ backgroundColor: "#000" }}
       >
         {/* Clip royallady + overlay only — green is a sibling so it can extend past section bottom */}
@@ -326,7 +308,7 @@ export function SamrayaPage() {
         </div>
 
         <div className="relative z-[30] max-w-4xl mx-auto px-4 sm:px-0 lg:px-8 lg:max-w-[54vw] lg:ml-0 lg:mr-auto">
-          <div className="text-center mb-12 sm:mb-16">
+          <div className="text-center mb-8 sm:mb-10">
             <p
               className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
               style={{ color: "#b8975a" }}
@@ -340,23 +322,17 @@ export function SamrayaPage() {
                   "linear-gradient(90deg, transparent, #b8975a, transparent)",
               }}
             />
-            <h2 className="section-heading animate-on-scroll delay-200">
+            <h2 className="section-lead animate-on-scroll delay-200">
               Luxury with Purpose
             </h2>
           </div>
 
-          <div className="space-y-6 animate-on-scroll delay-300 text-center max-w-3xl mx-auto">
-            <p
-              className="body-refined-lg font-bold drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
-              style={{ color: "rgba(245,240,232,0.92)", fontWeight: 700 }}
-            >
+          <div className="space-y-4 animate-on-scroll delay-300 text-center max-w-3xl mx-auto">
+            <p className="body-refined-lg text-ivory-muted/70 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]">
               At Samrāya, luxury is shaped by purpose, precision, and thoughtful
               hospitality.
             </p>
-            <p
-              className="body-refined-lg font-bold drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
-              style={{ fontWeight: 700 }}
-            >
+            <p className="body-refined-lg text-ivory-muted/70 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]">
               Rooted in the timeless Indian principle of{" "}
               <em>Atithi Devo Bhava</em>— the guest is divine — Samrāya
               interprets India’s heritage through a contemporary lens, creating
@@ -366,10 +342,7 @@ export function SamrayaPage() {
               while preserving the warmth and cultural depth of Indian
               hospitality.
             </p>
-            <p
-              className="body-refined-lg font-bold drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
-              style={{ fontWeight: 700 }}
-            >
+            <p className="body-refined-lg text-ivory-muted/70 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]">
               Samrāya represents refined grandeur — not opulence for display,
               but excellence expressed through architecture, service, and
               meticulous attention to detail.
@@ -379,7 +352,7 @@ export function SamrayaPage() {
       </section>
 
       {/* Offerings: transparent top band so philosophy green can show through; charcoal begins below overlap */}
-      <section className="section-pad relative z-10 overflow-visible bg-transparent">
+      <section className="home-section-pad relative z-10 overflow-visible bg-transparent">
         <div
           className="pointer-events-none absolute inset-x-0 bg-black z-0"
           style={{
@@ -389,7 +362,7 @@ export function SamrayaPage() {
           aria-hidden
         />
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-0">
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+          <div className="text-center mb-8 sm:mb-10">
             <p
               className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
               style={{ color: "#b8975a" }}
@@ -403,7 +376,7 @@ export function SamrayaPage() {
                   "linear-gradient(90deg, transparent, #b8975a, transparent)",
               }}
             />
-            <h2 className="section-heading animate-on-scroll delay-200">
+            <h2 className="section-lead animate-on-scroll delay-200">
               The Samrāya Experience
             </h2>
           </div>
@@ -424,21 +397,10 @@ export function SamrayaPage() {
                     <Icon size={18} style={{ color: "#b8975a" }} />
                   </div>
                   <div>
-                    <h3
-                      className="font-display text-ivory text-base mb-2"
-                      style={{
-                        fontFamily: "Instrument Serif, Georgia, serif",
-                        fontWeight: 400,
-                      }}
-                    >
+                    <h3 className="pillar-title text-ivory mb-2">
                       {feature.label}
                     </h3>
-                    <p
-                      className="font-body text-base text-ivory-muted/70 leading-relaxed"
-                      style={{
-                        fontWeight: 300,
-                      }}
-                    >
+                    <p className="body-refined text-ivory-muted/70">
                       {feature.description}
                     </p>
                   </div>

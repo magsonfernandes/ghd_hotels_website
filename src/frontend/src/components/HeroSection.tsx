@@ -8,7 +8,7 @@ interface HeroSectionProps {
   /** Optional poster image for bgVideo (shown while video loads). */
   bgVideoPoster?: string;
   eyebrow?: string;
-  title: React.ReactNode;
+  title?: React.ReactNode;
   subtitle?: string;
   description?: string;
   children?: React.ReactNode;
@@ -30,6 +30,8 @@ interface HeroSectionProps {
   contentClassName?: string;
   /** Allow dropdowns (search bar) to extend past hero bottom; raises stacking above following sections */
   allowSearchOverflow?: boolean;
+  /** Vertical placement of hero content (default centered). */
+  contentPlacement?: "center" | "below-center" | "lower";
 }
 
 export function HeroSection({
@@ -51,6 +53,7 @@ export function HeroSection({
   baseColor = "charcoal",
   contentClassName = "max-w-5xl",
   allowSearchOverflow = false,
+  contentPlacement = "center",
 }: HeroSectionProps) {
   const hasPhoto = Boolean(bgImage?.trim());
   const hasVideo = Boolean(bgVideo?.trim());
@@ -80,7 +83,7 @@ export function HeroSection({
 
   return (
     <section
-      className={`hero-section snap-section${baseColor === "black" ? " hero-section--black" : ""}${allowSearchOverflow ? " hero-section--search-visible" : ""}`}
+      className={`hero-section snap-section${baseColor === "black" ? " hero-section--black" : ""}${allowSearchOverflow ? " hero-section--search-visible" : ""}${contentPlacement === "lower" ? " hero-section--content-lower" : ""}${contentPlacement === "below-center" ? " hero-section--content-below-center" : ""}`}
     >
       {/* Wrapper so opacity is applied to the whole background layer; fade is impossible to miss */}
       <div
@@ -163,7 +166,7 @@ export function HeroSection({
 
       {/* Content */}
       <div
-        className={`relative z-10 text-center px-4 sm:px-6 mx-auto w-full pt-3 sm:pt-6 md:pt-10 ${contentClassName}`}
+        className={`hero-section__content relative z-10 text-center px-4 sm:px-6 mx-auto w-full pt-3 sm:pt-6 md:pt-10 ${contentClassName}`}
       >
         {eyebrow && (
           <p
@@ -174,27 +177,28 @@ export function HeroSection({
           </p>
         )}
 
-        <div
-          className="gold-divider mb-10 opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.15s", animationFillMode: "forwards" }}
-        />
+        {title != null && title !== "" && (
+          <>
+            <div
+              className="gold-divider mb-10 opacity-0 animate-fade-up"
+              style={{ animationDelay: "0.15s", animationFillMode: "forwards" }}
+            />
 
-        <h1
-          className={`font-display text-ivory opacity-0 animate-fade-up ${titleClass}`}
-          style={{
-            fontFamily: "Instrument Serif, Georgia, serif",
-            fontSize: "clamp(3rem, 7.5vw, 7rem)",
-            fontWeight: 500,
-            letterSpacing: "0.03em",
-            lineHeight: 1.02,
-            marginBottom: "2rem",
-            animationDelay: "0.2s",
-            animationFillMode: "forwards",
-            ...titleStyle,
-          }}
-        >
-          {title}
-        </h1>
+            <h1
+              className={`section-heading font-display text-ivory opacity-0 animate-fade-up ${titleClass}`}
+              style={{
+                fontWeight: 500,
+                lineHeight: 1.02,
+                marginBottom: "2rem",
+                animationDelay: "0.2s",
+                animationFillMode: "forwards",
+                ...titleStyle,
+              }}
+            >
+              {title}
+            </h1>
+          </>
+        )}
 
         {subtitle && (
           <p
@@ -211,13 +215,8 @@ export function HeroSection({
 
         {description && (
           <p
-            className="font-body text-ivory/60 max-w-xl mx-auto mb-8 sm:mb-12 opacity-0 animate-fade-up"
+            className="body-refined-lg text-ivory/60 max-w-xl mx-auto mb-8 sm:mb-12 opacity-0 animate-fade-up"
             style={{
-              fontFamily: "General Sans, Helvetica Neue, sans-serif",
-              fontWeight: 300,
-              fontSize: "clamp(1.125rem, 2.4vw, 1.2rem)",
-              lineHeight: 1.9,
-              letterSpacing: "0.01em",
               animationDelay: "0.42s",
               animationFillMode: "forwards",
             }}
@@ -228,7 +227,7 @@ export function HeroSection({
 
         {children && (
           <div
-            className="opacity-0 animate-fade-up mt-16 sm:mt-24"
+            className={`opacity-0 animate-fade-up ${contentPlacement === "lower" ? "mt-0 sm:mt-2" : "mt-16 sm:mt-24"}`}
             style={{ animationDelay: "0.55s", animationFillMode: "forwards" }}
           >
             {children}

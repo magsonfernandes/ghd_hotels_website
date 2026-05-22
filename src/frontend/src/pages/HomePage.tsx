@@ -13,7 +13,7 @@ const brands = [
     tagline: "by GHD",
     tier: "Smart Comfort Hotels",
     description:
-      "At Nivaãra, rooms and suites are designed as personal sanctuaries — layered lighting, bespoke furnishings, calming palettes, and views that restore perspective. Whether overlooking skyline, water, or landscape, each space invites you to exhale.",
+      "At Nivaãra, rooms and suites are designed as personal sanctuaries — layered lighting, bespoke furnishings, calming palettes, and serene views. Whether overlooking skyline, water or landscape, each space invites you to exhale.",
     ocidCard: "brand.nivaara.card",
     ocidBtn: "brand.nivaara.button",
     accent: "#b8975a",
@@ -27,7 +27,7 @@ const brands = [
     tagline: "by GHD",
     tier: "Luxury Hotels",
     description:
-      "At Samraya, hospitality is not a service—it is a tradition. Guests are welcomed with the reverence once reserved for royalty, where privacy is respected, comfort is intuitive, and every experience feels personal. Whether it is a serene stay in our premium rooms, an indulgent culinary journey, or a celebration hosted in our grand banquets, Samraya transforms moments into lasting memories.",
+      "At Samraya, hospitality is not a service—it is a tradition. Guests are welcomed with the reverence once reserved for royalty, where privacy is respected, comfort is intuitive, and every experience feels personal.",
     ocidCard: "brand.samraya.card",
     ocidBtn: "brand.samraya.button",
     accent: "#b8975a",
@@ -40,7 +40,7 @@ const brands = [
     tagline: "by GHD",
     tier: "Premium Hotels",
     description:
-      "Every Celéstra property is thoughtfully designed as a contemporary hospitality destination — blending modern architecture, intelligent amenities, and refined comfort to meet the needs of today's traveler. With well-appointed spaces for leisure, business, and social gatherings, Celéstra aims to become a preferred destination for vacations, meetings, and everyday stays — where comfort, convenience, and modern hospitality come together seamlessly.",
+      "Every Celéstra property is thoughtfully designed as a contemporary hospitality destination — blending modern architecture, intelligent amenities, and refined comfort to meet the needs of today's traveler.",
     ocidCard: "brand.celestra.card",
     ocidBtn: "brand.celestra.button",
     accent: "#b8975a",
@@ -124,11 +124,6 @@ export function HomePage() {
       window.removeEventListener("resize", onScroll);
     };
   }, []);
-
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
 
   // Our Hotel Brands — interactive carousel state
   const [activeBrandIndex, setActiveBrandIndex] = useState(1); // index 1 is Samrāya after swap
@@ -259,42 +254,14 @@ export function HomePage() {
             ? "/assets/generated/MainPage.mov"
             : "/assets/generated/WhatsApp%20Video%202026-04-27%20at%2017.02.37.mp4"
         }
-        title="Crafted Experiences. Defined Excellence."
         overlay="medium"
-        titleClass="max-w-6xl mx-auto px-2 sm:px-0"
-        titleStyle={{
-          fontSize: "clamp(1.85rem, 4vw, 3.85rem)",
-          fontWeight: 100,
-          marginTop: "0.65rem",
-          lineHeight: 1.12,
-          WebkitTextStroke: "1px rgba(0, 0, 0, 0.75)",
-        }}
         fadeOnScroll
         contentClassName="max-w-6xl"
+        contentPlacement="lower"
         allowSearchOverflow
       >
-        <div>
-          <div className="relative z-0 flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              type="button"
-              onClick={() => scrollTo("philosophy")}
-              className="btn-gold"
-              data-ocid="hero.philosophy.button"
-            >
-              <span>Explore Our Philosophy</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollTo("brands")}
-              className="btn-gold-filled"
-              data-ocid="hero.brands.button"
-            >
-              Discover Our Brands
-            </button>
-          </div>
-          <div className="relative z-[60] mt-8 sm:mt-10 md:mt-12 w-full text-left">
-            <HomeSearchBar />
-          </div>
+        <div className="relative z-[60] w-full text-left">
+          <HomeSearchBar />
         </div>
       </HeroSection>
 
@@ -302,11 +269,11 @@ export function HomePage() {
       <section
         id="philosophy"
         ref={philosophySectionRef}
-        className="snap-section section-pad bg-charcoal-mid min-h-screen flex flex-col justify-center pt-12 sm:pt-16 md:pt-20 lg:pt-24"
+        className="home-section-pad bg-black"
         style={{ marginTop: "-2px" }}
       >
         <div
-          className="max-w-4xl mx-auto text-center px-2 sm:px-0 mt-12"
+          className="max-w-4xl mx-auto text-center px-2 sm:px-0"
           style={{ opacity: philosophySectionFade, willChange: "opacity" }}
         >
           <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll">
@@ -314,59 +281,26 @@ export function HomePage() {
           </p>
           <div className="gold-divider animate-on-scroll delay-100" />
           <h2
-            className="font-display text-ivory animate-on-scroll delay-200"
-            style={{
-              fontFamily: "Instrument Serif, Georgia, serif",
-              fontWeight: 400,
-              fontSize: "clamp(2.5rem, 5vw, 5rem)",
-              lineHeight: 1.08,
-              letterSpacing: "0.03em",
-              marginBottom: "3rem",
-            }}
+            className="section-lead animate-on-scroll delay-200"
+            style={{ marginBottom: "1.5rem" }}
           >
             To craft spaces where people feel valued, inspired, and at ease.
           </h2>
-          <div className="space-y-7 animate-on-scroll delay-300 text-center max-w-3xl mx-auto">
-            <p
-              className="font-body text-ivory/65 leading-loose"
-              style={{
-                fontFamily:
-                  '"Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
-                fontWeight: 300,
-                fontSize: "1.3rem",
-                lineHeight: 1.9,
-              }}
-            >
+          <div className="space-y-5 animate-on-scroll delay-300 text-center max-w-3xl mx-auto">
+            <p className="body-refined-lg">
               From the quiet comfort of <strong>Nivaãra</strong>, to the refined elegance of{" "}
               <strong>Celéstra</strong>, to the royal luxury of <strong>Samrāya</strong> — each brand reflects a
               different expression of the same philosophy.
             </p>
-            <p
-              className="font-body text-ivory/65 leading-loose"
-              style={{
-                fontFamily:
-                  '"Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
-                fontWeight: 300,
-                fontSize: "1.3rem",
-                lineHeight: 1.9,
-              }}
-            >
+            <p className="body-refined-lg">
               We do not simply build hotels. We shape environments where stories
               unfold — business milestones, family celebrations, destination
               weddings, and quiet escapes.
             </p>
           </div>
 
-          <div className="mt-16 pt-12 border-t border-gold/10 animate-on-scroll delay-400">
-            <p
-              className="font-display text-gold/80 italic"
-              style={{
-                fontFamily: "Instrument Serif, Georgia, serif",
-                fontSize: "clamp(1.2rem, 2.5vw, 1.75rem)",
-                lineHeight: 1.5,
-                letterSpacing: "0.02em",
-              }}
-            >
+          <div className="mt-8 pt-6 border-t border-gold/10 animate-on-scroll delay-400">
+            <p className="section-quote text-gold/80">
               "Hospitality, at its finest, is not built in walls of marble or towers of glass. It is built in moments."
             </p>
           </div>
@@ -377,7 +311,7 @@ export function HomePage() {
       <section
         id="brands"
         ref={brandsSectionRef}
-        className="section-pad bg-charcoal"
+        className="home-section-pad bg-charcoal"
       >
         <div
           className="max-w-6xl mx-auto px-4 sm:px-0"
@@ -387,26 +321,15 @@ export function HomePage() {
             willChange: "opacity",
           }}
         >
-          <div className="text-center mb-14 sm:mb-20">
+          <div className="text-center mb-8 sm:mb-10">
             <p className="eyebrow eyebrow--gold-emphasis">Our Portfolio</p>
             <div className="gold-divider mx-auto" />
-            <h2
-              className="font-display text-ivory"
-              style={{
-                fontFamily: "Instrument Serif, Georgia, serif",
-                fontWeight: 400,
-                fontSize: "clamp(2.5rem, 5vw, 5rem)",
-                lineHeight: 1.08,
-                letterSpacing: "0.03em",
-              }}
-            >
-              Our Hotel Brands
-            </h2>
+            <h2 className="section-lead">Our Hotel Brands</h2>
           </div>
 
           {/* Carousel viewport */}
           <div
-            className="relative mt-6 sm:mt-8 h-[580px] sm:h-[640px] md:h-[720px] flex items-center justify-center"
+            className="relative mt-2 sm:mt-4 h-[500px] sm:h-[540px] md:h-[580px] flex items-center justify-center"
             style={{ perspective: "1600px" }}
             onWheel={handleBrandWheel}
             onTouchStart={handleBrandTouchStart}
@@ -437,29 +360,21 @@ export function HomePage() {
                 style={getBrandPositionStyles(i)}
               >
                 <div
-                  className="glass-card group relative overflow-hidden flex flex-col w-[400px] sm:w-[460px] md:w-[520px] h-[540px] sm:h-[600px] md:h-[680px] rounded-3xl"
+                  className="glass-card group relative overflow-hidden flex flex-col w-[300px] sm:w-[340px] md:w-[380px] h-[500px] sm:h-[540px] md:h-[580px] rounded-2xl"
                   data-ocid={brand.ocidCard}
                 >
-                  <div className="relative h-56 sm:h-64 md:h-80 flex-shrink-0 overflow-hidden bg-charcoal">
+                  <div className="relative h-1/2 min-h-0 shrink-0 overflow-hidden bg-charcoal">
                     <img
                       src={brand.image}
                       alt={brand.name}
-                      className="w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover object-center"
                       loading="lazy"
                     />
                   </div>
 
-                  <div className="p-5 sm:p-6 md:p-7 pt-6 flex-1 flex flex-col min-h-0 text-justify min-w-0">
-                    <div className="flex items-baseline justify-between gap-3 mb-1.5">
-                      <h3
-                        className="font-display text-ivory text-justify min-w-0 flex-1"
-                        style={{
-                          fontFamily: "Instrument Serif, Georgia, serif",
-                          fontWeight: 400,
-                          fontSize: "clamp(1.4rem, 2vw, 1.8rem)",
-                          letterSpacing: "0.04em",
-                        }}
-                      >
+                  <div className="flex h-1/2 min-h-0 flex-col p-4 sm:p-4 md:p-5 text-justify min-w-0">
+                    <div className="flex items-baseline justify-between gap-2 mb-1">
+                      <h3 className="pillar-title text-ivory text-justify min-w-0 flex-1">
                         {brand.name}
                       </h3>
                       <p
@@ -473,33 +388,24 @@ export function HomePage() {
                       </p>
                     </div>
                     <p
-                      className="font-body text-gold/70 uppercase mb-3"
+                      className="font-body text-gold/70 uppercase mb-2"
                     style={{
                       fontFamily:
                         '"Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
-                      fontSize: "0.7rem",
-                      letterSpacing: "0.32em",
+                      fontSize: "0.65rem",
+                      letterSpacing: "0.28em",
                     }}
                     >
                       {brand.tagline}
                     </p>
-                    <p
-                      className="font-body text-ivory leading-loose mb-4 flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain pr-1"
-                      style={{
-                        fontFamily:
-                          '"Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
-                        fontWeight: 300,
-                        fontSize: "0.95rem",
-                        lineHeight: 1.85,
-                      }}
-                    >
+                    <p className="body-refined text-ivory/65 mb-2 flex-1 min-h-0 overflow-y-auto scrollbar-invisible">
                       {brand.description}
                     </p>
 
                     <Link
                       to={brand.to}
-                      className="btn-gold mt-auto flex-shrink-0"
-                      style={{ fontSize: "0.7rem", letterSpacing: "0.2em" }}
+                      className="btn-gold mt-auto flex-shrink-0 !py-2 !min-h-0"
+                      style={{ fontSize: "0.65rem", letterSpacing: "0.18em" }}
                       data-ocid={brand.ocidBtn}
                       onClick={(e) => {
                         // Only allow navigation directly from the centered card
@@ -522,7 +428,7 @@ export function HomePage() {
       {/* ── Vision Section ─────────────────────────────────────── */}
       <section
         ref={visionSectionRef}
-        className="snap-section section-pad parallax-section parallax-fixed relative min-h-screen flex flex-col justify-center"
+        className="home-section-pad parallax-section parallax-fixed relative"
         style={{
           backgroundImage:
             "url(/assets/generated/hero-future.dim_1920x1080.png)",
@@ -544,41 +450,15 @@ export function HomePage() {
             The Future
           </p>
           <div className="gold-divider animate-on-scroll delay-100" />
-          <h2
-            className="font-display text-ivory animate-on-scroll delay-200"
-            style={{
-              fontFamily: "Instrument Serif, Georgia, serif",
-              fontWeight: 400,
-              fontSize: "clamp(2.5rem, 5vw, 5rem)",
-              lineHeight: 1.08,
-              letterSpacing: "0.03em",
-              marginBottom: "2.5rem",
-              // Match hero title (“Crafted Experiences…”): stroke + glow
-              WebkitTextStroke: "1.3px rgba(0, 0, 0, 0.8)",
-              textShadow:
-                "0 0 20px rgba(0,0,0,0.75), 0 0 40px rgba(0,0,0,0.6), 0 0 70px rgba(0,0,0,0.85)",
-            }}
-          >
-            Building the Future of Hospitality
-          </h2>
-          <div className="space-y-6 animate-on-scroll delay-300">
-            <p
-              className="font-body text-ivory/65 leading-loose"
-              style={{
-                fontFamily:
-                  '"Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
-                fontWeight: 400,
-                fontSize: "1.3rem",
-                lineHeight: 1.9,
-              }}
-            >
+          <div className="space-y-4 animate-on-scroll delay-200 max-w-3xl mx-auto mt-6">
+            <p className="section-lead text-ivory italic">
               GHD Hotels is developing a new generation of hotels that combine
               design excellence, operational efficiency, and guest-focused
               service. Our properties are currently under development across
               carefully selected destinations.
             </p>
           </div>
-          <div className="mt-14 animate-on-scroll delay-400">
+          <div className="mt-8 animate-on-scroll delay-400">
             <Link to="/vision" className="btn-gold">
               <span>Discover Our Vision</span>
             </Link>

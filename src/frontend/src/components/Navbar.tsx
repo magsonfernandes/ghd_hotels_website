@@ -62,15 +62,11 @@ export function Navbar() {
                   <Link
                     to={link.to}
                     data-ocid={link.ocid}
-                    className={`relative nav-link font-body text-sm tracking-[0.15em] uppercase transition-colors duration-300 pb-1 group ${
+                    className={`relative nav-link tracking-[0.15em] uppercase transition-colors duration-300 pb-1 group ${
                       isActive
                         ? "text-gold"
-                        : "text-ivory/90 hover:text-gold"
+                        : "text-white hover:text-gold"
                     }`}
-                    style={{
-                      fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                      fontSize: "0.875rem",
-                    }}
                   >
                     {link.label}
                     <span
@@ -120,10 +116,9 @@ export function Navbar() {
                   to={link.to}
                   data-ocid={link.ocid}
                   onClick={() => setMobileOpen(false)}
-                  className={`font-display text-2xl tracking-widest transition-colors duration-300 ${
-                    isActive ? "text-gold" : "text-ivory hover:text-gold"
+                  className={`nav-mobile-link tracking-[0.12em] uppercase transition-colors duration-300 ${
+                    isActive ? "text-gold" : "text-white hover:text-gold"
                   }`}
-                  style={{ fontFamily: "Instrument Serif, Georgia, serif" }}
                 >
                   {link.label}
                 </Link>

@@ -86,6 +86,8 @@
   }
 
   html {
+    /* One typographic step smaller sitewide (16px → 14px); scales rem, clamp(rem), Tailwind text-* */
+    font-size: 87.5%;
     scroll-behavior: smooth;
     color-scheme: dark;
     overflow-x: clip; /* clip avoids breaking position: sticky (unlike hidden) */
@@ -175,6 +177,71 @@ section {
 .nivaara-test-font .body-refined,
 .nivaara-test-font .body-refined-lg {
   line-height: 1.85;
+}
+
+/* Brand pages — hero + section titles match home/about scale */
+.nivaara-test-font .section-heading,
+.celestra-test-font .section-heading,
+.samraya-test-font .section-heading,
+.home-test-font .section-heading,
+.nivaara-test-font .section-lead,
+.celestra-test-font .section-lead,
+.samraya-test-font .section-lead,
+.home-test-font .section-lead,
+.nivaara-test-font .section-quote,
+.celestra-test-font .section-quote,
+.samraya-test-font .section-quote,
+.home-test-font .section-quote,
+.nivaara-test-font .pillar-title,
+.celestra-test-font .pillar-title,
+.samraya-test-font .pillar-title,
+.home-test-font .pillar-title,
+.nivaara-test-font .hero-section h1.font-display,
+.celestra-test-font .hero-section h1.font-display,
+.samraya-test-font .hero-section h1.font-display,
+.home-test-font .hero-section h1.section-heading {
+  font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+}
+
+.nivaara-test-font .section-heading,
+.celestra-test-font .section-heading,
+.samraya-test-font .section-heading,
+.home-test-font .section-heading,
+.nivaara-test-font .hero-section h1.font-display,
+.celestra-test-font .hero-section h1.font-display,
+.samraya-test-font .hero-section h1.font-display,
+.home-test-font .hero-section h1.section-heading {
+  font-size: clamp(2rem, 3.75vw, 4rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: 0.035em;
+}
+
+.nivaara-test-font .section-lead,
+.celestra-test-font .section-lead,
+.samraya-test-font .section-lead,
+.home-test-font .section-lead,
+.nivaara-test-font .hero-tagline,
+.celestra-test-font .hero-tagline,
+.samraya-test-font .hero-tagline,
+.home-test-font .hero-tagline {
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-weight: 400;
+  line-height: 1.28;
+  letter-spacing: 0.03em;
+}
+
+.nivaara-test-font .section-quote,
+.celestra-test-font .section-quote,
+.samraya-test-font .section-quote,
+.home-test-font .section-quote,
+.nivaara-test-font .pillar-title,
+.celestra-test-font .pillar-title,
+.samraya-test-font .pillar-title,
+.home-test-font .pillar-title {
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
 /* Luxury display scale — used for hero and primary section headings */
@@ -274,6 +341,24 @@ section {
 .hero-section.hero-section--search-visible {
   overflow: visible;
   z-index: 40;
+}
+
+/* Home hero: search bar anchored toward bottom */
+.hero-section.hero-section--content-lower {
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: clamp(2.5rem, 10vh, 5rem);
+}
+
+/* About → Contact (and all image heroes with title): main text lower in frame */
+.hero-section.hero-section--content-below-center {
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: clamp(5.5rem, 20vh, 11rem);
+}
+
+.hero-section.hero-section--content-below-center .hero-section__content {
+  transform: none;
 }
 
 @media (min-width: 480px) {
@@ -443,6 +528,33 @@ section {
   }
 }
 
+/* Home page — less vertical padding than global .section-pad */
+.home-section-pad {
+  padding: 2.75rem 1rem 3.25rem;
+}
+
+@media (min-width: 640px) {
+  .home-section-pad {
+    padding: 3.5rem 1.5rem 4rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .home-section-pad {
+    padding: 4rem 2rem 4.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .home-section-pad {
+    padding: 4.5rem 2rem 5rem;
+  }
+}
+
+.home-test-font .gold-divider {
+  margin: 1.25rem auto;
+}
+
 /* ─── Feature Grid ───────────────────────────────────────────────── */
 .feature-item {
   display: flex;
@@ -465,11 +577,23 @@ section {
   background: rgba(184, 151, 90, 0.04);
 }
 
-/* ─── Nav Hover Glow ─────────────────────────────────────────────── */
+/* ─── Nav links (desktop menu bar) ───────────────────────────────── */
+.nav-link {
+  font-family: 'General Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
 .nav-link:hover {
   text-shadow:
     0 0 8px rgba(184, 151, 90, 0.9),
     0 0 14px rgba(184, 151, 90, 0.7);
+}
+
+.nav-mobile-link {
+  font-family: 'General Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1.875rem;
 }
 
 /* ─── Text Styles ────────────────────────────────────────────────── */
@@ -629,17 +753,49 @@ footer.footer-shell .footer-bottom-bar {
 .section-heading {
   font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   font-weight: 400;
-  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-size: clamp(2rem, 3.75vw, 4rem);
   line-height: 1.08;
   letter-spacing: 0.035em;
   color: #f5f0e8;
 }
 
+/* Long-form section statements (multi-line); two steps below .section-heading */
+.section-lead,
 .section-subheading {
   font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   font-weight: 400;
-  font-size: clamp(1.75rem, 3vw, 2.75rem);
-  line-height: 1.15;
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  line-height: 1.28;
+  letter-spacing: 0.03em;
+  color: #f5f0e8;
+}
+
+/* Hero script/cursive line under the main title — same scale as .section-lead */
+.hero-tagline {
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.28;
+  text-transform: none;
+  -webkit-text-stroke: 0 transparent;
+}
+
+/* Italic pull quotes and brand taglines */
+.section-quote {
+  font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  font-style: italic;
+}
+
+/* Card / pillar titles (h3) */
+.pillar-title {
+  font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  line-height: 1.35;
   letter-spacing: 0.03em;
   color: #f5f0e8;
 }

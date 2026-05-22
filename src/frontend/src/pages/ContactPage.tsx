@@ -3,6 +3,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
+import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 import {
   formatContactFetchFailure,
@@ -124,40 +125,30 @@ export function ContactPage() {
       <HeroSection
         bgImage={CONTACT_HERO_IMAGE}
         eyebrow="GHD Hotels"
-        title="Contact Us"
+        title="— Contact Us —"
         overlay="dark"
-        titleStyle={{
-          WebkitTextStroke: "1px rgba(0, 0, 0, 0.55)",
-          textShadow:
-            "0 0 24px rgba(0,0,0,0.65), 0 0 48px rgba(0,0,0,0.45)",
-        }}
+        contentPlacement="below-center"
+        titleStyle={heroImageTitleStyle}
       />
 
       {/* Contact Layout */}
-      <section className="section-pad bg-charcoal-mid">
+      <section className="home-section-pad bg-charcoal-mid">
         <div className="max-w-6xl mx-auto px-4 sm:px-0">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10">
             {/* Left: Info */}
             <div>
               <div className="gold-divider gold-divider-left animate-on-scroll" />
               <h2
-                className="section-subheading animate-on-scroll delay-100"
-                style={{
-                  marginBottom: "2.5rem",
-                  fontSize: "clamp(1.5rem, 2.65vw, 2.35rem)",
-                  lineHeight: 1.18,
-                }}
+                className="section-lead animate-on-scroll delay-100"
+                style={{ marginBottom: "1.5rem" }}
               >
                 <span className="block">GHD Hotels</span>
-                <span
-                  className="block mt-2"
-                  style={{ fontSize: "0.78em", letterSpacing: "0.04em" }}
-                >
+                <span className="pillar-title block mt-2 text-ivory-muted/80">
                   Corporate Office
                 </span>
               </h2>
 
-              <div className="space-y-8 animate-on-scroll delay-300">
+              <div className="space-y-5 animate-on-scroll delay-300">
                 <div className="flex gap-5">
                   <div className="flex-shrink-0 mt-1">
                     <MapPin size={18} className="text-gold" />
@@ -166,13 +157,7 @@ export function ContactPage() {
                     <p className="eyebrow eyebrow--gold-emphasis mb-2">
                       Address
                     </p>
-                    <address
-                      className="font-body text-ivory-muted/70 not-italic leading-relaxed text-base"
-                      style={{
-                        fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                        fontWeight: 300,
-                      }}
-                    >
+                    <address className="body-refined text-ivory-muted/70 not-italic">
                       GHD Hotels LLP
                       <br />
                       625, Gera Imperium Star
@@ -191,14 +176,10 @@ export function ContactPage() {
                   <div>
                     <p className="eyebrow eyebrow--gold-emphasis mb-2">Email</p>
                     <a
-                      href="mailto:reservation@ghdhotels.in"
-                      className="font-body text-ivory-muted/70 text-base hover:text-gold transition-colors duration-300"
-                      style={{
-                        fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                        fontWeight: 300,
-                      }}
+                      href="mailto:info@ghdhotels.in"
+                      className="body-refined-lg text-ivory-muted/70 hover:text-gold transition-colors duration-300"
                     >
-                      reservation@ghdhotels.in
+                      info@ghdhotels.in
                     </a>
                   </div>
                 </div>
@@ -211,21 +192,17 @@ export function ContactPage() {
                     <p className="eyebrow eyebrow--gold-emphasis mb-2">Phone</p>
                     <a
                       href="tel:+918380008687"
-                      className="font-body text-ivory-muted/70 text-base hover:text-gold transition-colors duration-300"
-                      style={{
-                        fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                        fontWeight: 300,
-                      }}
+                      className="body-refined-lg text-ivory-muted/70 hover:text-gold transition-colors duration-300"
                     >
-                      +91 8380008687
+                      +91 838 000 8687
                     </a>
                   </div>
                 </div>
               </div>
 
               {/* Decorative Brand Links */}
-              <div className="mt-12 pt-10 border-t border-gold/10 animate-on-scroll delay-400">
-                <p className="eyebrow eyebrow--gold-emphasis mb-6">
+              <div className="mt-8 pt-6 border-t border-gold/10 animate-on-scroll delay-400">
+                <p className="eyebrow eyebrow--gold-emphasis mb-4">
                   Our Brands
                 </p>
                 <div className="flex flex-col gap-3">
@@ -243,13 +220,7 @@ export function ContactPage() {
                       className="flex items-center gap-3 group w-fit"
                     >
                       <span className="w-5 h-px bg-gold flex-shrink-0" />
-                      <span
-                        className="font-body text-sm text-ivory-muted/60 group-hover:text-gold transition-colors duration-300"
-                        style={{
-                          fontFamily:
-                            "General Sans, Helvetica Neue, sans-serif",
-                        }}
-                      >
+                      <span className="body-refined text-ivory-muted/60 group-hover:text-gold transition-colors duration-300">
                         {brand.label}
                       </span>
                     </Link>
@@ -261,22 +232,10 @@ export function ContactPage() {
             {/* Right: Form */}
             <div className="animate-on-scroll-right delay-200 min-w-0">
               <div className="border border-gold/15 p-5 sm:p-8 md:p-10">
-                <h3
-                  className="font-display text-ivory text-2xl mb-2"
-                  style={{
-                    fontFamily: "Instrument Serif, Georgia, serif",
-                    fontWeight: 400,
-                  }}
-                >
+                <h3 className="pillar-title text-ivory mb-2">
                   Send Us a Message
                 </h3>
-                <p
-                  className="font-body text-base text-ivory-muted/55 mb-8"
-                  style={{
-                    fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                    fontWeight: 300,
-                  }}
-                >
+                <p className="body-refined-lg text-ivory-muted/55 mb-8">
                   For enquiries, partnerships, or investment discussions.
                 </p>
 
@@ -286,19 +245,10 @@ export function ContactPage() {
                     data-ocid="contact.success_state"
                   >
                     <div className="gold-divider" />
-                    <p
-                      className="font-display text-gold text-xl mt-6 mb-3"
-                      style={{ fontFamily: "Instrument Serif, Georgia, serif" }}
-                    >
+                    <p className="pillar-title text-gold mt-6 mb-3">
                       Message Received
                     </p>
-                    <p
-                      className="font-body text-ivory-muted/60 text-base leading-relaxed"
-                      style={{
-                        fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                        fontWeight: 300,
-                      }}
-                    >
+                    <p className="body-refined-lg text-ivory-muted/60">
                       Thank you for reaching out. A member of the GHD Hotels
                       team will be in touch with you shortly.
                     </p>

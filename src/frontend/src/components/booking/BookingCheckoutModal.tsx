@@ -7,8 +7,8 @@ import {
   useRef,
   useState,
 } from "react";
+import { useRates } from "../../lib/rates";
 import {
-  BOOKING_TAX_RATE,
   type BookingRateSelection,
   perGuestMealsPerNightTotal,
 } from "./bookingRates";
@@ -89,6 +89,7 @@ export function BookingCheckoutModal(props: {
   const [agreePrivacy, setAgreePrivacy] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
+  const rates = useRates();
   const nights = useMemo(
     () => nightsBetween(props.search.checkIn, props.search.checkOut),
     [props.search.checkIn, props.search.checkOut],
@@ -106,16 +107,18 @@ export function BookingCheckoutModal(props: {
       : [defaultRoomOccupancy()];
     const adults = rooms.reduce((s, r) => s + r.adults, 0);
     const children = rooms.reduce((s, r) => s + r.children, 0);
-    const mealsSub = perGuestMealsPerNightTotal({
-      adults,
-      children,
-      meals: sel.meals,
-    }) * nights;
+    const mealsSub =
+      perGuestMealsPerNightTotal({
+        adults,
+        children,
+        meals: sel.meals,
+        mealPrices: rates.mealPrices,
+      }) * nights;
     const roomSub = roomBaseSub + mealsSub;
     const occ = computeOccupancySurcharges(rooms, nights);
     const surcharges = occ.surchargesSubtotal;
     const taxable = roomSub + surcharges;
-    const taxes = Math.round(taxable * BOOKING_TAX_RATE * 100) / 100;
+    const taxes = Math.round(taxable * rates.taxRate * 100) / 100;
     const total = Math.round((taxable + taxes) * 100) / 100;
     return {
       roomSub,
@@ -127,7 +130,13 @@ export function BookingCheckoutModal(props: {
       total,
       roomCount,
     };
-  }, [props.selection, props.search.rooms, nights]);
+  }, [
+    props.selection,
+    props.search.rooms,
+    nights,
+    rates.mealPrices,
+    rates.taxRate,
+  ]);
 
   const checkInDate = parseISODate(props.search.checkIn);
   const checkOutDate = parseISODate(props.search.checkOut);
@@ -631,7 +640,9 @@ export function BookingCheckoutModal(props: {
                   {nights} night{nights === 1 ? "" : "s"} stay
                   {pricing.roomCount > 0
                     ? ` · ${formatInr(
-                        pricing.roomSub / Math.max(1, pricing.roomCount) / nights,
+                        pricing.roomSub /
+                          Math.max(1, pricing.roomCount) /
+                          nights,
                       )} avg / room / night`
                     : ""}
                 </p>
@@ -683,11 +694,13 @@ export function BookingCheckoutModal(props: {
                 {pricing.roomCount > 0 && (
                   <div className="mt-4 space-y-2 text-xs text-charcoal/60 border-t border-charcoal/10 pt-4">
                     {sel.rooms.map((r) => {
-                      const baseSubtotal = r.quantity * r.baseRatePerNight * nights;
+                      const baseSubtotal =
+                        r.quantity * r.baseRatePerNight * nights;
                       return (
                         <p key={`bk-base-${r.categoryId}`}>
                           {r.categoryLabel} room rate × {r.quantity} × {nights}{" "}
-                          night{nights === 1 ? "" : "s"} — {formatInr(baseSubtotal)}
+                          night{nights === 1 ? "" : "s"} —{" "}
+                          {formatInr(baseSubtotal)}
                         </p>
                       );
                     })}

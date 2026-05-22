@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Clock, Laptop, Moon, Tv2, Utensils, Wifi } f
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
+import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 const features = [
@@ -174,15 +175,10 @@ export function NivaaraPage() {
           <>
             — Nivaãra —
             <span
-              className="block mt-6 sm:mt-8"
+              className="hero-tagline block mt-6 sm:mt-8"
               style={{
                 fontFamily:
                   '"Zapfino", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Brush Script MT", cursive',
-                fontSize: "clamp(1.02rem, 2.2vw, 1.8rem)",
-                fontWeight: 400,
-                letterSpacing: "0.02em",
-                textTransform: "none",
-                WebkitTextStroke: "0px transparent",
               }}
             >
               Luxury in Motion
@@ -192,17 +188,14 @@ export function NivaaraPage() {
         overlay="dark"
         baseColor="black"
         fadeOnScroll
-        titleStyle={{
-          WebkitTextStroke: "1.3px rgba(0, 0, 0, 0.8)",
-          textShadow:
-            "0 0 20px rgba(0,0,0,0.75), 0 0 40px rgba(0,0,0,0.6), 0 0 70px rgba(0,0,0,0.85)",
-        }}
+        contentPlacement="below-center"
+        titleStyle={heroImageTitleStyle}
       />
 
       {/* Brand Introduction */}
-      <section className="section-pad bg-black pt-12 sm:pt-16 md:pt-20 lg:pt-24">
+      <section className="home-section-pad bg-black">
         <div className="max-w-5xl mx-auto px-4 sm:px-0">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 items-center">
             <div className="lg:col-span-7">
               <p
                 className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
@@ -218,8 +211,8 @@ export function NivaaraPage() {
                 }}
               />
               <h2
-                className="section-subheading animate-on-scroll delay-200 text-justify"
-                style={{ marginBottom: "2.5rem" }}
+                className="section-lead animate-on-scroll delay-200 text-justify"
+                style={{ marginBottom: "1.5rem" }}
               >
                 Where Urban Energy Finds Balance
               </h2>
@@ -242,23 +235,13 @@ export function NivaaraPage() {
                   acoustically softened rooms, the experience feels
                   peaceful—even when the city outside is moving fast.
                 </p>
-                <p
-                  className="font-display text-ivory/90 italic text-justify"
-                  style={{
-                    fontFamily: "Instrument Serif, Georgia, serif",
-                    fontWeight: 400,
-                    fontSize: "clamp(1.1rem, 2.2vw, 1.5rem)",
-                    letterSpacing: "0.02em",
-                    lineHeight: 1.5,
-                    marginTop: "0.75rem",
-                  }}
-                >
+                <p className="section-quote text-ivory/90 text-justify" style={{ marginTop: "0.75rem" }}>
                   Nivaãra by GHD Hotels — Quick comfort. Refined living.
                 </p>
               </div>
             </div>
 
-            <div className="lg:col-span-5 lg:self-start lg:pt-12 animate-on-scroll-right delay-200">
+            <div className="lg:col-span-5 lg:self-start animate-on-scroll-right delay-200">
               <div className="border border-gold/20 p-5 sm:p-8">
                 <p className="eyebrow eyebrow--gold-emphasis mb-4 text-justify">
                   The Nivaãra Promise
@@ -276,14 +259,7 @@ export function NivaaraPage() {
                     return (
                       <li key={item} className="flex items-start gap-3">
                         <span className="w-5 h-px bg-gold flex-shrink-0 mt-[0.65em]" />
-                        <span
-                          className="font-body text-base text-ivory-muted/70 min-w-0 flex-1 text-justify"
-                          style={{
-                            fontFamily:
-                              "General Sans, Helvetica Neue, sans-serif",
-                            fontWeight: 300,
-                          }}
-                        >
+                        <span className="body-refined text-ivory-muted/70 min-w-0 flex-1 text-justify">
                           <strong className="text-ivory/90 font-semibold">
                             {label}
                           </strong>
@@ -300,7 +276,7 @@ export function NivaaraPage() {
       </section>
 
       {/* The Philosophy of Nivaãra */}
-      <section ref={philosophyRef} className="section-pad bg-black relative">
+      <section ref={philosophyRef} className="home-section-pad bg-black relative">
         {/* Background image – Buddha, softened behind content */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-65 transition-opacity duration-900 ease-out"
@@ -329,7 +305,7 @@ export function NivaaraPage() {
             willChange: "transform",
           }}
         >
-          <div className="text-center mb-12 sm:mb-16">
+          <div className="text-center mb-8 sm:mb-10">
             <p
               className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
               style={{ color: "#b8975a" }}
@@ -343,31 +319,22 @@ export function NivaaraPage() {
                   "linear-gradient(90deg, transparent, #b8975a, transparent)",
               }}
             />
-            <h2 className="section-heading animate-on-scroll delay-200">
+            <h2 className="section-lead animate-on-scroll delay-200">
               Calm in the Heart of Motion
             </h2>
           </div>
 
-          <div className="space-y-6 animate-on-scroll delay-300 text-center max-w-3xl mx-auto">
-            <p
-              className="body-refined-lg text-ivory-muted/70"
-              style={{ fontWeight: 700 }}
-            >
+          <div className="space-y-4 animate-on-scroll delay-300 text-center max-w-3xl mx-auto">
+            <p className="body-refined-lg text-ivory-muted/70">
               At Nivaãra by GHD Hotels, our philosophy is built around the
               understanding that modern travel moves at an accelerated pace.
               Cities are dynamic, journeys are purposeful, and time has become
               one of the most valuable resources for today’s traveler.
             </p>
-            <p
-              className="body-refined-lg text-ivory-muted/70"
-              style={{ fontWeight: 700 }}
-            >
+            <p className="body-refined-lg text-ivory-muted/70">
               Nivaãra was created to respond to this rhythm.
             </p>
-            <p
-              className="body-refined-lg text-ivory-muted/70"
-              style={{ fontWeight: 700 }}
-            >
+            <p className="body-refined-lg text-ivory-muted/70">
               Rather than slowing the world down, we design our hospitality to
               move with it—offering spaces where comfort, efficiency, and
               thoughtful design come together to support the traveler’s journey.
@@ -500,9 +467,9 @@ export function NivaaraPage() {
       </section>
 
       {/* Features Grid */}
-      <section className="section-pad bg-black">
+      <section className="home-section-pad bg-black">
         <div className="max-w-6xl mx-auto px-4 sm:px-0">
-          <div className="text-center mb-12 sm:mb-16">
+          <div className="text-center mb-8 sm:mb-10">
             <p
               className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
               style={{ color: "#b8975a" }}
@@ -516,7 +483,7 @@ export function NivaaraPage() {
                   "linear-gradient(90deg, transparent, #b8975a, transparent)",
               }}
             />
-            <h2 className="section-heading animate-on-scroll delay-200">
+            <h2 className="section-lead animate-on-scroll delay-200">
               The Nivaãra Experience
             </h2>
           </div>
@@ -537,21 +504,10 @@ export function NivaaraPage() {
                     <Icon size={18} style={{ color: "#b8975a" }} />
                   </div>
                   <div className="min-w-0 text-justify">
-                    <h3
-                      className="font-display text-ivory text-base mb-2"
-                      style={{
-                        fontFamily: "Instrument Serif, Georgia, serif",
-                        fontWeight: 400,
-                      }}
-                    >
+                    <h3 className="pillar-title text-ivory mb-2">
                       {feature.label}
                     </h3>
-                    <p
-                      className="font-body text-sm text-ivory-muted/60 leading-relaxed"
-                      style={{
-                        fontWeight: 300,
-                      }}
-                    >
+                    <p className="body-refined text-ivory-muted/60">
                       {feature.description}
                     </p>
                   </div>
@@ -565,7 +521,7 @@ export function NivaaraPage() {
       {/* Properties */}
       <section
         id="properties"
-        className="py-12 sm:py-16 bg-black border-t border-gold/10"
+        className="home-section-pad bg-black border-t border-gold/10"
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
           <p className="eyebrow eyebrow--gold-emphasis mb-4">Properties</p>
@@ -695,9 +651,9 @@ export function NivaaraPage() {
       </section>
 
       {/* Cross Navigation */}
-      <section className="py-16 bg-black border-t border-gold/10">
+      <section className="py-10 sm:py-12 bg-black border-t border-gold/10">
         <div className="max-w-4xl mx-auto text-center px-6">
-          <p className="eyebrow mb-8 animate-on-scroll">
+          <p className="eyebrow mb-6 animate-on-scroll">
             Explore Our Portfolio
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-on-scroll delay-200">
