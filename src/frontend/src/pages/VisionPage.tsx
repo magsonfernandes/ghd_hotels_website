@@ -106,6 +106,7 @@ export function VisionPage() {
   return (
     <div className="bg-charcoal min-h-screen nivaara-test-font">
       <HeroSection
+        baseColor="black"
         bgImage="/assets/generated/hero-vision.dim_1920x1080.png"
         title={
           <>
@@ -122,6 +123,7 @@ export function VisionPage() {
           </>
         }
         overlay="dark"
+        fadeOnScroll
         contentPlacement="below-center"
         bgBlurPx={1}
         bgBrightness={0.65}
@@ -129,7 +131,7 @@ export function VisionPage() {
       />
 
       {/* Intro Section */}
-      <section ref={introRef} className="home-section-pad bg-charcoal-mid">
+      <section ref={introRef} className="home-section-pad bg-black">
         <div
           className="max-w-4xl mx-auto text-center px-4 sm:px-0"
           style={{ opacity: introFade, willChange: "opacity" }}
@@ -162,7 +164,7 @@ export function VisionPage() {
       </section>
 
       {/* Four Pillars */}
-      <section ref={pillarsRef} className="home-section-pad bg-charcoal">
+      <section ref={pillarsRef} className="home-section-pad bg-black">
         <div
           className="max-w-6xl mx-auto px-4 sm:px-0"
           style={{ opacity: pillarsFade, willChange: "opacity" }}
@@ -333,7 +335,7 @@ export function VisionPage() {
       {/* CTA */}
       <section
         ref={ctaRef}
-        className="py-12 sm:py-20 bg-charcoal-mid border-t border-gold/10"
+        className="py-12 sm:py-20 bg-black border-t border-gold/10"
       >
         <div
           className="max-w-3xl mx-auto text-center px-4 sm:px-6"

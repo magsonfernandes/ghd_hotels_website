@@ -123,16 +123,18 @@ export function ContactPage() {
   return (
     <div className="bg-charcoal min-h-screen home-test-font">
       <HeroSection
+        baseColor="black"
         bgImage={CONTACT_HERO_IMAGE}
         eyebrow="GHD Hotels"
         title="— Contact Us —"
         overlay="dark"
+        fadeOnScroll
         contentPlacement="below-center"
         titleStyle={heroImageTitleStyle}
       />
 
       {/* Contact Layout */}
-      <section className="home-section-pad bg-charcoal-mid">
+      <section className="home-section-pad bg-black">
         <div className="max-w-6xl mx-auto px-4 sm:px-0">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10">
             {/* Left: Info */}
@@ -160,7 +162,7 @@ export function ContactPage() {
                     <address className="body-refined text-ivory-muted/70 not-italic">
                       GHD Hotels LLP
                       <br />
-                      625, Gera Imperium Star
+                      325, Gera Imperium Star
                       <br />
                       Patto, Panjim
                       <br />

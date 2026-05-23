@@ -96,6 +96,7 @@ export function AboutPage() {
   return (
     <div className="bg-charcoal min-h-screen">
       <HeroSection
+        baseColor="black"
         bgImage={ABOUT_COUPLE_HERO_IMAGE}
         title={
           <>
@@ -121,7 +122,7 @@ export function AboutPage() {
       <section
         id="who-we-are"
         ref={missionRef}
-        className="home-section-pad bg-charcoal-mid"
+        className="home-section-pad bg-black"
       >
         <div
           className="max-w-5xl mx-auto px-2 sm:px-0"
@@ -220,7 +221,7 @@ export function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section ref={valuesRef} className="home-section-pad bg-charcoal">
+      <section ref={valuesRef} className="home-section-pad bg-black">
         <div
           className="max-w-6xl mx-auto px-2 sm:px-0"
           style={{ opacity: valuesFade, willChange: "opacity" }}
@@ -272,7 +273,7 @@ export function AboutPage() {
       {/* Quote section */}
       <section
         ref={quoteRef}
-        className="home-section-pad parallax-section relative text-center"
+        className="about-quote-section home-section-pad parallax-section parallax-fixed relative text-center"
         style={{
           backgroundImage: `url(${ABOUT_COUPLE_HERO_IMAGE})`,
         }}
@@ -286,11 +287,14 @@ export function AboutPage() {
           }}
         />
         <div
-          className="relative z-10 max-w-3xl mx-auto"
+          className="about-quote-section__content relative z-10 w-full text-center"
           style={{ opacity: quoteFade, willChange: "opacity" }}
         >
           <div className="gold-divider animate-on-scroll" />
-          <blockquote className="section-lead text-ivory italic animate-on-scroll delay-200" style={{ margin: "1.5rem 0" }}>
+          <blockquote
+            className="about-quote-statement animate-on-scroll delay-200"
+            style={{ margin: "1.5rem 0" }}
+          >
             "Hospitality is not an amenity. It is an art form — one that we at
             GHD Hotels are dedicated to mastering, one property at a time."
           </blockquote>

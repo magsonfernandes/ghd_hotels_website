@@ -220,12 +220,19 @@ section {
 .nivaara-test-font .section-lead,
 .celestra-test-font .section-lead,
 .samraya-test-font .section-lead,
-.home-test-font .section-lead,
+.home-test-font .section-lead {
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-weight: 400;
+  line-height: 1.28;
+  letter-spacing: 0.03em;
+}
+
+/* Hero script taglines — section-lead minus 7 units (0.125rem / 0.125vw per unit) */
 .nivaara-test-font .hero-tagline,
 .celestra-test-font .hero-tagline,
 .samraya-test-font .hero-tagline,
 .home-test-font .hero-tagline {
-  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-size: clamp(0.625rem, 1.625vw, 1.375rem);
   font-weight: 400;
   line-height: 1.28;
   letter-spacing: 0.03em;
@@ -348,6 +355,38 @@ section {
   align-items: flex-end;
   justify-content: center;
   padding-bottom: clamp(2.5rem, 10vh, 5rem);
+}
+
+/* Home: below lg — full-viewport video, search in strip under hero (not on video) */
+@media (max-width: 1023px) {
+  .hero-section.hero-section--home.hero-section--content-lower {
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0;
+  }
+
+  .hero-section.hero-section--home.hero-section--search-visible {
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .hero-section.hero-section--home .hero-section__content {
+    display: none;
+  }
+
+  .hero-section.hero-section--home .hero-scroll-indicator {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-hero-search {
+    display: none !important;
+  }
+}
+
+.home-hero-search {
+  overflow: visible;
 }
 
 /* About → Contact (and all image heroes with title): main text lower in frame */
@@ -577,11 +616,29 @@ section {
   background: rgba(184, 151, 90, 0.04);
 }
 
-/* ─── Nav links (desktop menu bar) ───────────────────────────────── */
+/* ─── Nav links (top menu bar — all breakpoints) ─────────────────── */
 .nav-link {
   font-family: 'General Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 700;
   font-size: 1rem;
+}
+
+.nav-link--bar {
+  font-size: 0.6875rem;
+  line-height: 1.25;
+}
+
+@media (min-width: 640px) {
+  .nav-link--bar {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-link--bar {
+    font-size: 1rem;
+    line-height: inherit;
+  }
 }
 
 .nav-link:hover {
@@ -590,10 +647,23 @@ section {
     0 0 14px rgba(184, 151, 90, 0.7);
 }
 
-.nav-mobile-link {
-  font-family: 'General Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 700;
-  font-size: 1.875rem;
+/* Compact top bar on mobile/tablet — logo + links stay in fixed header */
+.nav-bar-inner {
+  max-width: 100%;
+}
+
+@media (max-width: 1023px) {
+  .nav-transparent {
+    background: rgba(15, 15, 15, 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(184, 151, 90, 0.12);
+  }
+
+  .nav-solid,
+  .nav-transparent:hover {
+    background: rgba(15, 15, 15, 0.97);
+  }
 }
 
 /* ─── Text Styles ────────────────────────────────────────────────── */
@@ -690,20 +760,6 @@ footer.footer-shell .footer-bottom-bar {
   color: rgba(212, 207, 198, 0.4);
 }
 
-/* ─── Mobile Nav ─────────────────────────────────────────────────── */
-.mobile-menu {
-  position: fixed;
-  inset: 0;
-  background: rgba(10, 10, 10, 0.97);
-  backdrop-filter: blur(20px);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2.5rem;
-}
-
 /* ─── Scrollbar ──────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 4px;
@@ -770,14 +826,121 @@ footer.footer-shell .footer-bottom-bar {
   color: #f5f0e8;
 }
 
-/* Hero script/cursive line under the main title — same scale as .section-lead */
+/* Hero script/cursive line under the main title — section-lead minus 7 units */
 .hero-tagline {
-  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-size: clamp(0.625rem, 1.625vw, 1.375rem);
   font-weight: 400;
   letter-spacing: 0.02em;
   line-height: 1.28;
   text-transform: none;
   -webkit-text-stroke: 0 transparent;
+}
+
+/* Home Future parallax — tall section, content spans full background width */
+.home-future-section.home-section-pad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(28rem, 82vh, 52rem);
+  min-height: clamp(28rem, 82dvh, 52rem);
+  padding-top: clamp(4rem, 10vh, 7rem);
+  padding-bottom: clamp(4rem, 10vh, 7rem);
+  padding-left: clamp(1.25rem, 5vw, 4rem);
+  padding-right: clamp(1.25rem, 5vw, 4rem);
+}
+
+.home-future-section__content {
+  width: 100%;
+  max-width: none;
+}
+
+.home-future-section .home-vision-statement {
+  max-width: none;
+  width: 100%;
+}
+
+/* About page closing quote — tall parallax section (matches home Future scale) */
+.about-quote-section.home-section-pad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(28rem, 82vh, 52rem);
+  min-height: clamp(28rem, 82dvh, 52rem);
+  padding-top: clamp(4rem, 10vh, 7rem);
+  padding-bottom: clamp(4rem, 10vh, 7rem);
+  padding-left: clamp(1.25rem, 5vw, 4rem);
+  padding-right: clamp(1.25rem, 5vw, 4rem);
+}
+
+.about-quote-section__content {
+  width: 100%;
+  max-width: none;
+}
+
+.about-quote-section .about-quote-statement {
+  max-width: none;
+  width: 100%;
+}
+
+/* Brand philosophy sections — full viewport, copy centered vertically + horizontally */
+.brand-philosophy-section,
+.nivaara-philosophy-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(2rem, 4vh, 3rem) clamp(1rem, 4vw, 2rem);
+}
+
+.brand-philosophy-section__content,
+.nivaara-philosophy-section__content {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.brand-philosophy-section__content .body-refined-lg,
+.nivaara-philosophy-section__content .body-refined-lg {
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Nivaãra properties carousel — crossfade (no fade-to-black) */
+.nivaara-property-carousel__slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nivaara-property-carousel__slide--incoming {
+  animation: nivaara-property-crossfade 380ms cubic-bezier(0.33, 0, 0.2, 1) forwards;
+}
+
+@keyframes nivaara-property-crossfade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Section-lead minus 2 units, wider horizontal measure */
+.home-vision-statement,
+.about-quote-statement {
+  font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  font-size: clamp(1.125rem, 2.125vw, 1.875rem);
+  line-height: 1.35;
+  letter-spacing: 0.03em;
+  font-style: italic;
+  color: #f5f0e8;
 }
 
 /* Italic pull quotes and brand taglines */

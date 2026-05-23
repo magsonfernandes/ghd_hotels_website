@@ -55,49 +55,24 @@ const features = [
 // ── Celéstra philosophy parallax tuning ─────────────────────────────
 // Adjust these values to manually tweak position + parallax intensity.
 const CELESTRA_PHILOSOPHY_PARALLAX = {
-  // Pathway background movement
   pathway: {
-    multiplier: 0.18, // parallax strength
+    multiplier: 0.18,
     clampMin: -220,
     clampMax: 220,
-  },
-  // Couple foreground movement
-  couple: {
-    multiplier: 0.1, // parallax strength (a bit stronger than pathway)
-    clampMin: -280,
-    clampMax: 200,
-  },
-  // Manual positioning + size for the couple layer
-  couplePosition: {
-    objectPosition: "center bottom",
-    scale: 1.2, // full size (adjust as needed)
-  },
-  // Pixel-perfect nudge while keeping parallax (x=right, y=down)
-  coupleOffsetPx: {
-    x: 0,
-    y: 0,
   },
 };
 
 // ── Celéstra philosophy fade tuning ─────────────────────────────────
 // Edit these values to change when and how fast the philosophy section fades.
 const CELESTRA_PHILOSOPHY_FADE = {
-  // Fade-in (pathway + overlay appear as you scroll into the section)
   fadeInStartVh: 1.5,
   fadeInEndVh: 0.2,
 
-  // COUPLE image fade-out: when the philosophy section itself scrolls away
-  fadeOutStartVh: -0.5, // start fading when section top is this many vh from top (e.g. 0.5 = 50% viewport)
-  fadeOutEndVh: -1, // fully faded when section top is this many vh above viewport (negative = above)
-
-  // PATHWAY image fade-out: starts when you're halfway towards "Celéstra Offerings"
+  // Pathway fade-out: starts when you're halfway towards "Celéstra Offerings"
   pathwayFadeStartVh: 0.7, // start fading earlier (midpoint still clearly on-screen)
   pathwayFadeEndVh: -0.05, // fully faded shortly after midpoint passes top (reaches 0 reliably)
 
-  // Curve: higher = more abrupt fade; lower = gentler (e.g. 1.2–2)
   curvePower: 1.3,
-  // Ease: lower = fade stays visible longer then drops; higher = more linear (e.g. 0.6–1)
-  fadeOutEase: 0.5,
   darkOverlayOpacity: 0.18,
 };
 
@@ -105,11 +80,8 @@ export function CelestraPage() {
   useScrollAnimationAll();
   const philosophyRef = useRef<HTMLElement | null>(null);
   const offeringsRef = useRef<HTMLElement | null>(null);
-  const [textParallax, setTextParallax] = useState(0);
   const [pathwayParallax, setPathwayParallax] = useState(0);
-  const [coupleParallax, setCoupleParallax] = useState(0);
   const [philosophyBgOpacity, setPhilosophyBgOpacity] = useState(0);
-  const [philosophyCoupleOpacity, setPhilosophyCoupleOpacity] = useState(0);
 
   useEffect(() => {
     document.title = "Celéstra by GHD – Premium Hospitality";
@@ -126,10 +98,6 @@ export function CelestraPage() {
         Math.max(min, Math.min(max, v));
       const smoothstep01 = (t: number) => t * t * (3 - 2 * t);
 
-      // Match Nivaãra philosophy text parallax exactly.
-      const textOffset = (center - rect.top) * 0.07;
-      setTextParallax(clamp(textOffset, -36, 36));
-
       // Smooth continuous parallax while entering/leaving the section
       const base = center - rect.top;
       setPathwayParallax(
@@ -137,13 +105,6 @@ export function CelestraPage() {
           base * CELESTRA_PHILOSOPHY_PARALLAX.pathway.multiplier,
           CELESTRA_PHILOSOPHY_PARALLAX.pathway.clampMin,
           CELESTRA_PHILOSOPHY_PARALLAX.pathway.clampMax,
-        ),
-      );
-      setCoupleParallax(
-        clamp(
-          base * CELESTRA_PHILOSOPHY_PARALLAX.couple.multiplier,
-          CELESTRA_PHILOSOPHY_PARALLAX.couple.clampMin,
-          CELESTRA_PHILOSOPHY_PARALLAX.couple.clampMax,
         ),
       );
 
@@ -154,19 +115,9 @@ export function CelestraPage() {
         0,
         1,
       );
-      // Fade-out based on section TOP (for couple)
-      const fadeOutStart = CELESTRA_PHILOSOPHY_FADE.fadeOutStartVh * vh;
-      const fadeOutEnd = CELESTRA_PHILOSOPHY_FADE.fadeOutEndVh * vh;
-      const fadeOutT = clamp(
-        (rect.top - fadeOutEnd) / (fadeOutStart - fadeOutEnd),
-        0,
-        1,
-      );
-      const fadeOutSmooth = fadeOutT ** CELESTRA_PHILOSOPHY_FADE.fadeOutEase;
-
-      // Pathway: start fading when halfway towards Celéstra Offerings (uses pathwayFadeStartVh / pathwayFadeEndVh)
+      // Pathway: start fading when halfway towards Celéstra Offerings
       const offeringsEl = offeringsRef.current;
-      let pathwayFadeOutT = fadeOutT;
+      let pathwayFadeOutT = 1;
       if (offeringsEl) {
         const offeringsRect = offeringsEl.getBoundingClientRect();
         const midpoint = (rect.bottom + offeringsRect.top) / 2;
@@ -183,13 +134,6 @@ export function CelestraPage() {
       const pathwayFadeOutSmooth = smoothstep01(pathwayFadeOutT);
       const opacityRaw = smoothstep01(fadeInT) * pathwayFadeOutSmooth;
       setPhilosophyBgOpacity(opacityRaw ** CELESTRA_PHILOSOPHY_FADE.curvePower);
-      // Couple: no fade-in, only fade-out; full opacity (1) until fade-out zone
-      const inFadeOutZone = rect.top < fadeOutStart;
-      const coupleOpacityRaw =
-        fadeInT > 0 ? (inFadeOutZone ? smoothstep01(fadeOutSmooth) : 1) : 0;
-      setPhilosophyCoupleOpacity(
-        coupleOpacityRaw ** CELESTRA_PHILOSOPHY_FADE.curvePower,
-      );
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -305,7 +249,7 @@ export function CelestraPage() {
       {/* The Philosophy of Celéstra */}
       <section
         ref={philosophyRef}
-        className="home-section-pad bg-black relative overflow-hidden"
+        className="brand-philosophy-section bg-black relative overflow-hidden"
         style={{ backgroundColor: "#000" }}
       >
         {/* Background image layer (use <img> so it always loads/paints reliably) */}
@@ -332,50 +276,30 @@ export function CelestraPage() {
           }}
           aria-hidden
         />
-        {/* Foreground couple layer (over pathway, under text); reduced size + parallax */}
-        <img
-          src="/assets/generated/couple_walking.png"
-          alt=""
-          aria-hidden
-          className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none hidden lg:block"
-          style={{
-            zIndex: 6,
-            objectPosition:
-              CELESTRA_PHILOSOPHY_PARALLAX.couplePosition.objectPosition,
-            transformOrigin: "center bottom",
-            transform: `translate3d(${CELESTRA_PHILOSOPHY_PARALLAX.coupleOffsetPx.x - 200}px, ${coupleParallax + CELESTRA_PHILOSOPHY_PARALLAX.coupleOffsetPx.y + 200}px, 0) scale(${CELESTRA_PHILOSOPHY_PARALLAX.couplePosition.scale})`,
-            willChange: "transform",
-            opacity: philosophyCoupleOpacity,
-          }}
-        />
-        <div
-          className="relative z-10 max-w-4xl mx-auto px-4 sm:px-0 lg:px-8 lg:max-w-[54vw] lg:ml-0 lg:mr-auto transition-transform duration-700 ease-out"
-          style={{
-            transform: `translateY(${textParallax}px)`,
-            willChange: "transform",
-          }}
-        >
-          <div className="text-center mb-8 sm:mb-10">
-            <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll">
-              The Philosophy of Celéstra
-            </p>
-            <div className="gold-divider mx-auto animate-on-scroll delay-100" />
-            <h2 className="section-lead animate-on-scroll delay-200">
-              Designed for ease, crafted for memorable stays
-            </h2>
-          </div>
-          <div className="space-y-4 animate-on-scroll delay-300 text-center max-w-3xl mx-auto">
-            <p className="body-refined-lg text-ivory-muted/70">
-              True hospitality is not displayed; it is experienced — felt
-              quietly and remembered naturally. A hotel should never overwhelm
-              the traveler, but instead welcome them with ease and intention.
-            </p>
-            <p className="body-refined-lg text-ivory-muted/70">
-              At Celéstra, this belief shapes every detail, where balanced
-              design, warm service, and a deep sense of place come together to
-              create environments in which journeys slow down and moments become
-              meaningful.
-            </p>
+        <div className="brand-philosophy-section__content relative z-10 flex w-full flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center">
+          <div className="w-full max-w-3xl mx-auto space-y-6 sm:space-y-8">
+            <div className="space-y-4">
+              <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll">
+                The Philosophy of Celéstra
+              </p>
+              <div className="gold-divider mx-auto animate-on-scroll delay-100" />
+              <h2 className="section-lead animate-on-scroll delay-200">
+                Designed for ease, crafted for memorable stays
+              </h2>
+            </div>
+            <div className="space-y-4 animate-on-scroll delay-300">
+              <p className="body-refined-lg text-ivory-muted/70">
+                True hospitality is not displayed; it is experienced — felt
+                quietly and remembered naturally. A hotel should never overwhelm
+                the traveler, but instead welcome them with ease and intention.
+              </p>
+              <p className="body-refined-lg text-ivory-muted/70">
+                At Celéstra, this belief shapes every detail, where balanced
+                design, warm service, and a deep sense of place come together to
+                create environments in which journeys slow down and moments become
+                meaningful.
+              </p>
+            </div>
           </div>
         </div>
       </section>

@@ -249,6 +249,8 @@ export function HomePage() {
     <div className="bg-charcoal min-h-screen home-test-font">
       {/* ── Hero ─────────────────────────────────────────────── */}
       <HeroSection
+        variant="home"
+        baseColor="black"
         bgVideo={
           isMobileHero
             ? "/assets/generated/MainPage.mov"
@@ -260,10 +262,19 @@ export function HomePage() {
         contentPlacement="lower"
         allowSearchOverflow
       >
-        <div className="relative z-[60] w-full text-left">
+        <div className="home-hero-search-in-video relative z-[60] hidden w-full text-left lg:block">
           <HomeSearchBar />
         </div>
       </HeroSection>
+
+      <section
+        className="home-hero-search lg:hidden relative z-50 bg-black px-3 py-4 border-b border-gold/10"
+        aria-label="Search availability"
+      >
+        <div className="max-w-6xl mx-auto w-full px-1">
+          <HomeSearchBar />
+        </div>
+      </section>
 
       {/* ── Philosophy ────────────────────────────────────────── */}
       <section
@@ -311,7 +322,7 @@ export function HomePage() {
       <section
         id="brands"
         ref={brandsSectionRef}
-        className="home-section-pad bg-charcoal"
+        className="home-section-pad bg-black"
       >
         <div
           className="max-w-6xl mx-auto px-4 sm:px-0"
@@ -428,7 +439,7 @@ export function HomePage() {
       {/* ── Vision Section ─────────────────────────────────────── */}
       <section
         ref={visionSectionRef}
-        className="home-section-pad parallax-section parallax-fixed relative"
+        className="home-future-section home-section-pad parallax-section parallax-fixed relative"
         style={{
           backgroundImage:
             "url(/assets/generated/hero-future.dim_1920x1080.png)",
@@ -443,15 +454,15 @@ export function HomePage() {
           }}
         />
         <div
-          className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-0"
+          className="home-future-section__content relative z-10 w-full text-center"
           style={{ opacity: visionSectionFade, willChange: "opacity" }}
         >
           <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll">
             The Future
           </p>
           <div className="gold-divider animate-on-scroll delay-100" />
-          <div className="space-y-4 animate-on-scroll delay-200 max-w-3xl mx-auto mt-6">
-            <p className="section-lead text-ivory italic">
+          <div className="space-y-4 animate-on-scroll delay-200 w-full mt-6">
+            <p className="home-vision-statement mx-auto">
               GHD Hotels is developing a new generation of hotels that combine
               design excellence, operational efficiency, and guest-focused
               service. Our properties are currently under development across

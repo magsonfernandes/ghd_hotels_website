@@ -23,6 +23,7 @@ import {
   normalizeRoomsList,
   totalGuestsFromRooms,
 } from "../components/booking/roomOccupancy";
+import { NIVAARA_PROPERTY_PHOTO_SRCS } from "../lib/nivaaraPropertyPhotos";
 import { useRates, useRatesStatus } from "../lib/rates";
 
 /** Fallback per-category inventory when not yet configurable via the API. */
@@ -249,7 +250,8 @@ export function BookingPage() {
   const roomDetails = useMemo(() => {
     return {
       roomName: "Royal Studio",
-      image: "/assets/generated/hero-nivaara.dim_1920x1080.png",
+      image: NIVAARA_PROPERTY_PHOTO_SRCS[0],
+      galleryImages: [...NIVAARA_PROPERTY_PHOTO_SRCS],
       bedInfo: "1 King Bed",
       sleepsInfo: "Sleeps 2",
       amenities: [
@@ -414,7 +416,11 @@ export function BookingPage() {
                     roomCategoryId={cat.id}
                     roomType={cat.label}
                     description={cat.shortDescription}
-                    image="/assets/generated/hero-nivaara.dim_1920x1080.png"
+                    image={
+                      catIndex === 0
+                        ? NIVAARA_PROPERTY_PHOTO_SRCS[0]
+                        : "/assets/generated/hero-nivaara.dim_1920x1080.png"
+                    }
                     totalInventory={inventory}
                     baseRateOriginal={cat.roomOnly.original}
                     baseRateDiscounted={cat.roomOnly.discounted}
@@ -503,6 +509,7 @@ export function BookingPage() {
         onClose={() => setRoomDetailsOpen(false)}
         roomName={roomDetails.roomName}
         image={roomDetails.image}
+        galleryImages={roomDetails.galleryImages}
         amenities={roomDetails.amenities}
         description={roomDetails.description}
         bedInfo={roomDetails.bedInfo}

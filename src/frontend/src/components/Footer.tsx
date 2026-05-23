@@ -1,5 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { SiInstagram, SiLinkedin, SiX } from "react-icons/si";
+import { SiFacebook, SiInstagram, SiLinkedin, SiX } from "react-icons/si";
+
+/** Set when Facebook page URL is available */
+const FACEBOOK_URL = "";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -42,6 +45,25 @@ export function Footer() {
               >
                 <SiInstagram size={18} />
               </a>
+              {FACEBOOK_URL ? (
+                <a
+                  href={FACEBOOK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-ivory-muted/50 hover:text-gold transition-colors duration-300"
+                  aria-label="Facebook"
+                >
+                  <SiFacebook size={18} />
+                </a>
+              ) : (
+                <span
+                  className="text-ivory-muted/50"
+                  aria-label="Facebook"
+                  title="Link coming soon"
+                >
+                  <SiFacebook size={18} />
+                </span>
+              )}
               <a
                 href="https://x.com/GHD_Hotels"
                 target="_blank"
@@ -185,7 +207,7 @@ export function Footer() {
               >
                 GHD Hotels LLP
                 <br />
-                625, Gera Imperium Star
+                325, Gera Imperium Star
                 <br />
                 Patto, Panjim
                 <br />

@@ -1,21 +1,23 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const navLinks = [
-  { to: "/", label: "Home", ocid: "nav.home.link" },
-  { to: "/about", label: "About", ocid: "nav.about.link" },
-  // Brand order: Nivaãra → Celéstra → Samrāya
-  { to: "/nivaara", label: "Nivaãra", ocid: "nav.nivaara.link" },
-  { to: "/celestra", label: "Celéstra", ocid: "nav.celestra.link" },
-  { to: "/samraya", label: "Samrāya", ocid: "nav.samraya.link" },
-  { to: "/vision", label: "Development Vision", ocid: "nav.vision.link" },
-  { to: "/contact", label: "Contact", ocid: "nav.contact.link" },
+  { to: "/", label: "Home", shortLabel: "Home", ocid: "nav.home.link" },
+  { to: "/about", label: "About", shortLabel: "About", ocid: "nav.about.link" },
+  { to: "/nivaara", label: "Nivaãra", shortLabel: "Nivaãra", ocid: "nav.nivaara.link" },
+  { to: "/celestra", label: "Celéstra", shortLabel: "Celéstra", ocid: "nav.celestra.link" },
+  { to: "/samraya", label: "Samrāya", shortLabel: "Samrāya", ocid: "nav.samraya.link" },
+  {
+    to: "/vision",
+    label: "Development Vision",
+    shortLabel: "Vision",
+    ocid: "nav.vision.link",
+  },
+  { to: "/contact", label: "Contact", shortLabel: "Contact", ocid: "nav.contact.link" },
 ];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
 
@@ -25,110 +27,51 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change — intentionally only runs when path changes
-  // biome-ignore lint/correctness/useExhaustiveDependencies: we only want to close on route change
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [currentPath]);
-
   return (
-    <>
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? "nav-solid" : "nav-transparent"
-        }`}
-      >
-        <div className="w-full px-4 sm:px-6 lg:px-10 flex items-center justify-between h-20 sm:h-28">
-          {/* Logo — left aligned */}
-          <Link
-            to="/"
-            className="flex items-center h-full group flex-shrink-0"
-            data-ocid="nav.home.link"
-          >
-            <img
-              src="/assets/logo/GHD HOTELS - Gold Emboss Logo.png"
-              alt="GHD Hotels"
-              className="h-[4.25rem] sm:h-[6.25rem] lg:h-28 w-auto max-h-full object-contain object-left transition-opacity duration-300 group-hover:opacity-95"
-              draggable={false}
-            />
-          </Link>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled ? "nav-solid" : "nav-transparent"
+      }`}
+    >
+      <div className="nav-bar-inner w-full px-2 sm:px-4 lg:px-10 flex flex-col gap-2 py-2 lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:h-28 lg:py-0">
+        <Link
+          to="/"
+          className="flex items-center justify-center lg:justify-start h-full group flex-shrink-0"
+          data-ocid="nav.home.link"
+        >
+          <img
+            src="/assets/logo/GHD HOTELS - Gold Emboss Logo.png"
+            alt="GHD Hotels"
+            className="nav-bar-logo h-10 sm:h-14 lg:h-28 w-auto max-h-full object-contain object-center lg:object-left transition-opacity duration-300 group-hover:opacity-95"
+            draggable={false}
+          />
+        </Link>
 
-          {/* Desktop Nav — right aligned */}
-          <ul className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => {
-              const isActive = currentPath === link.to;
-              return (
-                <li key={link.to}>
-                  <Link
-                    to={link.to}
-                    data-ocid={link.ocid}
-                    className={`relative nav-link tracking-[0.15em] uppercase transition-colors duration-300 pb-1 group ${
-                      isActive
-                        ? "text-gold"
-                        : "text-white hover:text-gold"
-                    }`}
-                  >
-                    {link.label}
-                    <span
-                      className={`absolute bottom-0 left-0 h-px bg-gold transition-all duration-300 ${
-                        isActive ? "w-full" : "w-0 group-hover:w-full"
-                      }`}
-                    />
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-
-          {/* Mobile Toggle — right aligned when minimized */}
-          <button
-            type="button"
-            className="lg:hidden text-ivory hover:text-gold transition-colors duration-300 p-2"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-            data-ocid="nav.mobile.toggle"
-          >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Menu Overlay */}
-      {mobileOpen && (
-        <div className="mobile-menu lg:hidden">
-          <button
-            type="button"
-            className="absolute top-6 right-6 text-ivory hover:text-gold transition-colors duration-300 p-2"
-            onClick={() => setMobileOpen(false)}
-            aria-label="Close menu"
-          >
-            <X size={24} />
-          </button>
-
-          <div className="gold-divider mb-4" />
-
-          <nav className="flex flex-col items-center gap-6">
-            {navLinks.map((link) => {
-              const isActive = currentPath === link.to;
-              return (
+        <ul className="nav-bar-links flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:gap-x-3 lg:flex-nowrap lg:justify-end lg:gap-8">
+          {navLinks.map((link) => {
+            const isActive = currentPath === link.to;
+            return (
+              <li key={link.to} className="flex-shrink-0">
                 <Link
-                  key={link.to}
                   to={link.to}
                   data-ocid={link.ocid}
-                  onClick={() => setMobileOpen(false)}
-                  className={`nav-mobile-link tracking-[0.12em] uppercase transition-colors duration-300 ${
+                  className={`relative nav-link nav-link--bar tracking-[0.08em] sm:tracking-[0.1em] lg:tracking-[0.15em] uppercase transition-colors duration-300 pb-0.5 lg:pb-1 group whitespace-nowrap ${
                     isActive ? "text-gold" : "text-white hover:text-gold"
                   }`}
                 >
-                  {link.label}
+                  <span className="lg:hidden">{link.shortLabel}</span>
+                  <span className="hidden lg:inline">{link.label}</span>
+                  <span
+                    className={`absolute bottom-0 left-0 h-px bg-gold transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  />
                 </Link>
-              );
-            })}
-          </nav>
-
-          <div className="gold-divider mt-4" />
-        </div>
-      )}
-    </>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </nav>
   );
 }

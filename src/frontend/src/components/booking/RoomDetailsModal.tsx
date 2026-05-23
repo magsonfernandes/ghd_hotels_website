@@ -31,6 +31,8 @@ type Props = {
   onClose: () => void;
   roomName: string;
   image: string;
+  /** When set, powers the room gallery carousel (falls back to repeating `image`). */
+  galleryImages?: string[];
   amenities: string[];
   description: string;
   bedInfo?: string;
@@ -92,7 +94,13 @@ export function RoomDetailsModal(props: Props) {
     return parts;
   }, [props.bedInfo, props.sleepsInfo]);
 
-  const images = useMemo(() => Array.from({ length: 6 }, () => props.image), [props.image]);
+  const images = useMemo(
+    () =>
+      props.galleryImages?.length
+        ? props.galleryImages
+        : [props.image],
+    [props.galleryImages, props.image],
+  );
 
   const GALLERY_FADE_MS = 220;
   const requestGalleryIndex = (nextIndex: number) => {

@@ -32,6 +32,10 @@ interface HeroSectionProps {
   allowSearchOverflow?: boolean;
   /** Vertical placement of hero content (default centered). */
   contentPlacement?: "center" | "below-center" | "lower";
+  /** Hide bottom scroll indicator (e.g. video-only mobile hero). */
+  hideScrollIndicator?: boolean;
+  /** Home page hero: video-only below lg; search bar moves outside hero via CSS. */
+  variant?: "default" | "home";
 }
 
 export function HeroSection({
@@ -54,6 +58,8 @@ export function HeroSection({
   contentClassName = "max-w-5xl",
   allowSearchOverflow = false,
   contentPlacement = "center",
+  hideScrollIndicator = false,
+  variant = "default",
 }: HeroSectionProps) {
   const hasPhoto = Boolean(bgImage?.trim());
   const hasVideo = Boolean(bgVideo?.trim());
@@ -83,7 +89,7 @@ export function HeroSection({
 
   return (
     <section
-      className={`hero-section snap-section${baseColor === "black" ? " hero-section--black" : ""}${allowSearchOverflow ? " hero-section--search-visible" : ""}${contentPlacement === "lower" ? " hero-section--content-lower" : ""}${contentPlacement === "below-center" ? " hero-section--content-below-center" : ""}`}
+      className={`hero-section snap-section${baseColor === "black" ? " hero-section--black" : ""}${variant === "home" ? " hero-section--home" : ""}${allowSearchOverflow ? " hero-section--search-visible" : ""}${contentPlacement === "lower" ? " hero-section--content-lower" : ""}${contentPlacement === "below-center" ? " hero-section--content-below-center" : ""}`}
     >
       {/* Wrapper so opacity is applied to the whole background layer; fade is impossible to miss */}
       <div
@@ -258,13 +264,14 @@ export function HeroSection({
         </div>
       )}
 
-      {/* Scroll indicator — refined line + small label */}
-      <div className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
-        <div
-          className="w-px h-14 bg-gradient-to-b from-gold/60 via-gold/30 to-transparent"
-          style={{ animation: "scroll-line 2.4s ease-in-out infinite" }}
-        />
-      </div>
+      {!hideScrollIndicator && (
+        <div className="hero-scroll-indicator absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+          <div
+            className="w-px h-14 bg-gradient-to-b from-gold/60 via-gold/30 to-transparent"
+            style={{ animation: "scroll-line 2.4s ease-in-out infinite" }}
+          />
+        </div>
+      )}
     </section>
   );
 }

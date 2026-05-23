@@ -80,6 +80,9 @@ const SAMRAYA_PHILOSOPHY_FADE = {
 /** How far green.png sits below the philosophy section’s bottom edge (into Offerings). */
 const SAMRAYA_GREEN_OVERFLOW = "clamp(4.5rem, 4vw, 10rem)";
 
+/** Extra top space so Offerings headings/grid clear the green decorative image. */
+const SAMRAYA_OFFERINGS_TOP_PAD = `calc(${SAMRAYA_GREEN_OVERFLOW} + 2.5rem)`;
+
 /** Full-bleed width (viewport). Slightly over 100vw if you want no hairline gaps. */
 const SAMRAYA_GREEN_WIDTH = "104vw";
 
@@ -261,7 +264,7 @@ export function SamrayaPage() {
       {/* Philosophy + Offerings: green.png overflows visually into Offerings (no overflow clip on section). */}
       <section
         ref={philosophyRef}
-        className="home-section-pad relative z-10 overflow-x-clip overflow-y-visible bg-black"
+        className="brand-philosophy-section relative z-10 overflow-x-clip overflow-y-visible bg-black"
         style={{ backgroundColor: "#000" }}
       >
         {/* Clip royallady + overlay only — green is a sibling so it can extend past section bottom */}
@@ -307,46 +310,48 @@ export function SamrayaPage() {
           />
         </div>
 
-        <div className="relative z-[30] max-w-4xl mx-auto px-4 sm:px-0 lg:px-8 lg:max-w-[54vw] lg:ml-0 lg:mr-auto">
-          <div className="text-center mb-8 sm:mb-10">
-            <p
-              className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
-              style={{ color: "#b8975a" }}
-            >
-              The Philosophy of Samrāya
-            </p>
-            <div
-              className="gold-divider animate-on-scroll delay-100"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, #b8975a, transparent)",
-              }}
-            />
-            <h2 className="section-lead animate-on-scroll delay-200">
-              Luxury with Purpose
-            </h2>
-          </div>
+        <div className="brand-philosophy-section__content relative z-[30] flex w-full flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center">
+          <div className="w-full max-w-3xl mx-auto space-y-6 sm:space-y-8">
+            <div className="space-y-4">
+              <p
+                className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
+                style={{ color: "#b8975a" }}
+              >
+                The Philosophy of Samrāya
+              </p>
+              <div
+                className="gold-divider mx-auto animate-on-scroll delay-100"
+                style={{
+                  background:
+                    "linear-gradient(90deg, transparent, #b8975a, transparent)",
+                }}
+              />
+              <h2 className="section-lead animate-on-scroll delay-200">
+                Luxury with Purpose
+              </h2>
+            </div>
 
-          <div className="space-y-4 animate-on-scroll delay-300 text-center max-w-3xl mx-auto">
-            <p className="body-refined-lg text-ivory-muted/70 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]">
-              At Samrāya, luxury is shaped by purpose, precision, and thoughtful
-              hospitality.
-            </p>
-            <p className="body-refined-lg text-ivory-muted/70 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]">
-              Rooted in the timeless Indian principle of{" "}
-              <em>Atithi Devo Bhava</em>— the guest is divine — Samrāya
-              interprets India’s heritage through a contemporary lens, creating
-              spaces where grandeur, dignity, and thoughtful service coexist in
-              perfect harmony. As the flagship five-star brand of GHD Hotels,
-              Samrāya is designed to deliver world-class luxury experiences
-              while preserving the warmth and cultural depth of Indian
-              hospitality.
-            </p>
-            <p className="body-refined-lg text-ivory-muted/70 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]">
-              Samrāya represents refined grandeur — not opulence for display,
-              but excellence expressed through architecture, service, and
-              meticulous attention to detail.
-            </p>
+            <div className="space-y-4 animate-on-scroll delay-300">
+              <p className="body-refined-lg text-ivory-muted/70 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]">
+                At Samrāya, luxury is shaped by purpose, precision, and thoughtful
+                hospitality.
+              </p>
+              <p className="body-refined-lg text-ivory-muted/70 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]">
+                Rooted in the timeless Indian principle of{" "}
+                <em>Atithi Devo Bhava</em>— the guest is divine — Samrāya
+                interprets India’s heritage through a contemporary lens, creating
+                spaces where grandeur, dignity, and thoughtful service coexist in
+                perfect harmony. As the flagship five-star brand of GHD Hotels,
+                Samrāya is designed to deliver world-class luxury experiences
+                while preserving the warmth and cultural depth of Indian
+                hospitality.
+              </p>
+              <p className="body-refined-lg text-ivory-muted/70 drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]">
+                Samrāya represents refined grandeur — not opulence for display,
+                but excellence expressed through architecture, service, and
+                meticulous attention to detail.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -361,7 +366,10 @@ export function SamrayaPage() {
           }}
           aria-hidden
         />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-0">
+        <div
+          className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-0"
+          style={{ paddingTop: SAMRAYA_OFFERINGS_TOP_PAD }}
+        >
           <div className="text-center mb-8 sm:mb-10">
             <p
               className="eyebrow eyebrow--gold-emphasis animate-on-scroll"

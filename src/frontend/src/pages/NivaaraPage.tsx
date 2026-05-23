@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Clock, Laptop, Moon, Tv2, Utensils, Wifi } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
 import { heroImageTitleStyle } from "../lib/heroTitleStyle";
+import { NIVAARA_PROPERTY_PHOTOS } from "../lib/nivaaraPropertyPhotos";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 const features = [
@@ -49,40 +50,47 @@ export function NivaaraPage() {
   useScrollAnimationAll();
   const philosophyRef = useRef<HTMLElement | null>(null);
   const [philosophyParallax, setPhilosophyParallax] = useState(0);
-  const [flowerParallax, setFlowerParallax] = useState(0);
-  const [textParallax, setTextParallax] = useState(0);
   const [philosophyBgOpacity, setPhilosophyBgOpacity] = useState(0);
   const [propertiesImageIndex, setPropertiesImageIndex] = useState(0);
-  const [propertiesCarouselPaused, setPropertiesCarouselPaused] = useState(false);
-  const [propertiesFading, setPropertiesFading] = useState(false);
-  const propertiesFadeTimerRef = useRef<number | null>(null);
-
-  const PROPERTIES_IMAGES = Array.from(
-    { length: 6 },
-    () => "/assets/generated/hero-nivaara.dim_1920x1080.png",
+  const [propertiesPrevIndex, setPropertiesPrevIndex] = useState<number | null>(
+    null,
   );
+  const [propertiesCarouselPaused, setPropertiesCarouselPaused] = useState(false);
+  const propertiesImageIndexRef = useRef(0);
+  const propertiesPrevIndexRef = useRef<number | null>(null);
+  const propertiesCrossfadeTimerRef = useRef<number | null>(null);
+
+  const PROPERTIES_IMAGES = NIVAARA_PROPERTY_PHOTOS;
   const PROPERTIES_AUTO_ADVANCE_MS = 3000;
-  const PROPERTIES_FADE_MS = 260;
+  const PROPERTIES_CROSSFADE_MS = 380;
 
-  const requestPropertiesIndex = (nextIndex: number) => {
-    const total = PROPERTIES_IMAGES.length;
-    const next = ((nextIndex % total) + total) % total;
-    if (next === propertiesImageIndex) return;
+  propertiesImageIndexRef.current = propertiesImageIndex;
+  propertiesPrevIndexRef.current = propertiesPrevIndex;
 
-    if (propertiesFadeTimerRef.current) {
-      window.clearTimeout(propertiesFadeTimerRef.current);
-      propertiesFadeTimerRef.current = null;
-    }
+  const goToPropertyPhoto = useCallback(
+    (nextIndex: number) => {
+      const total = PROPERTIES_IMAGES.length;
+      const next = ((nextIndex % total) + total) % total;
+      const current = propertiesImageIndexRef.current;
+      if (next === current && propertiesPrevIndexRef.current === null) return;
 
-    setPropertiesFading(true);
-    propertiesFadeTimerRef.current = window.setTimeout(() => {
+      if (propertiesCrossfadeTimerRef.current) {
+        window.clearTimeout(propertiesCrossfadeTimerRef.current);
+        propertiesCrossfadeTimerRef.current = null;
+      }
+
+      setPropertiesPrevIndex(current);
       setPropertiesImageIndex(next);
-      setPropertiesFading(false);
-      propertiesFadeTimerRef.current = null;
-    }, PROPERTIES_FADE_MS);
-  };
 
-  // Smooth opacity fade for decorative layers (Buddha + flowers) when entering/leaving Philosophy.
+      propertiesCrossfadeTimerRef.current = window.setTimeout(() => {
+        setPropertiesPrevIndex(null);
+        propertiesCrossfadeTimerRef.current = null;
+      }, PROPERTIES_CROSSFADE_MS);
+    },
+    [PROPERTIES_IMAGES.length],
+  );
+
+  // Smooth opacity fade for Buddha background when entering/leaving Philosophy.
   // Uses rect.top/rect.bottom so it naturally fades as the section transitions into/out of view.
   const NIVAA_PHILOSOPHY_FADE = {
     fadeInStartVh: 0.9,
@@ -98,21 +106,19 @@ export function NivaaraPage() {
   useEffect(() => {
     if (propertiesCarouselPaused) return;
     const id = window.setInterval(() => {
-      requestPropertiesIndex(propertiesImageIndex + 1);
+      goToPropertyPhoto(propertiesImageIndexRef.current + 1);
     }, PROPERTIES_AUTO_ADVANCE_MS);
     return () => window.clearInterval(id);
   }, [
     propertiesCarouselPaused,
     PROPERTIES_AUTO_ADVANCE_MS,
-    PROPERTIES_IMAGES.length,
-    propertiesImageIndex,
+    goToPropertyPhoto,
   ]);
 
   useEffect(() => {
     return () => {
-      if (propertiesFadeTimerRef.current) {
-        window.clearTimeout(propertiesFadeTimerRef.current);
-        propertiesFadeTimerRef.current = null;
+      if (propertiesCrossfadeTimerRef.current) {
+        window.clearTimeout(propertiesCrossfadeTimerRef.current);
       }
     };
   }, []);
@@ -128,18 +134,9 @@ export function NivaaraPage() {
         Math.max(min, Math.min(max, v));
       const smoothstep01 = (t: number) => t * t * (3 - 2 * t);
 
-      // Buddha background: keep parallax subtle (less movement than flowers)
+      // Buddha background: subtle scroll parallax
       const offset = (center - rect.top) * 0.2;
       setPhilosophyParallax(clamp(offset, -70, 100));
-
-      // Flowers: longer-range parallax so bottom florals keep drifting
-      // as you begin scrolling into the next section (avoid sudden "stop").
-      const flowerOffset = (center - rect.top) * 0.15;
-      setFlowerParallax(clamp(flowerOffset, -520, 540));
-
-      // Text: subtle parallax (less than Buddha/flowers), smooth both directions
-      const textOffset = (center - rect.top) * 0.07;
-      setTextParallax(clamp(textOffset, -36, 36));
 
       // Fade timing: fade in when entering the section, fade out as the section scrolls away
       // (into the next content area). No transform/parallax changes here.
@@ -276,7 +273,10 @@ export function NivaaraPage() {
       </section>
 
       {/* The Philosophy of Nivaãra */}
-      <section ref={philosophyRef} className="home-section-pad bg-black relative">
+      <section
+        ref={philosophyRef}
+        className="nivaara-philosophy-section bg-black relative"
+      >
         {/* Background image – Buddha, softened behind content */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-65 transition-opacity duration-900 ease-out"
@@ -298,170 +298,48 @@ export function NivaaraPage() {
           aria-hidden
         />
         <div
-          className="relative z-10 max-w-4xl mx-auto px-4 sm:px-0 lg:px-8 lg:max-w-[54vw] lg:ml-0 lg:mr-auto transition-opacity duration-700 ease-out"
+          className="nivaara-philosophy-section__content relative z-10 flex w-full flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center transition-opacity duration-700 ease-out"
           style={{
-            transform: `translateY(${textParallax}px)`,
             opacity: philosophyBgOpacity,
-            willChange: "transform",
+            willChange: "opacity",
           }}
         >
-          <div className="text-center mb-8 sm:mb-10">
-            <p
-              className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
-              style={{ color: "#b8975a" }}
-            >
-              The Philosophy of Nivaãra
-            </p>
-            <div
-              className="gold-divider animate-on-scroll delay-100"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, #b8975a, transparent)",
-              }}
-            />
-            <h2 className="section-lead animate-on-scroll delay-200">
-              Calm in the Heart of Motion
-            </h2>
-          </div>
+          <div className="w-full max-w-3xl mx-auto space-y-6 sm:space-y-8">
+            <div className="space-y-4">
+              <p
+                className="eyebrow eyebrow--gold-emphasis animate-on-scroll"
+                style={{ color: "#b8975a" }}
+              >
+                The Philosophy of Nivaãra
+              </p>
+              <div
+                className="gold-divider mx-auto animate-on-scroll delay-100"
+                style={{
+                  background:
+                    "linear-gradient(90deg, transparent, #b8975a, transparent)",
+                }}
+              />
+              <h2 className="section-lead animate-on-scroll delay-200">
+                Calm in the Heart of Motion
+              </h2>
+            </div>
 
-          <div className="space-y-4 animate-on-scroll delay-300 text-center max-w-3xl mx-auto">
-            <p className="body-refined-lg text-ivory-muted/70">
-              At Nivaãra by GHD Hotels, our philosophy is built around the
-              understanding that modern travel moves at an accelerated pace.
-              Cities are dynamic, journeys are purposeful, and time has become
-              one of the most valuable resources for today’s traveler.
-            </p>
-            <p className="body-refined-lg text-ivory-muted/70">
-              Nivaãra was created to respond to this rhythm.
-            </p>
-            <p className="body-refined-lg text-ivory-muted/70">
-              Rather than slowing the world down, we design our hospitality to
-              move with it—offering spaces where comfort, efficiency, and
-              thoughtful design come together to support the traveler’s journey.
-            </p>
-          </div>
-        </div>
-
-        {/* Floating floral accents on right and bottom with gentle parallax */}
-        <div
-          className="pointer-events-none absolute inset-0 z-10 transition-opacity duration-700 ease-out"
-          style={{ opacity: philosophyBgOpacity }}
-        >
-          {/* Right side blooms */}
-          <div
-            className="absolute right-[-6%] top-[40%] w-[44vw] max-w-[520px]"
-            style={{
-              transform: `translateY(${flowerParallax * 0.4}px)`,
-            }}
-          >
-            <img
-              src="/assets/generated/of1.png"
-              alt=""
-              className="w-full h-auto object-contain"
-            />
-          </div>
-          {/* Additional dark pink blossom above-right */}
-          <div
-            className="absolute right-[-2%] top-[33%] w-[20vw] max-w-[140px]"
-            style={{
-              transform: `translateY(${flowerParallax * -0.12}px)`,
-            }}
-          >
-            <img
-              src="/assets/generated/pf1.png"
-              alt=""
-              className="w-full h-auto object-contain"
-            />
-          </div>
-
-          {/* Two smaller companion blooms further down the right edge */}
-          <div
-            className="absolute right-[-3%] top-[40%] w-[18vw] max-w-[220px]"
-            style={{
-              transform: `translateY(${flowerParallax * -0.18}px)`,
-            }}
-          >
-            <img
-              src="/assets/generated/lpf2.png"
-              alt=""
-              className="w-full h-auto object-contain"
-            />
-          </div>
-          <div
-            className="absolute right-[35%] bottom-[4%] w-[16vw] max-w-[200px]"
-            style={{
-              transform: `translateY(${flowerParallax * 0.14}px)`,
-            }}
-          >
-            <img
-              src="/assets/generated/pf2.png"
-              alt=""
-              className="w-full h-auto object-contain"
-            />
-          </div>
-
-          {/* Bottom arc of petals */}
-          <div
-            className="absolute left-[-5%] bottom-[85%] w-[24vw] max-w-[300px]"
-            style={{
-              transform: `translateY(${flowerParallax * 0.3}px)`,
-            }}
-          >
-            <img
-              src="/assets/generated/of1.png"
-              alt=""
-              className="w-full h-auto object-contain"
-            />
-          </div>
-          {/* Companion bloom to the right of the orange flower (top-left) */}
-          <div
-            className="absolute left-[12%] bottom-[95%] w-[18vw] max-w-[180px]"
-            style={{
-              transform: `translateY(${flowerParallax * 0.26}px)`,
-            }}
-          >
-            <img
-              src="/assets/generated/lpf1.png"
-              alt=""
-              className="w-full h-auto object-contain"
-            />
-          </div>
-          {/* Soft petal just below the orange flower (top-left) */}
-          <div
-            className="absolute left-[4%] bottom-[80%] w-[20vw] max-w-[240px]"
-            style={{
-              transform: `translateY(${flowerParallax * 0.22}px)`,
-            }}
-          >
-            <img
-              src="/assets/generated/pf2.png"
-              alt=""
-              className="w-full h-auto object-contain"
-            />
-          </div>
-          <div
-            className="absolute left-[71%] bottom-[-10%] w-[28vw] max-w-[340px]"
-            style={{
-              transform: `translateX(-50%) translateY(${flowerParallax * -0.25}px)`,
-            }}
-          >
-            <img
-              src="/assets/generated/of2.png"
-              alt=""
-              className="w-full h-auto object-contain"
-            />
-          </div>
-          <div
-            className="absolute right-[10%] bottom-[2%] w-[22vw] max-w-[280px]"
-            style={{
-              transform: `translateY(${flowerParallax * 0.22}px)`,
-            }}
-          >
-            <img
-              src="/assets/generated/pf1.png"
-              alt=""
-              className="w-full h-auto object-contain"
-            />
+            <div className="space-y-4 animate-on-scroll delay-300">
+              <p className="body-refined-lg text-ivory-muted/70">
+                At Nivaãra by GHD Hotels, our philosophy is built around the
+                understanding that modern travel moves at an accelerated pace.
+                Cities are dynamic, journeys are purposeful, and time has become
+                one of the most valuable resources for today’s traveler.
+              </p>
+              <p className="body-refined-lg text-ivory-muted/70">
+                Nivaãra was created to respond to this rhythm.
+              </p>
+              <p className="body-refined-lg text-ivory-muted/70">
+                Rather than slowing the world down, we design our hospitality to
+                move with it—offering spaces where comfort, efficiency, and
+                thoughtful design come together to support the traveler’s journey.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -591,15 +469,41 @@ export function NivaaraPage() {
                     }
                   }}
                 >
-                  <img
-                    src={PROPERTIES_IMAGES[propertiesImageIndex] ?? PROPERTIES_IMAGES[0]}
-                    alt={`Nivaara - Nerul photo ${propertiesImageIndex + 1}`}
-                    className={`w-full h-[340px] sm:h-[420px] lg:h-[520px] object-cover transition-opacity duration-300 ${
-                      propertiesFading ? "opacity-0" : "opacity-100"
-                    }`}
-                    loading="lazy"
-                    draggable={false}
-                  />
+                  <div className="relative h-[340px] sm:h-[420px] lg:h-[520px]">
+                    <img
+                      src={
+                        PROPERTIES_IMAGES[
+                          propertiesPrevIndex ?? propertiesImageIndex
+                        ]?.src ?? PROPERTIES_IMAGES[0].src
+                      }
+                      alt={
+                        PROPERTIES_IMAGES[
+                          propertiesPrevIndex ?? propertiesImageIndex
+                        ]?.alt ?? PROPERTIES_IMAGES[0].alt
+                      }
+                      className="nivaara-property-carousel__slide"
+                      loading="lazy"
+                      decoding="async"
+                      draggable={false}
+                    />
+                    {propertiesPrevIndex !== null && (
+                      <img
+                        key={propertiesImageIndex}
+                        src={
+                          PROPERTIES_IMAGES[propertiesImageIndex]?.src ??
+                          PROPERTIES_IMAGES[0].src
+                        }
+                        alt={
+                          PROPERTIES_IMAGES[propertiesImageIndex]?.alt ??
+                          PROPERTIES_IMAGES[0].alt
+                        }
+                        className="nivaara-property-carousel__slide nivaara-property-carousel__slide--incoming"
+                        loading="eager"
+                        decoding="async"
+                        draggable={false}
+                      />
+                    )}
+                  </div>
 
                   {/* Left / right arrows */}
                   <div className="absolute inset-y-0 left-0 flex items-center px-3">
@@ -608,7 +512,7 @@ export function NivaaraPage() {
                       className="h-10 w-10 rounded-full bg-black/45 border border-white/10 text-ivory/90 flex items-center justify-center hover:bg-black/55 transition"
                       aria-label="Previous photo"
                       onClick={() =>
-                        requestPropertiesIndex(propertiesImageIndex - 1)
+                        goToPropertyPhoto(propertiesImageIndex - 1)
                       }
                     >
                       <ChevronLeft className="h-5 w-5" aria-hidden />
@@ -620,7 +524,7 @@ export function NivaaraPage() {
                       className="h-10 w-10 rounded-full bg-black/45 border border-white/10 text-ivory/90 flex items-center justify-center hover:bg-black/55 transition"
                       aria-label="Next photo"
                       onClick={() =>
-                        requestPropertiesIndex(propertiesImageIndex + 1)
+                        goToPropertyPhoto(propertiesImageIndex + 1)
                       }
                     >
                       <ChevronRight className="h-5 w-5" aria-hidden />
@@ -639,7 +543,7 @@ export function NivaaraPage() {
                             : "bg-white/15 hover:bg-white/25"
                         }`}
                         aria-label={`Show photo ${i + 1}`}
-                        onClick={() => requestPropertiesIndex(i)}
+                        onClick={() => goToPropertyPhoto(i)}
                       />
                     ))}
                   </div>
