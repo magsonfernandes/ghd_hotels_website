@@ -1,0 +1,65 @@
+import { sendMailViaSmtp } from "../mail/smtp.ts";
+
+type Body = {
+  name?: string;
+  email?: string;
+  phone?: string;
+  message?: string;
+};
+
+function json(status: number, payload: unknown) {
+  return Response.json(payload, { status });
+}
+
+export default async function handler(req: Request): Promise<Response> {
+  if (req.method !== "POST") {
+    return json(405, { ok: false, error: "Method not allowed" });
+  }
+
+  const mailbox = String(process.env.MAILBOX || "test@ghdhotels.in").trim();
+
+  let body: Body;
+  try {
+    body = (await req.json()) as Body;
+  } catch {
+    return json(400, { ok: false, error: "Invalid JSON body" });
+  }
+
+  const name = String(body.name ?? "").trim();
+  const email = String(body.email ?? "").trim();
+  const phone = String(body.phone ?? "").trim();
+  const message = String(body.message ?? "").trim();
+
+  if (!name || !email || !message) {
+    return json(400, { ok: false, error: "Missing required fields" });
+  }
+
+  const subject = `New enquiry from ${name}`;
+  const text = [
+    `Name: ${name}`,
+    `Email: ${email}`,
+    `Phone: ${phone || "Not provided"}`,
+    "",
+    "Message:",
+    message,
+  ].join("\n");
+
+  try {
+    await sendMailViaSmtp({
+      from: mailbox,
+      to: mailbox,
+      subject,
+      text,
+      replyTo: email,
+    });
+  } catch (err) {
+    if (err instanceof Error && /Missing SMTP_PASS/i.test(err.message)) {
+      return json(400, { ok: false, error: "Missing SMTP_PASS" });
+    }
+    const msg =
+      err instanceof Error ? err.message : "Failed to send email";
+    return json(500, { ok: false, error: msg });
+  }
+
+  return json(200, { ok: true });
+}

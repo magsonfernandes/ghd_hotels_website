@@ -40,6 +40,43 @@ server {
 
 Health check: `GET /api/health` should return `{ "ok": true }`.
 
+## Deploy on Vercel
+
+The repo includes `vercel.json` for the Vite frontend plus serverless handlers in
+`api/` (contact form, careers applications, booking rates, health check).
+
+1. Push this repository to GitHub (`magsonfernandes/ghd_hotels_website`).
+2. In [Vercel](https://vercel.com), **Add New Project** → import the repo.
+3. Leave the detected settings (install: `pnpm install`, build:
+   `pnpm --filter @caffeine/template-frontend build`, output: `src/frontend/dist`).
+4. Add **Environment Variables** (Production), then redeploy:
+
+| Variable | Required for | Notes |
+|----------|----------------|-------|
+| `SMTP_HOST` | Contact & Careers mail | e.g. `mail.ghdhotels.in` |
+| `SMTP_PORT` | Contact & Careers mail | e.g. `465` |
+| `SMTP_SECURE` | Contact & Careers mail | `true` for port 465 |
+| `SMTP_USER` | Contact & Careers mail | SMTP login |
+| `SMTP_PASS` | Contact & Careers mail | SMTP password (mark as **Sensitive**) |
+| `MAILBOX` | Contact & Careers mail | Inbox that receives submissions |
+
+5. Deploy. Your site will be at `https://<project>.vercel.app`.
+
+**CLI (optional):**
+
+```bash
+npx vercel login
+npx vercel link
+npx vercel --prod
+```
+
+Contact and careers forms use same-origin `/api/contact` and `/api/careers` on
+Vercel (no `VITE_MAIL_API_URL` needed). Booking rates load from `/api/rates`.
+
+**Note:** Admin rate edits (`/api/admin/rates`) and persistent `data/rates.json`
+are for the long-running Node server (`pnpm start`), not Vercel’s read-only
+serverless filesystem. On Vercel, booking uses the seeded rates in `api/rates.ts`.
+
 ## Windows (PowerShell)
 
 1) Install Node.js (LTS), then:
