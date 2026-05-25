@@ -5,6 +5,8 @@ import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
 import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { NIVAARA_PROPERTY_PHOTOS } from "../lib/nivaaraPropertyPhotos";
+
+const NIVAARA_PROPERTY_QR_SRC = "/assets/generated/nivaara%20qr.png";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 const features = [
@@ -429,29 +431,47 @@ export function NivaaraPage() {
                   role="group"
                   aria-label="Nivaara - Nerul contact details"
                 >
-                  <div className="space-y-2.5 text-sm text-ivory/85 leading-relaxed">
-                    <p>
-                      <span className="text-ivory-muted/70">Reception :</span>{" "}
-                      <a
-                        href="tel:+918390020408"
-                        className="text-ivory hover:text-gold transition-colors"
+                  <div className="flex items-center gap-4 sm:gap-5">
+                    <div className="min-w-0 flex-1 space-y-2.5 text-sm text-ivory/85 leading-relaxed">
+                      <p>
+                        <span className="text-ivory-muted/70">Reception :</span>{" "}
+                        <a
+                          href="tel:+918390020408"
+                          className="text-ivory hover:text-gold transition-colors"
+                        >
+                          8390 020408
+                        </a>
+                      </p>
+                      <p>
+                        <span className="text-ivory-muted/70">Reception Email :</span>{" "}
+                        <a
+                          href="mailto:info.nerul@ghdhotels.in"
+                          className="text-ivory hover:text-gold transition-colors break-all"
+                        >
+                          info.nerul@ghdhotels.in
+                        </a>
+                      </p>
+                      <p className="text-ivory-muted/80">
+                        <span className="text-ivory-muted/70">Address :</span>{" "}
+                        Survey No. 98, Nerul, North Goa – 403114
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 flex-col items-center gap-2 text-center">
+                      <p
+                        className="max-w-[9rem] text-xs font-bold leading-snug text-gold sm:max-w-[10rem] sm:text-sm"
+                        style={{ fontFamily: "General Sans, Helvetica Neue, sans-serif" }}
                       >
-                        +91 8390020408
-                      </a>
-                    </p>
-                    <p>
-                      <span className="text-ivory-muted/70">Reception Email :</span>{" "}
-                      <a
-                        href="mailto:info.nerul@ghdhotels.in"
-                        className="text-ivory hover:text-gold transition-colors break-all"
-                      >
-                        info.nerul@ghdhotels.in
-                      </a>
-                    </p>
-                    <p className="text-ivory-muted/80">
-                      <span className="text-ivory-muted/70">Address :</span>{" "}
-                      Survey No. 98, Nerul, North Goa – 403114
-                    </p>
+                        To reach us, scan me!
+                      </p>
+                      <img
+                        src={NIVAARA_PROPERTY_QR_SRC}
+                        alt="QR code for Nivaãra Nerul"
+                        className="h-[6.5rem] w-[6.5rem] sm:h-[7.5rem] sm:w-[7.5rem] lg:h-[8.5rem] lg:w-[8.5rem] object-contain rounded-md border border-gold/15 bg-black p-0.5"
+                        loading="lazy"
+                        decoding="async"
+                        draggable={false}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
