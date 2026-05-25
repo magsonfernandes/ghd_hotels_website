@@ -316,6 +316,23 @@ export function BookingPage() {
           "Nearest Bus Stand: Panaji (Kadamba)",
         ],
       },
+      stayInfo: {
+        timings: [
+          { label: "Breakfast", hours: "8:30 AM – 10:30 AM" },
+          { label: "Housekeeping", hours: "9:00 AM – 6:00 PM" },
+          { label: "Pool", hours: "9:00 AM – 8:00 PM" },
+        ],
+        reminders: [
+          "Deposit your room keys at Reception when going out.",
+          "Switch off lights, AC, and geyser when leaving the room.",
+          "Maintain silence in corridors and common areas.",
+          "Room service orders may take extra time during peak hours.",
+          "For any assistance, please contact Reception.",
+          "Please inform the Front Desk in advance for late check-out requests.",
+          "Management is not responsible for any loss of valuable belongings.",
+          "Any damage to room items will be charged accordingly.",
+        ],
+      },
     };
   }, []);
 
@@ -379,7 +396,7 @@ export function BookingPage() {
               className="btn-gold w-full sm:w-auto text-center"
             >
               <span>
-                {isNivaaraNerulSelected ? "Visit Nivaara" : "Back to home"}
+                {isNivaaraNerulSelected ? "Visit Nivaãra" : "Back to home"}
               </span>
             </Link>
           </div>
@@ -443,6 +460,8 @@ export function BookingPage() {
               })
             )}
 
+            {/* Meals — hidden for now; uncomment block below to re-enable meal add-ons */}
+            {/*
             <div className="rounded-2xl border border-gold/15 bg-white/90 p-5 sm:p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/55 mb-3">
                 Meals
@@ -475,6 +494,7 @@ export function BookingPage() {
                 ))}
               </div>
             </div>
+            */}
 
             <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-end">
               <button
@@ -515,6 +535,7 @@ export function BookingPage() {
         bedInfo={roomDetails.bedInfo}
         sleepsInfo={roomDetails.sleepsInfo}
         transport={roomDetails.transport}
+        stayInfo={roomDetails.stayInfo}
       />
       <Footer />
     </div>

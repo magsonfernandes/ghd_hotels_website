@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo } from "react";
 import { useRates } from "../../lib/rates";
 import { type RoomCategoryId, countSelectedMeals } from "./bookingRates";
@@ -80,38 +79,42 @@ export function RoomCard(props: {
     <div className="rounded-3xl overflow-hidden border border-gold/15 bg-white/90 shadow-2xl shadow-black/25">
       <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] xl:grid-cols-[360px_1fr]">
         <div className="relative bg-charcoal">
-          <img
-            src={props.image}
-            alt={props.roomType}
-            className="w-full h-[220px] sm:h-[260px] lg:h-full object-cover"
-            loading="lazy"
-          />
-          <div className="absolute top-4 left-4">
-            <span className="inline-flex items-center rounded-full bg-charcoal/70 text-ivory px-3 py-1 text-xs uppercase tracking-[0.22em] border border-gold/20">
-              {props.roomType}
-            </span>
-          </div>
-
-          <div className="absolute inset-y-0 left-0 flex items-center px-2">
+          {props.onRoomDetails ? (
             <button
               type="button"
-              className="h-9 w-9 rounded-full bg-black/35 border border-white/10 text-ivory/90 flex items-center justify-center hover:bg-black/45 transition"
-              aria-label="Previous image"
-              disabled
+              onClick={props.onRoomDetails}
+              className="group relative block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal"
+              aria-label={`View ${props.roomType} details`}
             >
-              <ChevronLeft className="h-4 w-4" aria-hidden />
+              <img
+                src={props.image}
+                alt={props.roomType}
+                className="w-full h-[220px] sm:h-[260px] lg:h-full min-h-[220px] sm:min-h-[260px] object-cover transition duration-300 group-hover:brightness-[0.92]"
+                loading="lazy"
+                draggable={false}
+              />
+              <div className="pointer-events-none absolute inset-0 bg-black/0 transition duration-300 group-hover:bg-black/10" />
+              <div className="absolute top-4 left-4">
+                <span className="inline-flex items-center rounded-full bg-charcoal/70 text-ivory px-3 py-1 text-xs uppercase tracking-[0.22em] border border-gold/20">
+                  {props.roomType}
+                </span>
+              </div>
             </button>
-          </div>
-          <div className="absolute inset-y-0 right-0 flex items-center px-2">
-            <button
-              type="button"
-              className="h-9 w-9 rounded-full bg-black/35 border border-white/10 text-ivory/90 flex items-center justify-center hover:bg-black/45 transition"
-              aria-label="Next image"
-              disabled
-            >
-              <ChevronRight className="h-4 w-4" aria-hidden />
-            </button>
-          </div>
+          ) : (
+            <>
+              <img
+                src={props.image}
+                alt={props.roomType}
+                className="w-full h-[220px] sm:h-[260px] lg:h-full object-cover"
+                loading="lazy"
+              />
+              <div className="absolute top-4 left-4">
+                <span className="inline-flex items-center rounded-full bg-charcoal/70 text-ivory px-3 py-1 text-xs uppercase tracking-[0.22em] border border-gold/20">
+                  {props.roomType}
+                </span>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="p-5 sm:p-7 lg:p-8">

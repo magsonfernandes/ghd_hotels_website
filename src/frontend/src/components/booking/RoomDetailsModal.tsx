@@ -17,7 +17,7 @@ import {
   Wifi,
   X,
 } from "lucide-react";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 
 type TransportHub = {
   name: string;
@@ -43,6 +43,10 @@ type Props = {
     buses: TransportHub[];
     quickTipLines: string[];
   };
+  stayInfo?: {
+    timings: Array<{ label: string; hours: string }>;
+    reminders: string[];
+  };
 };
 
 function amenityIcon(label: string) {
@@ -64,8 +68,10 @@ export function RoomDetailsModal(props: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const [zoomSrc, setZoomSrc] = useState<string | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
-  const [galleryFading, setGalleryFading] = useState(false);
-  const galleryFadeTimerRef = useRef<number | null>(null);
+  const [galleryPrevIndex, setGalleryPrevIndex] = useState<number | null>(null);
+  const galleryIndexRef = useRef(0);
+  const galleryPrevIndexRef = useRef<number | null>(null);
+  const galleryCrossfadeTimerRef = useRef<number | null>(null);
   const touchStartXRef = useRef<number | null>(null);
   const zoomTouchStartXRef = useRef<number | null>(null);
 
@@ -102,35 +108,47 @@ export function RoomDetailsModal(props: Props) {
     [props.galleryImages, props.image],
   );
 
-  const GALLERY_FADE_MS = 220;
-  const requestGalleryIndex = (nextIndex: number) => {
-    const total = images.length;
-    if (!total) return;
-    const next = ((nextIndex % total) + total) % total;
-    if (next === galleryIndex) return;
+  const GALLERY_CROSSFADE_MS = 380;
 
-    if (galleryFadeTimerRef.current) {
-      window.clearTimeout(galleryFadeTimerRef.current);
-      galleryFadeTimerRef.current = null;
-    }
+  galleryIndexRef.current = galleryIndex;
+  galleryPrevIndexRef.current = galleryPrevIndex;
 
-    // Phase 1: fade out (opacity -> 0)
-    setGalleryFading(true);
-    galleryFadeTimerRef.current = window.setTimeout(() => {
-      // Phase 2: swap image while still hidden
+  const goToGalleryIndex = useCallback(
+    (nextIndex: number) => {
+      const total = images.length;
+      if (!total) return;
+      const next = ((nextIndex % total) + total) % total;
+      const current = galleryIndexRef.current;
+      if (next === current && galleryPrevIndexRef.current === null) return;
+
+      if (galleryCrossfadeTimerRef.current) {
+        window.clearTimeout(galleryCrossfadeTimerRef.current);
+        galleryCrossfadeTimerRef.current = null;
+      }
+
+      setGalleryPrevIndex(current);
       setGalleryIndex(next);
-      // Phase 3: fade in on next frame (opacity -> 1)
-      window.requestAnimationFrame(() => setGalleryFading(false));
-      galleryFadeTimerRef.current = null;
-    }, GALLERY_FADE_MS);
-  };
+
+      galleryCrossfadeTimerRef.current = window.setTimeout(() => {
+        setGalleryPrevIndex(null);
+        galleryCrossfadeTimerRef.current = null;
+      }, GALLERY_CROSSFADE_MS);
+    },
+    [images.length],
+  );
+
+  const galleryBaseIndex = galleryPrevIndex ?? galleryIndex;
+  const galleryBaseSrc = images[galleryBaseIndex] ?? props.image;
+  const galleryIncomingSrc = images[galleryIndex] ?? props.image;
 
   useEffect(() => {
-    if (!props.isOpen) return;
+    if (props.isOpen) return;
+    setGalleryIndex(0);
+    setGalleryPrevIndex(null);
     return () => {
-      if (galleryFadeTimerRef.current) {
-        window.clearTimeout(galleryFadeTimerRef.current);
-        galleryFadeTimerRef.current = null;
+      if (galleryCrossfadeTimerRef.current) {
+        window.clearTimeout(galleryCrossfadeTimerRef.current);
+        galleryCrossfadeTimerRef.current = null;
       }
     };
   }, [props.isOpen]);
@@ -370,25 +388,35 @@ export function RoomDetailsModal(props: Props) {
                       const deltaX = endX - startX;
                       touchStartXRef.current = null;
                       if (Math.abs(deltaX) < 24) return;
-                      if (deltaX < 0) requestGalleryIndex(galleryIndex + 1);
-                      else requestGalleryIndex(galleryIndex - 1);
+                      if (deltaX < 0) goToGalleryIndex(galleryIndexRef.current + 1);
+                      else goToGalleryIndex(galleryIndexRef.current - 1);
                     }}
                   >
                     <button
                       type="button"
-                      onClick={() => setZoomSrc(images[galleryIndex] ?? props.image)}
+                      onClick={() => setZoomSrc(galleryIncomingSrc)}
                       className="group block w-full text-left"
                       aria-label={`Zoom gallery image ${galleryIndex + 1}`}
                     >
-                      <img
-                        src={images[galleryIndex] ?? props.image}
-                        alt={`${props.roomName} gallery image ${galleryIndex + 1}`}
-                        className={`w-full h-[260px] sm:h-[320px] lg:h-[420px] object-cover transition-opacity duration-300 ${
-                          galleryFading ? "opacity-0" : "opacity-100"
-                        }`}
-                        loading="lazy"
-                        draggable={false}
-                      />
+                      <div className="relative h-[260px] sm:h-[320px] lg:h-[420px]">
+                        <img
+                          src={galleryBaseSrc}
+                          alt={`${props.roomName} gallery image ${galleryBaseIndex + 1}`}
+                          className="absolute inset-0 h-full w-full object-cover"
+                          loading="lazy"
+                          draggable={false}
+                        />
+                        {galleryPrevIndex !== null ? (
+                          <img
+                            key={galleryIndex}
+                            src={galleryIncomingSrc}
+                            alt={`${props.roomName} gallery image ${galleryIndex + 1}`}
+                            className="absolute inset-0 h-full w-full object-cover nivaara-property-carousel__slide--incoming"
+                            loading="eager"
+                            draggable={false}
+                          />
+                        ) : null}
+                      </div>
                     </button>
 
                     <div className="absolute inset-y-0 left-0 flex items-center px-2">
@@ -396,7 +424,7 @@ export function RoomDetailsModal(props: Props) {
                         type="button"
                         className="h-9 w-9 rounded-full bg-black/40 border border-white/10 text-ivory/90 flex items-center justify-center hover:bg-black/55 transition"
                         aria-label="Previous gallery image"
-                        onClick={() => requestGalleryIndex(galleryIndex - 1)}
+                        onClick={() => goToGalleryIndex(galleryIndex - 1)}
                       >
                         <ChevronLeft className="h-4 w-4" aria-hidden />
                       </button>
@@ -406,7 +434,7 @@ export function RoomDetailsModal(props: Props) {
                         type="button"
                         className="h-9 w-9 rounded-full bg-black/40 border border-white/10 text-ivory/90 flex items-center justify-center hover:bg-black/55 transition"
                         aria-label="Next gallery image"
-                        onClick={() => requestGalleryIndex(galleryIndex + 1)}
+                        onClick={() => goToGalleryIndex(galleryIndex + 1)}
                       >
                         <ChevronRight className="h-4 w-4" aria-hidden />
                       </button>
@@ -423,12 +451,57 @@ export function RoomDetailsModal(props: Props) {
                               : "bg-white/15 hover:bg-white/25"
                           }`}
                           aria-label={`Show gallery image ${i + 1}`}
-                          onClick={() => requestGalleryIndex(i)}
+                          onClick={() => goToGalleryIndex(i)}
                         />
                       ))}
                     </div>
                   </div>
                 </div>
+
+                {props.stayInfo ? (
+                  <div className="mt-6">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/55 mb-3">
+                      During your stay
+                    </p>
+
+                    <div className="rounded-xl border border-charcoal/10 bg-white/60 px-4 py-4 space-y-4">
+                      <div>
+                        <p className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-charcoal/55 mb-2 flex items-center gap-2">
+                          <Clock className="h-4 w-4" aria-hidden />
+                          Timings
+                        </p>
+                        <ul className="space-y-1.5">
+                          {props.stayInfo.timings.map((row) => (
+                            <li
+                              key={row.label}
+                              className="text-sm text-charcoal/80 leading-relaxed"
+                            >
+                              <span className="font-semibold text-charcoal/90">
+                                {row.label}:
+                              </span>{" "}
+                              {row.hours}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <ul className="space-y-2 border-t border-charcoal/10 pt-4">
+                        {props.stayInfo.reminders.map((line) => (
+                          <li
+                            key={line}
+                            className="flex items-start gap-2 text-sm text-charcoal/75 leading-relaxed"
+                          >
+                            <span
+                              className="mt-2 h-1 w-1 shrink-0 rounded-full bg-gold/80"
+                              aria-hidden
+                            />
+                            <span>{line}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
@@ -469,24 +542,33 @@ export function RoomDetailsModal(props: Props) {
                 const deltaX = endX - startX;
                 zoomTouchStartXRef.current = null;
                 if (Math.abs(deltaX) < 24) return;
-                if (deltaX < 0) requestGalleryIndex(galleryIndex + 1);
-                else requestGalleryIndex(galleryIndex - 1);
-                setZoomSrc(images[((galleryIndex % images.length) + images.length) % images.length] ?? props.image);
+                if (deltaX < 0) goToGalleryIndex(galleryIndexRef.current + 1);
+                else goToGalleryIndex(galleryIndexRef.current - 1);
               }}
             >
-            <img
-              src={images[galleryIndex] ?? zoomSrc}
-              alt={`Zoomed ${props.roomName}`}
-              className={`w-full max-h-[80vh] object-contain rounded-2xl border border-white/10 shadow-2xl shadow-black/50 bg-black/20 transition-opacity duration-300 ${
-                galleryFading ? "opacity-0" : "opacity-100"
-              }`}
-            />
+            <div className="relative flex max-h-[80vh] min-h-[200px] w-full items-center justify-center">
+              <img
+                src={galleryBaseSrc}
+                alt={`Zoomed ${props.roomName}`}
+                className="max-h-[80vh] w-full object-contain rounded-2xl border border-white/10 shadow-2xl shadow-black/50 bg-black/20"
+                draggable={false}
+              />
+              {galleryPrevIndex !== null ? (
+                <img
+                  key={`zoom-${galleryIndex}`}
+                  src={galleryIncomingSrc}
+                  alt={`Zoomed ${props.roomName}`}
+                  className="absolute inset-0 m-auto max-h-[80vh] w-full object-contain rounded-2xl border border-white/10 shadow-2xl shadow-black/50 bg-black/20 nivaara-property-carousel__slide--incoming"
+                  draggable={false}
+                />
+              ) : null}
+            </div>
               <div className="absolute inset-y-0 left-0 flex items-center px-2">
                 <button
                   type="button"
                   className="h-10 w-10 rounded-full bg-black/45 border border-white/15 text-white/90 flex items-center justify-center hover:bg-black/60 transition"
                   aria-label="Previous image"
-                  onClick={() => requestGalleryIndex(galleryIndex - 1)}
+                  onClick={() => goToGalleryIndex(galleryIndex - 1)}
                 >
                   <ChevronLeft className="h-5 w-5" aria-hidden />
                 </button>
@@ -496,7 +578,7 @@ export function RoomDetailsModal(props: Props) {
                   type="button"
                   className="h-10 w-10 rounded-full bg-black/45 border border-white/15 text-white/90 flex items-center justify-center hover:bg-black/60 transition"
                   aria-label="Next image"
-                  onClick={() => requestGalleryIndex(galleryIndex + 1)}
+                  onClick={() => goToGalleryIndex(galleryIndex + 1)}
                 >
                   <ChevronRight className="h-5 w-5" aria-hidden />
                 </button>
