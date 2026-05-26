@@ -3,6 +3,7 @@ import { Building2, Leaf, TrendingUp, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
+import { MediaBackground } from "../components/MediaBackground";
 import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
@@ -226,15 +227,12 @@ export function VisionPage() {
       <section
         id="development-status"
         ref={statusRef}
-        className="home-section-pad parallax-section relative"
-        style={{
-          backgroundImage:
-            "url(/assets/generated/hero-vision.dim_1920x1080.png)",
-        }}
+        className="home-section-pad parallax-section relative overflow-hidden"
       >
+        <MediaBackground src="/assets/generated/hero-vision.dim_1920x1080.png" />
         {/* No vignette overlay (intentionally removed site-wide) */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 z-[1]"
           style={{
             background:
               "linear-gradient(to bottom, rgba(15,15,15,0.7) 0%, rgba(15,15,15,0.55) 50%, rgba(15,15,15,0.8) 100%)",

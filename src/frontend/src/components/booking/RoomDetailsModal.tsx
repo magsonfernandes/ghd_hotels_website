@@ -18,6 +18,11 @@ import {
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { ResponsiveImage } from "../ResponsiveImage";
+import {
+  GALLERY_IMAGE_SIZES,
+  optimizeSrc,
+} from "../../lib/optimizedMedia";
 
 type TransportHub = {
   name: string;
@@ -152,6 +157,17 @@ export function RoomDetailsModal(props: Props) {
       }
     };
   }, [props.isOpen]);
+
+  useEffect(() => {
+    if (!props.isOpen || images.length === 0) return;
+    const n = images.length;
+    const next = (galleryIndex + 1) % n;
+    const prev = (galleryIndex - 1 + n) % n;
+    for (const i of [next, prev]) {
+      const preload = new Image();
+      preload.src = optimizeSrc(images[i] ?? props.image);
+    }
+  }, [props.isOpen, galleryIndex, images, props.image]);
 
   if (!props.isOpen) return null;
 
@@ -399,20 +415,21 @@ export function RoomDetailsModal(props: Props) {
                       aria-label={`Zoom gallery image ${galleryIndex + 1}`}
                     >
                       <div className="relative h-[260px] sm:h-[320px] lg:h-[420px]">
-                        <img
+                        <ResponsiveImage
                           src={galleryBaseSrc}
                           alt={`${props.roomName} gallery image ${galleryBaseIndex + 1}`}
                           className="absolute inset-0 h-full w-full object-cover"
-                          loading="lazy"
+                          sizes={GALLERY_IMAGE_SIZES}
                           draggable={false}
                         />
                         {galleryPrevIndex !== null ? (
-                          <img
+                          <ResponsiveImage
                             key={galleryIndex}
                             src={galleryIncomingSrc}
                             alt={`${props.roomName} gallery image ${galleryIndex + 1}`}
                             className="absolute inset-0 h-full w-full object-cover nivaara-property-carousel__slide--incoming"
-                            loading="eager"
+                            sizes={GALLERY_IMAGE_SIZES}
+                            priority
                             draggable={false}
                           />
                         ) : null}
@@ -547,18 +564,22 @@ export function RoomDetailsModal(props: Props) {
               }}
             >
             <div className="relative flex max-h-[80vh] min-h-[200px] w-full items-center justify-center">
-              <img
+              <ResponsiveImage
                 src={galleryBaseSrc}
                 alt={`Zoomed ${props.roomName}`}
                 className="max-h-[80vh] w-full object-contain rounded-2xl border border-white/10 shadow-2xl shadow-black/50 bg-black/20"
+                sizes={GALLERY_IMAGE_SIZES}
+                priority
                 draggable={false}
               />
               {galleryPrevIndex !== null ? (
-                <img
+                <ResponsiveImage
                   key={`zoom-${galleryIndex}`}
                   src={galleryIncomingSrc}
                   alt={`Zoomed ${props.roomName}`}
                   className="absolute inset-0 m-auto max-h-[80vh] w-full object-contain rounded-2xl border border-white/10 shadow-2xl shadow-black/50 bg-black/20 nivaara-property-carousel__slide--incoming"
+                  sizes={GALLERY_IMAGE_SIZES}
+                  priority
                   draggable={false}
                 />
               ) : null}

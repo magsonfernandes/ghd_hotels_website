@@ -1,0 +1,423 @@
+{
+  "images": {
+    "/Nivaara/Nivaara_Full Building View_Pic1.png": {
+      "src": "/Nivaara/Nivaara_Full Building View_Pic1.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Full Building View_Pic1.w480.webp 480w, /Nivaara/Nivaara_Full Building View_Pic1.w800.webp 800w, /Nivaara/Nivaara_Full Building View_Pic1.w1200.webp 1200w, /Nivaara/Nivaara_Full Building View_Pic1.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Pool_Pic1.png": {
+      "src": "/Nivaara/Nivaara_Pool_Pic1.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Pool_Pic1.w480.webp 480w, /Nivaara/Nivaara_Pool_Pic1.w800.webp 800w, /Nivaara/Nivaara_Pool_Pic1.w1200.webp 1200w, /Nivaara/Nivaara_Pool_Pic1.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Pool_Pic2.png": {
+      "src": "/Nivaara/Nivaara_Pool_Pic2.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Pool_Pic2.w480.webp 480w, /Nivaara/Nivaara_Pool_Pic2.w800.webp 800w, /Nivaara/Nivaara_Pool_Pic2.w1200.webp 1200w, /Nivaara/Nivaara_Pool_Pic2.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Reception_Pic1.png": {
+      "src": "/Nivaara/Nivaara_Reception_Pic1.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Reception_Pic1.w480.webp 480w, /Nivaara/Nivaara_Reception_Pic1.w800.webp 800w, /Nivaara/Nivaara_Reception_Pic1.w1200.webp 1200w, /Nivaara/Nivaara_Reception_Pic1.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Reception_Pic2.png": {
+      "src": "/Nivaara/Nivaara_Reception_Pic2.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Reception_Pic2.w480.webp 480w, /Nivaara/Nivaara_Reception_Pic2.w800.webp 800w, /Nivaara/Nivaara_Reception_Pic2.w1200.webp 1200w, /Nivaara/Nivaara_Reception_Pic2.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Reception_Pic3.png": {
+      "src": "/Nivaara/Nivaara_Reception_Pic3.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Reception_Pic3.w480.webp 480w, /Nivaara/Nivaara_Reception_Pic3.w800.webp 800w, /Nivaara/Nivaara_Reception_Pic3.w1200.webp 1200w, /Nivaara/Nivaara_Reception_Pic3.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Room_Pic_1.png": {
+      "src": "/Nivaara/Nivaara_Room_Pic_1.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Room_Pic_1.w480.webp 480w, /Nivaara/Nivaara_Room_Pic_1.w800.webp 800w, /Nivaara/Nivaara_Room_Pic_1.w1200.webp 1200w, /Nivaara/Nivaara_Room_Pic_1.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Room_Pic_2.png": {
+      "src": "/Nivaara/Nivaara_Room_Pic_2.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Room_Pic_2.w480.webp 480w, /Nivaara/Nivaara_Room_Pic_2.w800.webp 800w, /Nivaara/Nivaara_Room_Pic_2.w1200.webp 1200w, /Nivaara/Nivaara_Room_Pic_2.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Room_Pic_3.png": {
+      "src": "/Nivaara/Nivaara_Room_Pic_3.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Room_Pic_3.w480.webp 480w, /Nivaara/Nivaara_Room_Pic_3.w800.webp 800w, /Nivaara/Nivaara_Room_Pic_3.w1200.webp 1200w, /Nivaara/Nivaara_Room_Pic_3.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Room_Pic_4.png": {
+      "src": "/Nivaara/Nivaara_Room_Pic_4.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Room_Pic_4.w480.webp 480w, /Nivaara/Nivaara_Room_Pic_4.w800.webp 800w, /Nivaara/Nivaara_Room_Pic_4.w1200.webp 1200w, /Nivaara/Nivaara_Room_Pic_4.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Room_Pic_5.png": {
+      "src": "/Nivaara/Nivaara_Room_Pic_5.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Room_Pic_5.w480.webp 480w, /Nivaara/Nivaara_Room_Pic_5.w800.webp 800w, /Nivaara/Nivaara_Room_Pic_5.w1200.webp 1200w, /Nivaara/Nivaara_Room_Pic_5.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Terrace_Pic1.png": {
+      "src": "/Nivaara/Nivaara_Terrace_Pic1.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Terrace_Pic1.w480.webp 480w, /Nivaara/Nivaara_Terrace_Pic1.w800.webp 800w, /Nivaara/Nivaara_Terrace_Pic1.w1200.webp 1200w, /Nivaara/Nivaara_Terrace_Pic1.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Terrace_Pic2.png": {
+      "src": "/Nivaara/Nivaara_Terrace_Pic2.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Terrace_Pic2.w480.webp 480w, /Nivaara/Nivaara_Terrace_Pic2.w800.webp 800w, /Nivaara/Nivaara_Terrace_Pic2.w1200.webp 1200w, /Nivaara/Nivaara_Terrace_Pic2.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Washroom_Pic1.png": {
+      "src": "/Nivaara/Nivaara_Washroom_Pic1.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Washroom_Pic1.w480.webp 480w, /Nivaara/Nivaara_Washroom_Pic1.w800.webp 800w, /Nivaara/Nivaara_Washroom_Pic1.w1200.webp 1200w, /Nivaara/Nivaara_Washroom_Pic1.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Nivaara/Nivaara_Washroom_Pic2.png": {
+      "src": "/Nivaara/Nivaara_Washroom_Pic2.w1600.webp",
+      "srcSet": "/Nivaara/Nivaara_Washroom_Pic2.w480.webp 480w, /Nivaara/Nivaara_Washroom_Pic2.w800.webp 800w, /Nivaara/Nivaara_Washroom_Pic2.w1200.webp 1200w, /Nivaara/Nivaara_Washroom_Pic2.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/assets/generated/bg image.png": {
+      "src": "/assets/generated/bg image.w1280.webp",
+      "srcSet": "/assets/generated/bg image.w480.webp 480w, /assets/generated/bg image.w768.webp 768w, /assets/generated/bg image.w1280.webp 1280w",
+      "widths": [
+        480,
+        768,
+        1280
+      ]
+    },
+    "/assets/generated/buddha.png": {
+      "src": "/assets/generated/buddha.w1280.webp",
+      "srcSet": "/assets/generated/buddha.w480.webp 480w, /assets/generated/buddha.w768.webp 768w, /assets/generated/buddha.w1280.webp 1280w",
+      "widths": [
+        480,
+        768,
+        1280
+      ]
+    },
+    "/assets/generated/contact.png": {
+      "src": "/assets/generated/contact.w1280.webp",
+      "srcSet": "/assets/generated/contact.w480.webp 480w, /assets/generated/contact.w768.webp 768w, /assets/generated/contact.w1280.webp 1280w",
+      "widths": [
+        480,
+        768,
+        1280
+      ]
+    },
+    "/assets/generated/couple laughing.png": {
+      "src": "/assets/generated/couple laughing.w1920.webp",
+      "srcSet": "/assets/generated/couple laughing.w480.webp 480w, /assets/generated/couple laughing.w768.webp 768w, /assets/generated/couple laughing.w1280.webp 1280w, /assets/generated/couple laughing.w1920.webp 1920w",
+      "widths": [
+        480,
+        768,
+        1280,
+        1920
+      ]
+    },
+    "/assets/generated/couple_walking.png": {
+      "src": "/assets/generated/couple_walking.w1920.webp",
+      "srcSet": "/assets/generated/couple_walking.w480.webp 480w, /assets/generated/couple_walking.w768.webp 768w, /assets/generated/couple_walking.w1280.webp 1280w, /assets/generated/couple_walking.w1920.webp 1920w",
+      "widths": [
+        480,
+        768,
+        1280,
+        1920
+      ]
+    },
+    "/assets/generated/green.png": {
+      "src": "/assets/generated/green.w1920.webp",
+      "srcSet": "/assets/generated/green.w480.webp 480w, /assets/generated/green.w768.webp 768w, /assets/generated/green.w1280.webp 1280w, /assets/generated/green.w1920.webp 1920w",
+      "widths": [
+        480,
+        768,
+        1280,
+        1920
+      ]
+    },
+    "/assets/generated/grey_hexagons_on_black_background.jpg": {
+      "src": "/assets/generated/grey_hexagons_on_black_background.w1920.webp",
+      "srcSet": "/assets/generated/grey_hexagons_on_black_background.w480.webp 480w, /assets/generated/grey_hexagons_on_black_background.w768.webp 768w, /assets/generated/grey_hexagons_on_black_background.w1280.webp 1280w, /assets/generated/grey_hexagons_on_black_background.w1920.webp 1920w",
+      "widths": [
+        480,
+        768,
+        1280,
+        1920
+      ]
+    },
+    "/assets/generated/hero-about.dim_1920x1080.png": {
+      "src": "/assets/generated/hero-about.dim_1920x1080.w1920.webp",
+      "srcSet": "/assets/generated/hero-about.dim_1920x1080.w640.webp 640w, /assets/generated/hero-about.dim_1920x1080.w960.webp 960w, /assets/generated/hero-about.dim_1920x1080.w1280.webp 1280w, /assets/generated/hero-about.dim_1920x1080.w1920.webp 1920w",
+      "widths": [
+        640,
+        960,
+        1280,
+        1920
+      ]
+    },
+    "/assets/generated/hero-celestra.dim_1920x1080.png": {
+      "src": "/assets/generated/hero-celestra.dim_1920x1080.w1920.webp",
+      "srcSet": "/assets/generated/hero-celestra.dim_1920x1080.w640.webp 640w, /assets/generated/hero-celestra.dim_1920x1080.w960.webp 960w, /assets/generated/hero-celestra.dim_1920x1080.w1280.webp 1280w, /assets/generated/hero-celestra.dim_1920x1080.w1920.webp 1920w",
+      "widths": [
+        640,
+        960,
+        1280,
+        1920
+      ]
+    },
+    "/assets/generated/hero-future.dim_1920x1080.png": {
+      "src": "/assets/generated/hero-future.dim_1920x1080.w1920.webp",
+      "srcSet": "/assets/generated/hero-future.dim_1920x1080.w640.webp 640w, /assets/generated/hero-future.dim_1920x1080.w960.webp 960w, /assets/generated/hero-future.dim_1920x1080.w1280.webp 1280w, /assets/generated/hero-future.dim_1920x1080.w1920.webp 1920w",
+      "widths": [
+        640,
+        960,
+        1280,
+        1920
+      ]
+    },
+    "/assets/generated/hero-home.dim_1920x1080.png": {
+      "src": "/assets/generated/hero-home.dim_1920x1080.w1920.webp",
+      "srcSet": "/assets/generated/hero-home.dim_1920x1080.w640.webp 640w, /assets/generated/hero-home.dim_1920x1080.w960.webp 960w, /assets/generated/hero-home.dim_1920x1080.w1280.webp 1280w, /assets/generated/hero-home.dim_1920x1080.w1920.webp 1920w",
+      "widths": [
+        640,
+        960,
+        1280,
+        1920
+      ]
+    },
+    "/assets/generated/hero-nivaara.dim_1920x1080.png": {
+      "src": "/assets/generated/hero-nivaara.dim_1920x1080.w1920.webp",
+      "srcSet": "/assets/generated/hero-nivaara.dim_1920x1080.w640.webp 640w, /assets/generated/hero-nivaara.dim_1920x1080.w960.webp 960w, /assets/generated/hero-nivaara.dim_1920x1080.w1280.webp 1280w, /assets/generated/hero-nivaara.dim_1920x1080.w1920.webp 1920w",
+      "widths": [
+        640,
+        960,
+        1280,
+        1920
+      ]
+    },
+    "/assets/generated/hero-samraya.dim_1920x1080.png": {
+      "src": "/assets/generated/hero-samraya.dim_1920x1080.w1920.webp",
+      "srcSet": "/assets/generated/hero-samraya.dim_1920x1080.w640.webp 640w, /assets/generated/hero-samraya.dim_1920x1080.w960.webp 960w, /assets/generated/hero-samraya.dim_1920x1080.w1280.webp 1280w, /assets/generated/hero-samraya.dim_1920x1080.w1920.webp 1920w",
+      "widths": [
+        640,
+        960,
+        1280,
+        1920
+      ]
+    },
+    "/assets/generated/hero-vision.dim_1920x1080.png": {
+      "src": "/assets/generated/hero-vision.dim_1920x1080.w1920.webp",
+      "srcSet": "/assets/generated/hero-vision.dim_1920x1080.w640.webp 640w, /assets/generated/hero-vision.dim_1920x1080.w960.webp 960w, /assets/generated/hero-vision.dim_1920x1080.w1280.webp 1280w, /assets/generated/hero-vision.dim_1920x1080.w1920.webp 1920w",
+      "widths": [
+        640,
+        960,
+        1280,
+        1920
+      ]
+    },
+    "/assets/generated/lady by the pool.png": {
+      "src": "/assets/generated/lady by the pool.w1280.webp",
+      "srcSet": "/assets/generated/lady by the pool.w480.webp 480w, /assets/generated/lady by the pool.w768.webp 768w, /assets/generated/lady by the pool.w1280.webp 1280w",
+      "widths": [
+        480,
+        768,
+        1280
+      ]
+    },
+    "/assets/generated/lpf1.png": {
+      "src": "/assets/generated/lpf1.w800.webp",
+      "srcSet": "/assets/generated/lpf1.w400.webp 400w, /assets/generated/lpf1.w800.webp 800w",
+      "widths": [
+        400,
+        800
+      ]
+    },
+    "/assets/generated/lpf2.png": {
+      "src": "/assets/generated/lpf2.w800.webp",
+      "srcSet": "/assets/generated/lpf2.w400.webp 400w, /assets/generated/lpf2.w800.webp 800w",
+      "widths": [
+        400,
+        800
+      ]
+    },
+    "/assets/generated/nivaara qr.png": {
+      "src": "/assets/generated/nivaara qr.w600.webp",
+      "srcSet": "/assets/generated/nivaara qr.w200.webp 200w, /assets/generated/nivaara qr.w400.webp 400w, /assets/generated/nivaara qr.w600.webp 600w",
+      "widths": [
+        200,
+        400,
+        600
+      ]
+    },
+    "/assets/generated/of1.png": {
+      "src": "/assets/generated/of1.w800.webp",
+      "srcSet": "/assets/generated/of1.w400.webp 400w, /assets/generated/of1.w800.webp 800w",
+      "widths": [
+        400,
+        800
+      ]
+    },
+    "/assets/generated/of2.png": {
+      "src": "/assets/generated/of2.w800.webp",
+      "srcSet": "/assets/generated/of2.w400.webp 400w, /assets/generated/of2.w800.webp 800w",
+      "widths": [
+        400,
+        800
+      ]
+    },
+    "/assets/generated/pathway.png": {
+      "src": "/assets/generated/pathway.w1280.webp",
+      "srcSet": "/assets/generated/pathway.w480.webp 480w, /assets/generated/pathway.w768.webp 768w, /assets/generated/pathway.w1280.webp 1280w",
+      "widths": [
+        480,
+        768,
+        1280
+      ]
+    },
+    "/assets/generated/pf1.png": {
+      "src": "/assets/generated/pf1.w800.webp",
+      "srcSet": "/assets/generated/pf1.w400.webp 400w, /assets/generated/pf1.w800.webp 800w",
+      "widths": [
+        400,
+        800
+      ]
+    },
+    "/assets/generated/pf2.png": {
+      "src": "/assets/generated/pf2.w800.webp",
+      "srcSet": "/assets/generated/pf2.w400.webp 400w, /assets/generated/pf2.w800.webp 800w",
+      "widths": [
+        400,
+        800
+      ]
+    },
+    "/assets/generated/royallady.png": {
+      "src": "/assets/generated/royallady.w1280.webp",
+      "srcSet": "/assets/generated/royallady.w480.webp 480w, /assets/generated/royallady.w768.webp 768w, /assets/generated/royallady.w1280.webp 1280w",
+      "widths": [
+        480,
+        768,
+        1280
+      ]
+    },
+    "/assets/logo/Celestra_logo.png": {
+      "src": "/assets/logo/Celestra_logo.w600.webp",
+      "srcSet": "/assets/logo/Celestra_logo.w200.webp 200w, /assets/logo/Celestra_logo.w400.webp 400w, /assets/logo/Celestra_logo.w600.webp 600w",
+      "widths": [
+        200,
+        400,
+        600
+      ]
+    },
+    "/assets/logo/GHD HOTELS - Gold Emboss Logo.png": {
+      "src": "/assets/logo/GHD HOTELS - Gold Emboss Logo.w600.webp",
+      "srcSet": "/assets/logo/GHD HOTELS - Gold Emboss Logo.w200.webp 200w, /assets/logo/GHD HOTELS - Gold Emboss Logo.w400.webp 400w, /assets/logo/GHD HOTELS - Gold Emboss Logo.w600.webp 600w",
+      "widths": [
+        200,
+        400,
+        600
+      ]
+    },
+    "/assets/logo/Nivaãra_logo.png": {
+      "src": "/assets/logo/Nivaãra_logo.w600.webp",
+      "srcSet": "/assets/logo/Nivaãra_logo.w200.webp 200w, /assets/logo/Nivaãra_logo.w400.webp 400w, /assets/logo/Nivaãra_logo.w600.webp 600w",
+      "widths": [
+        200,
+        400,
+        600
+      ]
+    },
+    "/assets/logo/Samrāya_logo.png": {
+      "src": "/assets/logo/Samrāya_logo.w600.webp",
+      "srcSet": "/assets/logo/Samrāya_logo.w200.webp 200w, /assets/logo/Samrāya_logo.w400.webp 400w, /assets/logo/Samrāya_logo.w600.webp 600w",
+      "widths": [
+        200,
+        400,
+        600
+      ]
+    }
+  },
+  "videos": {
+    "homeHeroDesktop": {
+      "mp4": "/assets/generated/home-hero.mp4",
+      "webm": "/assets/generated/home-hero.webm",
+      "poster": "/assets/generated/home-hero-poster.w1280.webp"
+    },
+    "homeHeroMobile": {
+      "mp4": "/assets/generated/home-hero-mobile.mp4",
+      "webm": "/assets/generated/home-hero-mobile.webm",
+      "poster": "/assets/generated/home-hero-mobile-poster.w1280.webp"
+    }
+  }
+}

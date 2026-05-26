@@ -3,8 +3,15 @@ import { ChevronLeft, ChevronRight, Clock, Laptop, Moon, Tv2, Utensils, Wifi } f
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
+import { MediaBackground } from "../components/MediaBackground";
+import { ResponsiveImage } from "../components/ResponsiveImage";
 import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { NIVAARA_PROPERTY_PHOTOS } from "../lib/nivaaraPropertyPhotos";
+import {
+  GALLERY_IMAGE_SIZES,
+  LOGO_IMAGE_SIZES,
+  optimizeSrc,
+} from "../lib/optimizedMedia";
 
 const NIVAARA_PROPERTY_QR_SRC = "/assets/generated/nivaara%20qr.png";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
@@ -124,6 +131,16 @@ export function NivaaraPage() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    const n = PROPERTIES_IMAGES.length;
+    const next = (propertiesImageIndex + 1) % n;
+    const prev = (propertiesImageIndex - 1 + n) % n;
+    for (const i of [next, prev]) {
+      const preload = new Image();
+      preload.src = optimizeSrc(PROPERTIES_IMAGES[i].src);
+    }
+  }, [propertiesImageIndex]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -281,12 +298,10 @@ export function NivaaraPage() {
       >
         {/* Background image – Buddha, softened behind content */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-65 transition-opacity duration-900 ease-out"
+          className="absolute inset-0 overflow-hidden opacity-65 transition-opacity duration-900 ease-out"
           style={{
-            backgroundImage: 'url("/assets/generated/buddha.png")',
             transform: `translateY(${-philosophyParallax}px)`,
             opacity: philosophyBgOpacity,
-            filter: "brightness(0.5)",
             // Soften edges so the image blends into the black base.
             WebkitMaskImage:
               "radial-gradient(ellipse at center, rgba(0,0,0,1) 58%, rgba(0,0,0,0) 100%)",
@@ -298,7 +313,12 @@ export function NivaaraPage() {
             maskSize: "cover",
           }}
           aria-hidden
-        />
+        >
+          <MediaBackground
+            src="/assets/generated/buddha.png"
+            imgStyle={{ filter: "brightness(0.5)" }}
+          />
+        </div>
         <div
           className="nivaara-philosophy-section__content relative z-10 flex w-full flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center transition-opacity duration-700 ease-out"
           style={{
@@ -463,12 +483,11 @@ export function NivaaraPage() {
                       >
                         To reach us, scan me!
                       </p>
-                      <img
+                      <ResponsiveImage
                         src={NIVAARA_PROPERTY_QR_SRC}
                         alt="QR code for Nivaãra Nerul"
                         className="h-[6.5rem] w-[6.5rem] sm:h-[7.5rem] sm:w-[7.5rem] lg:h-[8.5rem] lg:w-[8.5rem] object-contain rounded-md border border-gold/15 bg-black p-0.5"
-                        loading="lazy"
-                        decoding="async"
+                        sizes={LOGO_IMAGE_SIZES}
                         draggable={false}
                       />
                     </div>
@@ -490,7 +509,7 @@ export function NivaaraPage() {
                   }}
                 >
                   <div className="relative h-[340px] sm:h-[420px] lg:h-[520px]">
-                    <img
+                    <ResponsiveImage
                       src={
                         PROPERTIES_IMAGES[
                           propertiesPrevIndex ?? propertiesImageIndex
@@ -502,12 +521,11 @@ export function NivaaraPage() {
                         ]?.alt ?? PROPERTIES_IMAGES[0].alt
                       }
                       className="nivaara-property-carousel__slide"
-                      loading="lazy"
-                      decoding="async"
+                      sizes={GALLERY_IMAGE_SIZES}
                       draggable={false}
                     />
                     {propertiesPrevIndex !== null && (
-                      <img
+                      <ResponsiveImage
                         key={propertiesImageIndex}
                         src={
                           PROPERTIES_IMAGES[propertiesImageIndex]?.src ??
@@ -518,8 +536,8 @@ export function NivaaraPage() {
                           PROPERTIES_IMAGES[0].alt
                         }
                         className="nivaara-property-carousel__slide nivaara-property-carousel__slide--incoming"
-                        loading="eager"
-                        decoding="async"
+                        sizes={GALLERY_IMAGE_SIZES}
+                        priority
                         draggable={false}
                       />
                     )}

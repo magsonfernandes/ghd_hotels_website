@@ -3,6 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
 import { HomeSearchBar } from "../components/HomeSearchBar";
+import { ResponsiveImage } from "../components/ResponsiveImage";
+import { MediaBackground } from "../components/MediaBackground";
+import {
+  CARD_IMAGE_SIZES,
+  HOME_HERO_VIDEO_DESKTOP,
+  HOME_HERO_VIDEO_MOBILE,
+} from "../lib/optimizedMedia";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 const brands = [
@@ -253,8 +260,18 @@ export function HomePage() {
         baseColor="black"
         bgVideo={
           isMobileHero
-            ? "/assets/generated/MainPage.mov"
-            : "/assets/generated/WhatsApp%20Video%202026-04-27%20at%2017.02.37.mp4"
+            ? HOME_HERO_VIDEO_MOBILE.mp4
+            : HOME_HERO_VIDEO_DESKTOP.mp4
+        }
+        bgVideoPoster={
+          isMobileHero
+            ? HOME_HERO_VIDEO_MOBILE.poster
+            : HOME_HERO_VIDEO_DESKTOP.poster
+        }
+        bgVideoWebm={
+          isMobileHero
+            ? HOME_HERO_VIDEO_MOBILE.webm
+            : HOME_HERO_VIDEO_DESKTOP.webm
         }
         overlay="medium"
         fadeOnScroll
@@ -375,11 +392,11 @@ export function HomePage() {
                   data-ocid={brand.ocidCard}
                 >
                   <div className="relative h-1/2 min-h-0 shrink-0 overflow-hidden bg-charcoal">
-                    <img
+                    <ResponsiveImage
                       src={brand.image}
                       alt={brand.name}
                       className="absolute inset-0 w-full h-full object-cover object-center"
-                      loading="lazy"
+                      sizes={CARD_IMAGE_SIZES}
                     />
                   </div>
 
@@ -439,15 +456,15 @@ export function HomePage() {
       {/* ── Vision Section ─────────────────────────────────────── */}
       <section
         ref={visionSectionRef}
-        className="home-future-section home-section-pad parallax-section parallax-fixed relative"
-        style={{
-          backgroundImage:
-            "url(/assets/generated/hero-future.dim_1920x1080.png)",
-        }}
+        className="home-future-section home-section-pad parallax-section parallax-fixed relative overflow-hidden"
       >
+        <MediaBackground
+          src="/assets/generated/hero-future.dim_1920x1080.png"
+          className="parallax-fixed"
+        />
         {/* No vignette overlay (intentionally removed site-wide) */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 z-[1]"
           style={{
             background:
               "linear-gradient(to bottom, rgba(15,15,15,0.6) 0%, rgba(15,15,15,0.45) 50%, rgba(15,15,15,0.75) 100%)",

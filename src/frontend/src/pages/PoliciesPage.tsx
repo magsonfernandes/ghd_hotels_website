@@ -1,4 +1,5 @@
-import { useEffect, type CSSProperties } from "react";
+import { useEffect } from "react";
+import { MediaBackground } from "../components/MediaBackground";
 
 export function PoliciesPage() {
   useEffect(() => {
@@ -14,24 +15,14 @@ export function PoliciesPage() {
   const li =
     "font-body text-sm sm:text-[0.95rem] text-ivory/80 leading-relaxed";
 
-  const policiesBgStyle: CSSProperties = {
-    backgroundImage: 'url("/assets/generated/bg%20image.png")',
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundAttachment: "fixed",
-  };
-
   return (
     <div className="min-h-screen flex flex-col relative bg-charcoal">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          ...policiesBgStyle,
-          filter: "brightness(1.12)",
-        }}
-      />
+      <div aria-hidden className="pointer-events-none fixed inset-0">
+        <MediaBackground
+          src="/assets/generated/bg%20image.png"
+          imgStyle={{ filter: "brightness(1.12)" }}
+        />
+      </div>
       <div className="absolute inset-0 bg-black/55" />
 
       <section className="relative z-10 flex-1 section-pad pt-28 sm:pt-32">

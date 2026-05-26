@@ -11,6 +11,8 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
+import { ResponsiveImage } from "../components/ResponsiveImage";
+import { HERO_IMAGE_SIZES } from "../lib/optimizedMedia";
 import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
@@ -269,11 +271,12 @@ export function SamrayaPage() {
       >
         {/* Clip royallady + overlay only — green is a sibling so it can extend past section bottom */}
         <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-          <img
+          <ResponsiveImage
             src="/assets/generated/royallady.png"
             alt=""
             aria-hidden
             className="absolute inset-0 h-full w-full object-cover object-center select-none"
+            sizes={HERO_IMAGE_SIZES}
             style={{
               filter: "brightness(0.88) contrast(1.05) saturate(1.02)",
               transform: `translate3d(0, ${royalParallax}px, 0)`,
@@ -302,11 +305,12 @@ export function SamrayaPage() {
             opacity: philosophyFade,
           }}
         >
-          <img
+          <ResponsiveImage
             src="/assets/generated/green.png"
             alt=""
             aria-hidden
             className="mx-auto block h-auto w-full max-w-full object-contain object-center select-none"
+            sizes={HERO_IMAGE_SIZES}
           />
         </div>
 

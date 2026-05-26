@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useRates } from "../../lib/rates";
+import { GALLERY_IMAGE_SIZES } from "../../lib/optimizedMedia";
+import { ResponsiveImage } from "../ResponsiveImage";
 import { type RoomCategoryId, countSelectedMeals } from "./bookingRates";
 
 function currency(n: number) {
@@ -86,11 +88,11 @@ export function RoomCard(props: {
               className="group relative block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal"
               aria-label={`View ${props.roomType} details`}
             >
-              <img
+              <ResponsiveImage
                 src={props.image}
                 alt={props.roomType}
                 className="w-full h-[220px] sm:h-[260px] lg:h-full min-h-[220px] sm:min-h-[260px] object-cover transition duration-300 group-hover:brightness-[0.92]"
-                loading="lazy"
+                sizes={GALLERY_IMAGE_SIZES}
                 draggable={false}
               />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition duration-300 group-hover:bg-black/10" />
@@ -102,11 +104,11 @@ export function RoomCard(props: {
             </button>
           ) : (
             <>
-              <img
+              <ResponsiveImage
                 src={props.image}
                 alt={props.roomType}
                 className="w-full h-[220px] sm:h-[260px] lg:h-full object-cover"
-                loading="lazy"
+                sizes={GALLERY_IMAGE_SIZES}
               />
               <div className="absolute top-4 left-4">
                 <span className="inline-flex items-center rounded-full bg-charcoal/70 text-ivory px-3 py-1 text-xs uppercase tracking-[0.22em] border border-gold/20">

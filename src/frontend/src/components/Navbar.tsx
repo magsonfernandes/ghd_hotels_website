@@ -1,5 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { ResponsiveImage } from "./ResponsiveImage";
+import { LOGO_IMAGE_SIZES } from "../lib/optimizedMedia";
 
 const navLinks = [
   { to: "/", label: "Home", shortLabel: "Home", ocid: "nav.home.link" },
@@ -39,10 +41,12 @@ export function Navbar() {
           className="flex items-center justify-center lg:justify-start h-full group flex-shrink-0"
           data-ocid="nav.home.link"
         >
-          <img
+          <ResponsiveImage
             src="/assets/logo/GHD HOTELS - Gold Emboss Logo.png"
             alt="GHD Hotels"
             className="nav-bar-logo h-10 sm:h-14 lg:h-28 w-auto max-h-full object-contain object-center lg:object-left transition-opacity duration-300 group-hover:opacity-95"
+            sizes={LOGO_IMAGE_SIZES}
+            priority
             draggable={false}
           />
         </Link>

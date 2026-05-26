@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { MediaBackground } from "./MediaBackground";
 
 interface HeroSectionProps {
   /** Background photo URL. Omit or leave empty for a neutral gradient until an asset is added. */
   bgImage?: string;
   /** Background video URL (e.g. mp4). When provided, it takes precedence over bgImage. */
   bgVideo?: string;
+  /** Optional WebM source (smaller; used before MP4 when supported). */
+  bgVideoWebm?: string;
   /** Optional poster image for bgVideo (shown while video loads). */
   bgVideoPoster?: string;
   eyebrow?: string;
@@ -41,6 +44,7 @@ interface HeroSectionProps {
 export function HeroSection({
   bgImage,
   bgVideo,
+  bgVideoWebm,
   bgVideoPoster,
   eyebrow,
   title,
@@ -100,26 +104,31 @@ export function HeroSection({
         }}
         aria-hidden
       >
-        <div
-          className="hero-bg"
-          style={{
-            backgroundImage:
-              !hasVideo && hasPhoto
-                ? `url(${bgImage})`
-                : "linear-gradient(145deg, #1a1917 0%, #252220 38%, #1c1a18 72%, #141312 100%)",
-            transform: hasVideo || hasPhoto ? `translateY(${bgOffset * -1}px)` : undefined,
-            filter: !hasVideo && hasPhoto
-              ? (() => {
-                  const parts: string[] = [];
-                  if (bgBlurPx) parts.push(`blur(${bgBlurPx}px)`);
-                  if (bgBrightness !== 1)
-                    parts.push(`brightness(${bgBrightness})`);
-                  return parts.length ? parts.join(" ") : undefined;
-                })()
-              : undefined,
-          }}
-        />
-        {hasVideo && (
+        {!hasVideo && !hasPhoto ? (
+          <div
+            className="hero-bg"
+            style={{
+              backgroundImage:
+                "linear-gradient(145deg, #1a1917 0%, #252220 38%, #1c1a18 72%, #141312 100%)",
+            }}
+          />
+        ) : null}
+        {!hasVideo && hasPhoto && bgImage ? (
+          <MediaBackground
+            src={bgImage}
+            priority
+            imgStyle={{
+              transform: `translateY(${bgOffset * -1}px)`,
+              filter: (() => {
+                const parts: string[] = [];
+                if (bgBlurPx) parts.push(`blur(${bgBlurPx}px)`);
+                if (bgBrightness !== 1) parts.push(`brightness(${bgBrightness})`);
+                return parts.length ? parts.join(" ") : undefined;
+              })(),
+            }}
+          />
+        ) : null}
+        {hasVideo && bgVideo ? (
           <video
             className="absolute inset-0 w-full h-full object-cover pointer-events-none"
             style={{
@@ -127,16 +136,23 @@ export function HeroSection({
               filter:
                 bgBrightness !== 1 ? `brightness(${bgBrightness})` : undefined,
             }}
-            src={bgVideo}
             poster={bgVideoPoster}
             autoPlay
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             aria-hidden
-          />
-        )}
+          >
+            {bgVideoWebm ? (
+              <source src={bgVideoWebm} type="video/webm" />
+            ) : null}
+            <source
+              src={bgVideo}
+              type={bgVideo.endsWith(".mov") ? "video/quicktime" : "video/mp4"}
+            />
+          </video>
+        ) : null}
       </div>
 
       {/* Layer 1: Bottom-weighted directional gradient for text legibility */}

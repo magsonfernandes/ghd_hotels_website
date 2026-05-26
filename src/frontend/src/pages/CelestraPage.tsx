@@ -10,6 +10,8 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
+import { ResponsiveImage } from "../components/ResponsiveImage";
+import { HERO_IMAGE_SIZES } from "../lib/optimizedMedia";
 import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
@@ -253,11 +255,12 @@ export function CelestraPage() {
         style={{ backgroundColor: "#000" }}
       >
         {/* Background image layer (use <img> so it always loads/paints reliably) */}
-        <img
+        <ResponsiveImage
           src="/assets/generated/pathway.png"
           alt=""
           aria-hidden
           className="absolute inset-0 w-full h-full object-cover object-center"
+          sizes={HERO_IMAGE_SIZES}
           style={{
             zIndex: 0,
             filter: "brightness(0.82) contrast(1.06) saturate(0.95)",

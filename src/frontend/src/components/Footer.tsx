@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { SiFacebook, SiInstagram, SiLinkedin, SiX } from "react-icons/si";
+import { ResponsiveImage } from "./ResponsiveImage";
+import { LOGO_IMAGE_SIZES } from "../lib/optimizedMedia";
 
 /** Set when Facebook page URL is available */
 const FACEBOOK_URL = "";
@@ -20,10 +22,11 @@ export function Footer() {
                 className="inline-block group"
                 data-ocid="footer.home.logo"
               >
-                <img
+                <ResponsiveImage
                   src="/assets/logo/GHD HOTELS - Gold Emboss Logo.png"
                   alt="GHD Hotels"
                   className="h-[4.25rem] sm:h-[6.25rem] lg:h-28 w-auto max-w-[min(100%,360px)] object-contain object-left transition-opacity duration-300 group-hover:opacity-95"
+                  sizes={LOGO_IMAGE_SIZES}
                   draggable={false}
                 />
               </Link>

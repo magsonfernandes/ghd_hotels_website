@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "pnpm -r --if-present run build",
+    "optimize:assets": "node scripts/optimize-assets.mjs",
     "build:web": "pnpm --filter @caffeine/template-frontend build",
     "mail:serve": "tsx server/index.ts",
     "dev:stack": "concurrently -k \"pnpm mail:serve\" \"pnpm --filter @caffeine/template-frontend dev\"",

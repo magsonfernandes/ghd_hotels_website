@@ -10,6 +10,7 @@ Goal: serve the built site + `/api/*` from the same domain.
 
 ```bash
 pnpm install
+pnpm optimize:assets   # once after adding/changing images in public/ (generates WebP + manifest)
 pnpm --filter @caffeine/template-frontend build
 ```
 
@@ -98,12 +99,18 @@ pnpm -C src/frontend dev -- --port 5173
 corepack enable
 corepack prepare pnpm@latest --activate
 pnpm install
+pnpm optimize:assets   # after adding images/videos under src/frontend/public
 pnpm -C src/frontend dev -- --port 5173
 ```
 
 Open:
 
 - `http://localhost:5173`
+
+**Images:** `pnpm optimize:assets` writes WebP `srcset` variants and
+`src/frontend/src/generated/media-manifest.json`. The site serves those via
+`ResponsiveImage` / `MediaBackground` (same layout; smaller downloads). Re-run when
+you change source files in `public/`.
 
 ## If install warns about ignored build scripts
 

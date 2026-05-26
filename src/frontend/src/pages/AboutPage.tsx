@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
+import { MediaBackground } from "../components/MediaBackground";
+import { ResponsiveImage } from "../components/ResponsiveImage";
+import { LOGO_IMAGE_SIZES } from "../lib/optimizedMedia";
 import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
@@ -165,37 +168,43 @@ export function AboutPage() {
               <div className="about-logo-strip animate-on-scroll-right delay-200 mt-4 sm:mt-6">
                 <div className="about-logo-track" aria-hidden>
                   <div className="about-logo-group">
-                    <img
+                    <ResponsiveImage
                       src="/assets/logo/Celestra_logo.png"
                       alt=""
                       className="about-logo-item about-logo-item--celestra"
+                      sizes={LOGO_IMAGE_SIZES}
                     />
-                    <img
+                    <ResponsiveImage
                       src="/assets/logo/Samrāya_logo.png"
                       alt=""
                       className="about-logo-item"
+                      sizes={LOGO_IMAGE_SIZES}
                     />
-                    <img
+                    <ResponsiveImage
                       src="/assets/logo/Nivaãra_logo.png"
                       alt=""
                       className="about-logo-item"
+                      sizes={LOGO_IMAGE_SIZES}
                     />
                   </div>
                   <div className="about-logo-group">
-                    <img
+                    <ResponsiveImage
                       src="/assets/logo/Celestra_logo.png"
                       alt=""
                       className="about-logo-item about-logo-item--celestra"
+                      sizes={LOGO_IMAGE_SIZES}
                     />
-                    <img
+                    <ResponsiveImage
                       src="/assets/logo/Samrāya_logo.png"
                       alt=""
                       className="about-logo-item"
+                      sizes={LOGO_IMAGE_SIZES}
                     />
-                    <img
+                    <ResponsiveImage
                       src="/assets/logo/Nivaãra_logo.png"
                       alt=""
                       className="about-logo-item"
+                      sizes={LOGO_IMAGE_SIZES}
                     />
                   </div>
                 </div>
@@ -273,14 +282,12 @@ export function AboutPage() {
       {/* Quote section */}
       <section
         ref={quoteRef}
-        className="about-quote-section home-section-pad parallax-section parallax-fixed relative text-center"
-        style={{
-          backgroundImage: `url(${ABOUT_COUPLE_HERO_IMAGE})`,
-        }}
+        className="about-quote-section home-section-pad parallax-section parallax-fixed relative overflow-hidden text-center"
       >
+        <MediaBackground src={ABOUT_COUPLE_HERO_IMAGE} className="parallax-fixed" />
         {/* No vignette overlay (intentionally removed site-wide) */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 z-[1]"
           style={{
             background:
               "linear-gradient(to bottom, rgba(15,15,15,0.7) 0%, rgba(15,15,15,0.5) 50%, rgba(15,15,15,0.75) 100%)",
