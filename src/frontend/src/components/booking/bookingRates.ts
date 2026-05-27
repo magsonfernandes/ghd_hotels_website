@@ -45,14 +45,14 @@ export type BookingRateSelection = {
  */
 export const SEED_RATES_CLIENT = {
   version: 1 as const,
-  taxRate: 0.18,
+  taxRate: 0.05,
   mealPrices: { perAdult: 500, perChild: 250 },
   roomCategories: [
     {
       id: "studio-apartment",
       label: "Royal Studio",
       shortDescription: "Modern smart comfort — ideal for 2 guests.",
-      roomOnly: { original: 7500, discounted: 5999 },
+      roomOnly: { original: 7500, discounted: 7499 },
     },
   ] as RoomCategory[],
 };

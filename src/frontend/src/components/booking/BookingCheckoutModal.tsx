@@ -667,7 +667,9 @@ export function BookingCheckoutModal(props: {
                   </div>
                 ) : null}
                 <div className="my-4 border-t border-charcoal/10 pt-4 flex justify-between gap-2 text-sm">
-                  <span className="text-charcoal/65">Taxes and fees</span>
+                  <span className="text-charcoal/65">
+                    GST ({Math.round(rates.taxRate * 100)}%)
+                  </span>
                   <span className="font-medium text-charcoal">
                     {formatInr(pricing.taxes)}
                   </span>

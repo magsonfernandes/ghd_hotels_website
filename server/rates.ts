@@ -32,14 +32,14 @@ export type RatesPayload = {
 export const SEED_RATES: RatesPayload = {
   version: 1,
   updatedAt: new Date(0).toISOString(),
-  taxRate: 0.18,
+  taxRate: 0.05,
   mealPrices: { perAdult: 500, perChild: 250 },
   roomCategories: [
     {
       id: "studio-apartment",
       label: "Royal Studio",
       shortDescription: "Modern smart comfort — ideal for 2 guests.",
-      roomOnly: { original: 7500, discounted: 5999 },
+      roomOnly: { original: 7500, discounted: 7499 },
     },
   ],
 };

@@ -5,11 +5,12 @@ import { GALLERY_IMAGE_SIZES } from "../../lib/optimizedMedia";
 import { ResponsiveImage } from "../ResponsiveImage";
 import { type RoomCategoryId, countSelectedMeals } from "./bookingRates";
 
-function currency(n: number) {
+function currency(n: number, fractionDigits: 0 | 2 = 0) {
   return n.toLocaleString("en-IN", {
     style: "currency",
     currency: "INR",
-    maximumFractionDigits: 0,
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
   });
 }
 
@@ -68,7 +69,15 @@ export function RoomCard(props: {
           assignedChildren * rates.mealPrices.perChild) *
         nights
       : 0;
-  const totalSubtotal = baseSubtotal + mealsSubtotal;
+  const taxableSubtotal = baseSubtotal + mealsSubtotal;
+  const gstAmount =
+    Math.round(taxableSubtotal * rates.taxRate * 100) / 100;
+  const totalWithGst =
+    Math.round((taxableSubtotal + gstAmount) * 100) / 100;
+  const perNightWithGst =
+    props.quantity > 0
+      ? Math.round((totalWithGst / props.quantity / nights) * 100) / 100
+      : 0;
   const categoryById = useMemo(() => {
     const m = new Map<string, { label: string }>();
     for (const c of rates.roomCategories) m.set(c.id, { label: c.label });
@@ -198,15 +207,17 @@ export function RoomCard(props: {
               </label>
               <div className="text-left lg:text-right lg:min-w-[160px]">
                 <p className="text-xs text-charcoal/55 uppercase tracking-[0.18em]">
-                  Total ({nights} night{nights === 1 ? "" : "s"})
+                  Total incl. GST ({nights} night{nights === 1 ? "" : "s"})
                 </p>
                 <div className="flex items-baseline justify-start lg:justify-end gap-2 mt-0.5">
                   <span className="text-lg font-semibold text-charcoal">
-                    {currency(totalSubtotal)}
+                    {currency(totalWithGst, 2)}
                   </span>
                 </div>
                 <p className="mt-1 text-[0.7rem] text-charcoal/55">
-                  {currency(props.baseRateDiscounted)} / room / night{" "}
+                  {currency(props.baseRateDiscounted)} / room / night +{" "}
+                  {Math.round(rates.taxRate * 100)}% GST (
+                  {currency(perNightWithGst, 2)} / room / night){" "}
                   <span className="text-charcoal/40 line-through">
                     {currency(props.baseRateOriginal)}
                   </span>
