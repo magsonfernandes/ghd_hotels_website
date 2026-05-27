@@ -85,7 +85,7 @@ const defaultSearch: BookingSearchSnapshot = {
 };
 
 const defaultMeals = (): MealSelection => ({
-  breakfast: true,
+  breakfast: false,
   lunch: false,
   dinner: false,
 });
