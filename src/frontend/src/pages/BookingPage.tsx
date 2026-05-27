@@ -7,14 +7,10 @@ import {
   type IsoDate,
   parseHomeSearchFromStorage,
 } from "../components/HomeSearchBar";
-import {
-  BookingCheckoutModal,
-  type BookingSearchSnapshot,
-} from "../components/booking/BookingCheckoutModal";
+import type { BookingSearchSnapshot } from "../components/booking/BookingCheckoutModal";
 import { RoomCard } from "../components/booking/RoomCard";
 import { RoomDetailsModal } from "../components/booking/RoomDetailsModal";
 import type {
-  BookingRateSelection,
   MealSelection,
   RoomCategoryId,
 } from "../components/booking/bookingRates";
@@ -25,6 +21,10 @@ import {
 } from "../components/booking/roomOccupancy";
 import { NIVAARA_PROPERTY_PHOTO_SRCS } from "../lib/nivaaraPropertyPhotos";
 import { useRates, useRatesStatus } from "../lib/rates";
+import {
+  hasValidBookingDates,
+  openReservationWhatsApp,
+} from "../lib/whatsappReservation";
 
 /** Fallback per-category inventory when not yet configurable via the API. */
 const DEFAULT_INVENTORY_PER_CATEGORY = 15;
@@ -144,9 +144,6 @@ export function BookingPage() {
   const { isLoading: ratesLoading } = useRatesStatus();
   const primaryCategoryId = rates.roomCategories[0]?.id ?? "studio-apartment";
 
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [checkoutSelection, setCheckoutSelection] =
-    useState<BookingRateSelection | null>(null);
   const [selectedHotelId, setSelectedHotelId] =
     useState<string>("nivaara-nerul");
   const [liveSearch, setLiveSearch] = useState<BookingSearchSnapshot>(() =>
@@ -230,7 +227,17 @@ export function BookingPage() {
   };
 
   const openCheckout = useCallback(() => {
-    setLiveSearch(readBookingSearch());
+    const search = readBookingSearch();
+    setLiveSearch(search);
+
+    if (!hasValidBookingDates(search.checkIn, search.checkOut)) {
+      // eslint-disable-next-line no-alert
+      alert(
+        "Please select your check-in and check-out dates in the search bar above before continuing to checkout.",
+      );
+      return;
+    }
+
     const rooms = rates.roomCategories
       .map((cat) => ({
         categoryId: cat.id,
@@ -240,12 +247,34 @@ export function BookingPage() {
       }))
       .filter((r) => r.quantity > 0);
 
-    setCheckoutSelection({
-      rooms,
-      meals: { ...meals },
+    const hotel =
+      HOTELS.find((h) => h.id === selectedHotelId) ?? HOTELS[0];
+    const roomsForGuests = search.rooms?.length
+      ? search.rooms
+      : [defaultRoomOccupancy()];
+
+    openReservationWhatsApp({
+      hotelName: hotel.name,
+      checkIn: search.checkIn,
+      checkOut: search.checkOut,
+      rooms: roomsForGuests,
+      roomAssignments: roomAssignments.map((categoryId) => ({
+        categoryLabel:
+          rates.roomCategories.find((c) => c.id === categoryId)?.label ??
+          categoryId,
+      })),
+      selection: {
+        rooms,
+        meals: { ...meals },
+      },
     });
-    setCheckoutOpen(true);
-  }, [counts, meals, rates.roomCategories]);
+  }, [
+    counts,
+    meals,
+    rates.roomCategories,
+    roomAssignments,
+    selectedHotelId,
+  ]);
 
   const roomDetails = useMemo(() => {
     return {
@@ -514,16 +543,6 @@ export function BookingPage() {
           </div>
         </div>
       </section>
-      {checkoutOpen && checkoutSelection ? (
-        <BookingCheckoutModal
-          onClose={() => {
-            setCheckoutOpen(false);
-            setCheckoutSelection(null);
-          }}
-          search={liveSearch}
-          selection={checkoutSelection}
-        />
-      ) : null}
       <RoomDetailsModal
         isOpen={roomDetailsOpen}
         onClose={() => setRoomDetailsOpen(false)}

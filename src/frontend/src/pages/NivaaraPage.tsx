@@ -459,7 +459,7 @@ export function NivaaraPage() {
                           href="tel:+918390020408"
                           className="text-ivory hover:text-gold transition-colors"
                         >
-                          8390 020408
+                          83900 20408
                         </a>
                       </p>
                       <p>

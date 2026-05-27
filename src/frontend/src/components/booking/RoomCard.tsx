@@ -182,29 +182,37 @@ export function RoomCard(props: {
                   Room Rate
                 </p>
               </div>
-              <label className="flex items-center justify-between gap-3 lg:justify-start lg:gap-2">
+              <div className="flex items-center justify-between gap-3 lg:justify-start lg:gap-2">
                 <span className="text-xs uppercase tracking-[0.18em] text-charcoal/55 whitespace-nowrap">
                   Rooms
                 </span>
-                <select
-                  value={props.quantity}
-                  onChange={(e) =>
-                    props.onQuantityChange(Number(e.target.value))
-                  }
-                  className="h-10 w-[120px] sm:w-[140px] lg:w-[92px] rounded-lg border border-gold/30 bg-white px-3 text-sm text-charcoal outline-none focus:border-gold focus:ring-2 focus:ring-gold/25"
-                  aria-label={`Number of rooms for ${props.roomType}`}
-                  disabled={props.lockQuantity}
-                >
-                  {roomQtyOptions.map((row) => (
-                    <option
-                      key={`${props.roomCategoryId}-room-qty-${row.quantity}`}
-                      value={row.quantity}
-                    >
-                      {row.quantity}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                {props.lockQuantity ? (
+                  <span
+                    className="inline-flex h-10 min-w-[3rem] items-center justify-center rounded-lg border border-gold/30 bg-white px-3 text-sm font-semibold text-charcoal"
+                    aria-label={`Number of rooms for ${props.roomType}`}
+                  >
+                    {props.quantity}
+                  </span>
+                ) : (
+                  <select
+                    value={props.quantity}
+                    onChange={(e) =>
+                      props.onQuantityChange(Number(e.target.value))
+                    }
+                    className="h-10 w-[120px] sm:w-[140px] lg:w-[92px] appearance-none rounded-lg border border-gold/30 bg-white px-3 text-sm text-charcoal outline-none focus:border-gold focus:ring-2 focus:ring-gold/25"
+                    aria-label={`Number of rooms for ${props.roomType}`}
+                  >
+                    {roomQtyOptions.map((row) => (
+                      <option
+                        key={`${props.roomCategoryId}-room-qty-${row.quantity}`}
+                        value={row.quantity}
+                      >
+                        {row.quantity}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
               <div className="text-left lg:text-right lg:min-w-[160px]">
                 <p className="text-xs text-charcoal/55 uppercase tracking-[0.18em]">
                   Total incl. GST ({nights} night{nights === 1 ? "" : "s"})
