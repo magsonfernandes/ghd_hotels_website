@@ -1059,75 +1059,85 @@ footer.footer-shell .footer-bottom-bar {
   position: relative;
   width: 100%;
   overflow: hidden;
-  height: 10.5rem;
+  height: 8.5rem;
   mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
 }
 
 .about-logo-track {
+  --about-logo-gap: 3rem;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 0;
+  gap: var(--about-logo-gap);
   width: max-content;
-  animation: about-logo-marquee 10s linear infinite;
+  animation: about-logo-marquee 14s linear infinite;
   will-change: transform;
+  backface-visibility: hidden;
 }
 
 .about-logo-strip:hover .about-logo-track {
   animation-play-state: paused;
 }
 
-.about-logo-group {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 2.5rem;
-  padding-right: 2.5rem;
-  flex-shrink: 0;
-}
-
 .about-logo-item {
-  height: 9rem;
   width: auto;
   object-fit: contain;
   flex-shrink: 0;
+  backface-visibility: hidden;
 }
 
-/* Celéstra mark reads smaller at same box height — nudge up vs Samrāya / Nivaãra */
-.about-logo-item.about-logo-item--celestra {
-  height: 10rem;
+.about-logo-item--celestra {
+  height: 3.75rem;
+  max-width: 13.5rem;
+}
+
+.about-logo-item--samraya,
+.about-logo-item--nivaara {
+  height: 6.5rem;
+  max-width: 9.25rem;
 }
 
 @media (min-width: 640px) {
   .about-logo-strip {
-    height: 11.5rem;
+    height: 9.25rem;
   }
 
-  .about-logo-item {
-    height: 10rem;
+  .about-logo-item--celestra {
+    height: 4.25rem;
+    max-width: 15rem;
   }
 
-  .about-logo-item.about-logo-item--celestra {
-    height: 11.25rem;
+  .about-logo-item--samraya,
+  .about-logo-item--nivaara {
+    height: 7.25rem;
+    max-width: 10rem;
   }
 }
 
 @media (min-width: 1024px) {
   .about-logo-strip {
-    height: 12.75rem;
+    height: 10rem;
   }
 
-  .about-logo-item {
-    height: 11rem;
+  .about-logo-item--celestra {
+    height: 4.75rem;
+    max-width: 16rem;
   }
 
-  .about-logo-item.about-logo-item--celestra {
-    height: 12.25rem;
+  .about-logo-item--samraya,
+  .about-logo-item--nivaara {
+    height: 8rem;
+    max-width: 10.5rem;
   }
 }
 
 @keyframes about-logo-marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    /* -50% alone misaligns with flex gap; subtract half a gap for a seamless loop */
+    transform: translate3d(calc(-50% - var(--about-logo-gap) / 2), 0, 0);
+  }
 }

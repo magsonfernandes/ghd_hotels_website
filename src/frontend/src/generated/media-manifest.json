@@ -467,13 +467,12 @@
       ]
     },
     "/assets/logo/Celestra_logo.png": {
-      "src": "/assets/logo/Celestra_logo.w1024.webp",
-      "srcSet": "/assets/logo/Celestra_logo.w200.webp 200w, /assets/logo/Celestra_logo.w400.webp 400w, /assets/logo/Celestra_logo.w600.webp 600w, /assets/logo/Celestra_logo.w1024.webp 1024w",
+      "src": "/assets/logo/Celestra_logo.w600.webp",
+      "srcSet": "/assets/logo/Celestra_logo.w200.webp 200w, /assets/logo/Celestra_logo.w400.webp 400w, /assets/logo/Celestra_logo.w600.webp 600w",
       "widths": [
         200,
         400,
-        600,
-        1024
+        600
       ]
     },
     "/assets/logo/GHD HOTELS - Gold Emboss Logo.png": {
@@ -486,23 +485,21 @@
       ]
     },
     "/assets/logo/Nivaãra_logo.png": {
-      "src": "/assets/logo/Nivaãra_logo.w1536.webp",
-      "srcSet": "/assets/logo/Nivaãra_logo.w200.webp 200w, /assets/logo/Nivaãra_logo.w400.webp 400w, /assets/logo/Nivaãra_logo.w600.webp 600w, /assets/logo/Nivaãra_logo.w1536.webp 1536w",
+      "src": "/assets/logo/Nivaãra_logo.w600.webp",
+      "srcSet": "/assets/logo/Nivaãra_logo.w200.webp 200w, /assets/logo/Nivaãra_logo.w400.webp 400w, /assets/logo/Nivaãra_logo.w600.webp 600w",
       "widths": [
         200,
         400,
-        600,
-        1536
+        600
       ]
     },
     "/assets/logo/Samrāya_logo.png": {
-      "src": "/assets/logo/Samrāya_logo.w1536.webp",
-      "srcSet": "/assets/logo/Samrāya_logo.w200.webp 200w, /assets/logo/Samrāya_logo.w400.webp 400w, /assets/logo/Samrāya_logo.w600.webp 600w, /assets/logo/Samrāya_logo.w1536.webp 1536w",
+      "src": "/assets/logo/Samrāya_logo.w600.webp",
+      "srcSet": "/assets/logo/Samrāya_logo.w200.webp 200w, /assets/logo/Samrāya_logo.w400.webp 400w, /assets/logo/Samrāya_logo.w600.webp 600w",
       "widths": [
         200,
         400,
-        600,
-        1536
+        600
       ]
     }
   },

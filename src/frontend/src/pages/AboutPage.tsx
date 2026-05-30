@@ -4,6 +4,7 @@ import { HeroSection } from "../components/HeroSection";
 import { MediaBackground } from "../components/MediaBackground";
 import { ResponsiveImage } from "../components/ResponsiveImage";
 import { LOGO_IMAGE_SIZES } from "../lib/optimizedMedia";
+import { ABOUT_BRAND_LOGOS } from "../lib/aboutBrandLogos";
 import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
@@ -167,49 +168,22 @@ export function AboutPage() {
 
               <div className="about-logo-strip animate-on-scroll-right delay-200 mt-4 sm:mt-6">
                 <div className="about-logo-track" aria-hidden>
-                  <div className="about-logo-group">
-                    <ResponsiveImage
-                      src="/assets/logo/Celestra_logo.png"
-                      alt=""
-                      className="about-logo-item about-logo-item--celestra"
-                      sizes={LOGO_IMAGE_SIZES}
-                    />
-                    <ResponsiveImage
-                      src="/assets/logo/Samrāya_logo.png"
-                      alt=""
-                      className="about-logo-item"
-                      sizes={LOGO_IMAGE_SIZES}
-                    />
-                    <ResponsiveImage
-                      src="/assets/logo/Nivaãra_logo.png"
-                      alt=""
-                      className="about-logo-item"
-                      sizes={LOGO_IMAGE_SIZES}
-                    />
-                  </div>
-                  <div className="about-logo-group">
-                    <ResponsiveImage
-                      src="/assets/logo/Celestra_logo.png"
-                      alt=""
-                      className="about-logo-item about-logo-item--celestra"
-                      sizes={LOGO_IMAGE_SIZES}
-                    />
-                    <ResponsiveImage
-                      src="/assets/logo/Samrāya_logo.png"
-                      alt=""
-                      className="about-logo-item"
-                      sizes={LOGO_IMAGE_SIZES}
-                    />
-                    <ResponsiveImage
-                      src="/assets/logo/Nivaãra_logo.png"
-                      alt=""
-                      className="about-logo-item"
-                      sizes={LOGO_IMAGE_SIZES}
-                    />
-                  </div>
+                  {[...ABOUT_BRAND_LOGOS, ...ABOUT_BRAND_LOGOS].map(
+                    (logo, index) => (
+                      <ResponsiveImage
+                        key={`about-logo-${index}-${logo.src}`}
+                        src={logo.src}
+                        alt=""
+                        className={logo.className}
+                        sizes={LOGO_IMAGE_SIZES}
+                        draggable={false}
+                      />
+                    ),
+                  )}
                 </div>
                 <div className="sr-only">
-                  Celéstra, Samrāya, and Nivaãra brand logos moving continuously.
+                  {ABOUT_BRAND_LOGOS.map((logo) => logo.alt).join(", ")} — brand
+                  logos moving continuously.
                 </div>
               </div>
 
