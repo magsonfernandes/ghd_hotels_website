@@ -44,7 +44,8 @@ function pickWidths(meta, publicPath) {
   const w = meta.width ?? 1920;
   const p = publicPath.toLowerCase();
   if (p.includes("/logo/") || p.includes("qr")) return LOGO_WIDTHS;
-  if (p.includes("/nivaara/")) return GALLERY_WIDTHS;
+  if (p.includes("/nivaara/") || p.includes("/celestra dodamarg/"))
+    return GALLERY_WIDTHS;
   if (p.includes("hero-") || p.includes("hero.")) return HERO_WIDTHS;
   if (w <= 600) return SMALL_WIDTHS;
   if (w <= 1200) return CARD_WIDTHS;

@@ -20,6 +20,7 @@ import {
   totalGuestsFromRooms,
 } from "../components/booking/roomOccupancy";
 import { NIVAARA_PROPERTY_PHOTO_SRCS } from "../lib/nivaaraPropertyPhotos";
+import { CELESTRA_HERO_IMAGE } from "../lib/celestraPropertyPhotos";
 import { useRates, useRatesStatus } from "../lib/rates";
 import {
   hasValidBookingDates,
@@ -71,7 +72,7 @@ const HOTELS: Hotel[] = [
     tagline: "Celéstra by GHD — Premium",
     description:
       "Contemporary hospitality with intelligent amenities and refined comfort — conceptual listing while development is underway.",
-    image: "/assets/generated/hero-celestra.dim_1920x1080.png",
+    image: CELESTRA_HERO_IMAGE,
     to: "/celestra",
   },
 ];

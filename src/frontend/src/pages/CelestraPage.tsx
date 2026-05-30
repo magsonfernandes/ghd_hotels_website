@@ -1,17 +1,25 @@
 import { Link } from "@tanstack/react-router";
 import {
-  Armchair,
   BedDouble,
   Briefcase,
-  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
   Coffee,
   Dumbbell,
+  Sparkles,
+  TreePine,
+  ToyBrick,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
 import { ResponsiveImage } from "../components/ResponsiveImage";
-import { HERO_IMAGE_SIZES } from "../lib/optimizedMedia";
+import { CELESTRA_HERO_IMAGE, CELESTRA_PROPERTY_PHOTOS } from "../lib/celestraPropertyPhotos";
+import {
+  GALLERY_IMAGE_SIZES,
+  HERO_IMAGE_SIZES,
+  optimizeSrc,
+} from "../lib/optimizedMedia";
 import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
@@ -35,22 +43,28 @@ const features = [
       "State-of-the-art meeting rooms and boardrooms equipped with modern technology.",
   },
   {
-    icon: Armchair,
-    label: "Premium Lounge",
-    description:
-      "Exclusive lounge areas for relaxation, networking, and informal business conversations.",
-  },
-  {
     icon: Dumbbell,
-    label: "Fitness Center",
+    label: "Gymnasium",
     description:
-      "Fully equipped, modern fitness facilities with professional equipment and wellness programs.",
+      "A fully equipped gymnasium with professional-grade equipment for strength, cardio, and wellness routines.",
   },
   {
-    icon: CalendarDays,
-    label: "Event Spaces",
+    icon: Sparkles,
+    label: "Spa & Sauna",
     description:
-      "Flexible, elegantly designed spaces for corporate events, social gatherings, and private celebrations.",
+      "Restorative spa treatments and sauna facilities designed for relaxation, renewal, and quiet indulgence.",
+  },
+  {
+    icon: ToyBrick,
+    label: "Kids Play Area",
+    description:
+      "A safe, engaging play zone where younger guests can explore, play, and unwind in a supervised setting.",
+  },
+  {
+    icon: TreePine,
+    label: "Event Spaces & Thematic Garden",
+    description:
+      "Flexible event venues paired with curated thematic gardens — ideal for celebrations, gatherings, and memorable occasions.",
   },
 ];
 
@@ -84,10 +98,78 @@ export function CelestraPage() {
   const offeringsRef = useRef<HTMLElement | null>(null);
   const [pathwayParallax, setPathwayParallax] = useState(0);
   const [philosophyBgOpacity, setPhilosophyBgOpacity] = useState(0);
+  const [propertiesImageIndex, setPropertiesImageIndex] = useState(0);
+  const [propertiesPrevIndex, setPropertiesPrevIndex] = useState<number | null>(
+    null,
+  );
+  const [propertiesCarouselPaused, setPropertiesCarouselPaused] = useState(false);
+  const propertiesImageIndexRef = useRef(0);
+  const propertiesPrevIndexRef = useRef<number | null>(null);
+  const propertiesCrossfadeTimerRef = useRef<number | null>(null);
+
+  const PROPERTIES_IMAGES = CELESTRA_PROPERTY_PHOTOS;
+  const PROPERTIES_AUTO_ADVANCE_MS = 3000;
+  const PROPERTIES_CROSSFADE_MS = 380;
+
+  propertiesImageIndexRef.current = propertiesImageIndex;
+  propertiesPrevIndexRef.current = propertiesPrevIndex;
+
+  const goToPropertyPhoto = useCallback(
+    (nextIndex: number) => {
+      const total = PROPERTIES_IMAGES.length;
+      const next = ((nextIndex % total) + total) % total;
+      const current = propertiesImageIndexRef.current;
+      if (next === current && propertiesPrevIndexRef.current === null) return;
+
+      if (propertiesCrossfadeTimerRef.current) {
+        window.clearTimeout(propertiesCrossfadeTimerRef.current);
+        propertiesCrossfadeTimerRef.current = null;
+      }
+
+      setPropertiesPrevIndex(current);
+      setPropertiesImageIndex(next);
+
+      propertiesCrossfadeTimerRef.current = window.setTimeout(() => {
+        setPropertiesPrevIndex(null);
+        propertiesCrossfadeTimerRef.current = null;
+      }, PROPERTIES_CROSSFADE_MS);
+    },
+    [PROPERTIES_IMAGES.length],
+  );
 
   useEffect(() => {
     document.title = "Celéstra by GHD – Premium Hospitality";
   }, []);
+
+  useEffect(() => {
+    if (propertiesCarouselPaused) return;
+    const id = window.setInterval(() => {
+      goToPropertyPhoto(propertiesImageIndexRef.current + 1);
+    }, PROPERTIES_AUTO_ADVANCE_MS);
+    return () => window.clearInterval(id);
+  }, [
+    propertiesCarouselPaused,
+    PROPERTIES_AUTO_ADVANCE_MS,
+    goToPropertyPhoto,
+  ]);
+
+  useEffect(() => {
+    return () => {
+      if (propertiesCrossfadeTimerRef.current) {
+        window.clearTimeout(propertiesCrossfadeTimerRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const n = PROPERTIES_IMAGES.length;
+    const next = (propertiesImageIndex + 1) % n;
+    const prev = (propertiesImageIndex - 1 + n) % n;
+    for (const i of [next, prev]) {
+      const preload = new Image();
+      preload.src = optimizeSrc(PROPERTIES_IMAGES[i].src);
+    }
+  }, [propertiesImageIndex, PROPERTIES_IMAGES]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -148,7 +230,7 @@ export function CelestraPage() {
       style={{ backgroundColor: "#000" }}
     >
       <HeroSection
-        bgImage="/assets/generated/hero-celestra.dim_1920x1080.png"
+        bgImage={CELESTRA_HERO_IMAGE}
         title={
           <>
             — Celéstra —
@@ -354,35 +436,125 @@ export function CelestraPage() {
         </div>
       </section>
 
-      {/* Under Development Banner */}
-      <section className="py-10 sm:py-12 bg-black">
-        <div className="max-w-3xl mx-auto text-center px-6">
-          <div className="border border-gold/25 p-8 sm:p-10 animate-on-scroll">
-            <div className="gold-divider" />
-            <h3
-              className="font-display text-gold text-2xl mt-6 mb-4"
-              style={{
-                fontFamily: "Instrument Serif, Georgia, serif",
-                fontWeight: 400,
-              }}
-            >
-              Coming Soon
-            </h3>
-            <p
-              className="font-body text-ivory-muted/65 text-base leading-relaxed mb-8"
+      {/* Properties */}
+      <section
+        id="properties"
+        className="home-section-pad bg-black border-t border-gold/10"
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+          <p className="eyebrow eyebrow--gold-emphasis mb-4">Properties</p>
+          <div className="gold-divider mx-auto mb-8" />
+          <ul className="text-left mx-auto space-y-4">
+            <li
+              className="font-body text-ivory/90 border border-gold/15 rounded-2xl px-6 py-6 sm:px-8 sm:py-8 w-full bg-black/30 animate-on-scroll"
               style={{
                 fontFamily: "General Sans, Helvetica Neue, sans-serif",
-                fontWeight: 300,
               }}
             >
-              Celéstra properties are currently under development at carefully
-              selected destinations. The finest experiences require the finest
-              preparation.
-            </p>
-            <Link to="/contact" className="btn-gold text-sm">
-              <span>Register Your Interest</span>
-            </Link>
-          </div>
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-stretch lg:gap-8">
+                <div className="min-w-0 shrink-0 text-left lg:flex lg:flex-col lg:justify-center">
+                  <span className="font-display text-gold-light text-2xl block">
+                    Celestra Dodamarg
+                  </span>
+                  <p className="body-refined text-ivory-muted/65 mt-3 max-w-md">
+                    A premium Celéstra destination nestled in the Western Ghats —
+                    contemporary comfort amid serene mountain landscapes.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <div
+                  className="relative rounded-2xl overflow-hidden border border-gold/15 bg-black/30"
+                  onMouseEnter={() => setPropertiesCarouselPaused(true)}
+                  onMouseLeave={() => setPropertiesCarouselPaused(false)}
+                  onFocusCapture={() => setPropertiesCarouselPaused(true)}
+                  onBlurCapture={(e) => {
+                    const next = e.relatedTarget as Node | null;
+                    if (!next || !e.currentTarget.contains(next)) {
+                      setPropertiesCarouselPaused(false);
+                    }
+                  }}
+                >
+                  <div className="relative h-[340px] sm:h-[420px] lg:h-[520px]">
+                    <ResponsiveImage
+                      src={
+                        PROPERTIES_IMAGES[
+                          propertiesPrevIndex ?? propertiesImageIndex
+                        ]?.src ?? PROPERTIES_IMAGES[0].src
+                      }
+                      alt={
+                        PROPERTIES_IMAGES[
+                          propertiesPrevIndex ?? propertiesImageIndex
+                        ]?.alt ?? PROPERTIES_IMAGES[0].alt
+                      }
+                      className="nivaara-property-carousel__slide"
+                      sizes={GALLERY_IMAGE_SIZES}
+                      draggable={false}
+                    />
+                    {propertiesPrevIndex !== null && (
+                      <ResponsiveImage
+                        key={propertiesImageIndex}
+                        src={
+                          PROPERTIES_IMAGES[propertiesImageIndex]?.src ??
+                          PROPERTIES_IMAGES[0].src
+                        }
+                        alt={
+                          PROPERTIES_IMAGES[propertiesImageIndex]?.alt ??
+                          PROPERTIES_IMAGES[0].alt
+                        }
+                        className="nivaara-property-carousel__slide nivaara-property-carousel__slide--incoming"
+                        sizes={GALLERY_IMAGE_SIZES}
+                        priority
+                        draggable={false}
+                      />
+                    )}
+                  </div>
+
+                  <div className="absolute inset-y-0 left-0 flex items-center px-3">
+                    <button
+                      type="button"
+                      className="h-10 w-10 rounded-full bg-black/45 border border-white/10 text-ivory/90 flex items-center justify-center hover:bg-black/55 transition"
+                      aria-label="Previous photo"
+                      onClick={() =>
+                        goToPropertyPhoto(propertiesImageIndex - 1)
+                      }
+                    >
+                      <ChevronLeft className="h-5 w-5" aria-hidden />
+                    </button>
+                  </div>
+                  <div className="absolute inset-y-0 right-0 flex items-center px-3">
+                    <button
+                      type="button"
+                      className="h-10 w-10 rounded-full bg-black/45 border border-white/10 text-ivory/90 flex items-center justify-center hover:bg-black/55 transition"
+                      aria-label="Next photo"
+                      onClick={() =>
+                        goToPropertyPhoto(propertiesImageIndex + 1)
+                      }
+                    >
+                      <ChevronRight className="h-5 w-5" aria-hidden />
+                    </button>
+                  </div>
+
+                  <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center gap-2">
+                    {PROPERTIES_IMAGES.map((_, i) => (
+                      <button
+                        key={`celestra-prop-dot-${i}`}
+                        type="button"
+                        className={`h-2.5 w-2.5 rounded-full border border-white/25 transition ${
+                          i === propertiesImageIndex
+                            ? "bg-gold/90"
+                            : "bg-white/15 hover:bg-white/25"
+                        }`}
+                        aria-label={`Show photo ${i + 1}`}
+                        onClick={() => goToPropertyPhoto(i)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </section>
 

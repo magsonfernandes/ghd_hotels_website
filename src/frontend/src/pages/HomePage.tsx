@@ -11,6 +11,7 @@ import {
   HOME_HERO_VIDEO_MOBILE,
 } from "../lib/optimizedMedia";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
+import { CELESTRA_HERO_IMAGE } from "../lib/celestraPropertyPhotos";
 
 const brands = [
   {
@@ -51,7 +52,7 @@ const brands = [
     ocidCard: "brand.celestra.card",
     ocidBtn: "brand.celestra.button",
     accent: "#b8975a",
-    image: "/assets/generated/hero-celestra.dim_1920x1080.png",
+    image: CELESTRA_HERO_IMAGE,
   },
 ];
 
