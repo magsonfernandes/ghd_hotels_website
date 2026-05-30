@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import {
-  BedDouble,
   Briefcase,
   ChevronLeft,
   ChevronRight,
@@ -24,12 +23,6 @@ import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
 const features = [
-  {
-    icon: BedDouble,
-    label: "Modern Rooms & Suites",
-    description:
-      "Thoughtfully designed rooms with premium fixtures, luxurious bedding, and sophisticated finishes.",
-  },
   {
     icon: Coffee,
     label: "All Day Dining Restaurant",
