@@ -563,9 +563,9 @@
       "poster": "/assets/generated/home-hero-poster.w1280.webp"
     },
     "homeHeroMobile": {
-      "mp4": "/assets/generated/home-hero-mobile.mp4",
-      "webm": "/assets/generated/home-hero-mobile.webm",
-      "poster": "/assets/generated/home-hero-mobile-poster.w1280.webp"
+      "mp4": "/assets/generated/home-hero.mp4",
+      "webm": "/assets/generated/home-hero.webm",
+      "poster": "/assets/generated/home-hero-poster.w1280.webp"
     },
     "celestraHero": {
       "mp4": "/assets/generated/celestra-hero.mp4",

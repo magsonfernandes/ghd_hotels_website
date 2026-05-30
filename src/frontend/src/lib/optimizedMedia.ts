@@ -46,15 +46,12 @@ export const LOGO_IMAGE_SIZES = "(max-width: 640px) 40vw, 200px";
 
 export const HOME_HERO_VIDEO_DESKTOP =
   videos.homeHeroDesktop ?? {
-    mp4: "/assets/generated/WhatsApp%20Video%202026-04-27%20at%2017.02.37.mp4",
-    poster: optimizeSrc("/assets/generated/hero-home.dim_1920x1080.png"),
+    mp4: "/assets/generated/home-hero.mp4",
+    webm: "/assets/generated/home-hero.webm",
+    poster: "/assets/generated/home-hero-poster.w1280.webp",
   };
 
-export const HOME_HERO_VIDEO_MOBILE =
-  videos.homeHeroMobile ?? {
-    mp4: "/assets/generated/MainPage.mov",
-    poster: optimizeSrc("/assets/generated/hero-home.dim_1920x1080.png"),
-  };
+export const HOME_HERO_VIDEO_MOBILE = HOME_HERO_VIDEO_DESKTOP;
 
 export const CELESTRA_HERO_VIDEO =
   videos.celestraHero ?? {

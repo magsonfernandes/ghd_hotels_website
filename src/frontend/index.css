@@ -389,6 +389,26 @@ section {
   overflow: visible;
 }
 
+.home-search-welcome {
+  font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.4rem, 2.75vw, 2.125rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: 0.015em;
+  color: #1c1a18;
+}
+
+.home-search-welcome__lead {
+  color: #3d3a36;
+  font-weight: 400;
+}
+
+.home-search-welcome__brand {
+  color: #9a7b4a;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
 /* About → Contact (and all image heroes with title): main text lower in frame */
 .hero-section.hero-section--content-below-center {
   align-items: flex-end;

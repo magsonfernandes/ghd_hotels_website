@@ -91,6 +91,8 @@ export function HomeSearchBar(props?: {
   /** Fires whenever dates, guests, or hotel change — use to keep checkout totals in sync */
   onValuesChange?: (values: HomeSearchValues) => void;
   embedded?: boolean;
+  /** Shown above the form on the home hero search card */
+  welcomeTitle?: string;
 }) {
   const navigate = useNavigate();
   const [hotelId, setHotelId] = useState(
@@ -193,6 +195,12 @@ export function HomeSearchBar(props?: {
       }
       data-ocid="home.search.bar"
     >
+      {props?.welcomeTitle && !props?.embedded ? (
+        <p className="home-search-welcome mb-3 sm:mb-4 text-center lg:text-left">
+          <span className="home-search-welcome__lead">Welcome To</span>{" "}
+          <span className="home-search-welcome__brand">GHD Hotels</span>
+        </p>
+      ) : null}
       <div
         className={
           props?.embedded

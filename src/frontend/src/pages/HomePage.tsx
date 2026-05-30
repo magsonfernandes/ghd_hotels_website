@@ -8,7 +8,6 @@ import { MediaBackground } from "../components/MediaBackground";
 import {
   CARD_IMAGE_SIZES,
   HOME_HERO_VIDEO_DESKTOP,
-  HOME_HERO_VIDEO_MOBILE,
 } from "../lib/optimizedMedia";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 import { CELESTRA_HERO_IMAGE } from "../lib/celestraPropertyPhotos";
@@ -71,21 +70,14 @@ export function HomePage() {
     document.title = "GHD Hotels – Crafted Experiences. Defined Excellence";
   }, []);
 
-  const [isMobileHero, setIsMobileHero] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 640px)");
-    const apply = () => setIsMobileHero(mq.matches);
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
-
   const philosophySectionRef = useRef<HTMLElement | null>(null);
   const brandsSectionRef = useRef<HTMLElement | null>(null);
   const visionSectionRef = useRef<HTMLElement | null>(null);
   const [philosophySectionFade, setPhilosophySectionFade] = useState(0);
   const [brandsSectionFade, setBrandsSectionFade] = useState(0);
   const [visionSectionFade, setVisionSectionFade] = useState(0);
+
+  const homeHeroVideo = HOME_HERO_VIDEO_DESKTOP;
 
   useEffect(() => {
     const clamp = (v: number, min: number, max: number) =>
@@ -259,21 +251,9 @@ export function HomePage() {
       <HeroSection
         variant="home"
         baseColor="black"
-        bgVideo={
-          isMobileHero
-            ? HOME_HERO_VIDEO_MOBILE.mp4
-            : HOME_HERO_VIDEO_DESKTOP.mp4
-        }
-        bgVideoPoster={
-          isMobileHero
-            ? HOME_HERO_VIDEO_MOBILE.poster
-            : HOME_HERO_VIDEO_DESKTOP.poster
-        }
-        bgVideoWebm={
-          isMobileHero
-            ? HOME_HERO_VIDEO_MOBILE.webm
-            : HOME_HERO_VIDEO_DESKTOP.webm
-        }
+        bgVideo={homeHeroVideo.mp4}
+        bgVideoPoster={homeHeroVideo.poster}
+        bgVideoWebm={homeHeroVideo.webm}
         overlay="medium"
         fadeOnScroll
         contentClassName="max-w-6xl"
@@ -281,7 +261,7 @@ export function HomePage() {
         allowSearchOverflow
       >
         <div className="home-hero-search-in-video relative z-[60] hidden w-full text-left lg:block">
-          <HomeSearchBar />
+          <HomeSearchBar welcomeTitle="Welcome To GHD Hotels" />
         </div>
       </HeroSection>
 
@@ -290,7 +270,7 @@ export function HomePage() {
         aria-label="Search availability"
       >
         <div className="max-w-6xl mx-auto w-full px-1">
-          <HomeSearchBar />
+          <HomeSearchBar welcomeTitle="Welcome To GHD Hotels" />
         </div>
       </section>
 

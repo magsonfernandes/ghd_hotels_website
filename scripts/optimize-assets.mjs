@@ -193,14 +193,27 @@ async function main() {
       {
         key: "homeHeroDesktop",
         files: [
-          path.join(publicDir, "assets/generated/WhatsApp Video 2026-04-27 at 17.02.37.mp4"),
+          path.join(
+            publicDir,
+            "assets/generated/GHD Hotels website video (2).mp4",
+          ),
+          path.join(
+            publicDir,
+            "assets/generated/WhatsApp Video 2026-04-27 at 17.02.37.mp4",
+          ),
         ],
         out: "home-hero",
       },
       {
         key: "homeHeroMobile",
-        files: [path.join(publicDir, "assets/generated/MainPage.mov")],
-        out: "home-hero-mobile",
+        files: [
+          path.join(
+            publicDir,
+            "assets/generated/GHD Hotels website video (2).mp4",
+          ),
+          path.join(publicDir, "assets/generated/MainPage.mov"),
+        ],
+        out: "home-hero",
       },
       {
         key: "celestraHero",
