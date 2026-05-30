@@ -13,8 +13,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
 import { ResponsiveImage } from "../components/ResponsiveImage";
-import { CELESTRA_HERO_IMAGE, CELESTRA_PROPERTY_PHOTOS } from "../lib/celestraPropertyPhotos";
+import { CELESTRA_PROPERTY_PHOTOS } from "../lib/celestraPropertyPhotos";
 import {
+  CELESTRA_HERO_VIDEO,
   GALLERY_IMAGE_SIZES,
   HERO_IMAGE_SIZES,
   optimizeSrc,
@@ -223,7 +224,9 @@ export function CelestraPage() {
       style={{ backgroundColor: "#000" }}
     >
       <HeroSection
-        bgImage={CELESTRA_HERO_IMAGE}
+        bgVideo={CELESTRA_HERO_VIDEO.mp4}
+        bgVideoWebm={CELESTRA_HERO_VIDEO.webm}
+        bgVideoPoster={CELESTRA_HERO_VIDEO.poster}
         title={
           <>
             — Celéstra —

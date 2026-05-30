@@ -36,36 +36,9 @@
         1200
       ]
     },
-    "/Celestra Dodamarg/05.jpg": {
-      "src": "/Celestra Dodamarg/05.w1200.webp",
-      "srcSet": "/Celestra Dodamarg/05.w480.webp 480w, /Celestra Dodamarg/05.w800.webp 800w, /Celestra Dodamarg/05.w1200.webp 1200w",
-      "widths": [
-        480,
-        800,
-        1200
-      ]
-    },
-    "/Celestra Dodamarg/06.jpg": {
-      "src": "/Celestra Dodamarg/06.w1200.webp",
-      "srcSet": "/Celestra Dodamarg/06.w480.webp 480w, /Celestra Dodamarg/06.w800.webp 800w, /Celestra Dodamarg/06.w1200.webp 1200w",
-      "widths": [
-        480,
-        800,
-        1200
-      ]
-    },
     "/Celestra Dodamarg/07.jpg": {
       "src": "/Celestra Dodamarg/07.w1200.webp",
       "srcSet": "/Celestra Dodamarg/07.w480.webp 480w, /Celestra Dodamarg/07.w800.webp 800w, /Celestra Dodamarg/07.w1200.webp 1200w",
-      "widths": [
-        480,
-        800,
-        1200
-      ]
-    },
-    "/Celestra Dodamarg/08.jpg": {
-      "src": "/Celestra Dodamarg/08.w1200.webp",
-      "srcSet": "/Celestra Dodamarg/08.w480.webp 480w, /Celestra Dodamarg/08.w800.webp 800w, /Celestra Dodamarg/08.w1200.webp 1200w",
       "widths": [
         480,
         800,
@@ -501,6 +474,86 @@
         400,
         600
       ]
+    },
+    "/Celestra Dodamarg/Celestra_Exterior_Day.png": {
+      "src": "/Celestra Dodamarg/Celestra_Exterior_Day.w1600.webp",
+      "srcSet": "/Celestra Dodamarg/Celestra_Exterior_Day.w480.webp 480w, /Celestra Dodamarg/Celestra_Exterior_Day.w800.webp 800w, /Celestra Dodamarg/Celestra_Exterior_Day.w1200.webp 1200w, /Celestra Dodamarg/Celestra_Exterior_Day.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Celestra Dodamarg/Celestra_Exterior_Night.png": {
+      "src": "/Celestra Dodamarg/Celestra_Exterior_Night.w1600.webp",
+      "srcSet": "/Celestra Dodamarg/Celestra_Exterior_Night.w480.webp 480w, /Celestra Dodamarg/Celestra_Exterior_Night.w800.webp 800w, /Celestra Dodamarg/Celestra_Exterior_Night.w1200.webp 1200w, /Celestra Dodamarg/Celestra_Exterior_Night.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Celestra Dodamarg/Room_Studio_View_01.jpg": {
+      "src": "/Celestra Dodamarg/Room_Studio_View_01.w1600.webp",
+      "srcSet": "/Celestra Dodamarg/Room_Studio_View_01.w480.webp 480w, /Celestra Dodamarg/Room_Studio_View_01.w800.webp 800w, /Celestra Dodamarg/Room_Studio_View_01.w1200.webp 1200w, /Celestra Dodamarg/Room_Studio_View_01.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Celestra Dodamarg/Room_Studio_View_02.jpg": {
+      "src": "/Celestra Dodamarg/Room_Studio_View_02.w1600.webp",
+      "srcSet": "/Celestra Dodamarg/Room_Studio_View_02.w480.webp 480w, /Celestra Dodamarg/Room_Studio_View_02.w800.webp 800w, /Celestra Dodamarg/Room_Studio_View_02.w1200.webp 1200w, /Celestra Dodamarg/Room_Studio_View_02.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Celestra Dodamarg/Room_Studio_View_03.jpg": {
+      "src": "/Celestra Dodamarg/Room_Studio_View_03.w1600.webp",
+      "srcSet": "/Celestra Dodamarg/Room_Studio_View_03.w480.webp 480w, /Celestra Dodamarg/Room_Studio_View_03.w800.webp 800w, /Celestra Dodamarg/Room_Studio_View_03.w1200.webp 1200w, /Celestra Dodamarg/Room_Studio_View_03.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Celestra Dodamarg/Room_Studio_Living.jpg": {
+      "src": "/Celestra Dodamarg/Room_Studio_Living.w1600.webp",
+      "srcSet": "/Celestra Dodamarg/Room_Studio_Living.w480.webp 480w, /Celestra Dodamarg/Room_Studio_Living.w800.webp 800w, /Celestra Dodamarg/Room_Studio_Living.w1200.webp 1200w, /Celestra Dodamarg/Room_Studio_Living.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Celestra Dodamarg/Room_Bedroom_View.jpg": {
+      "src": "/Celestra Dodamarg/Room_Bedroom_View.w1600.webp",
+      "srcSet": "/Celestra Dodamarg/Room_Bedroom_View.w480.webp 480w, /Celestra Dodamarg/Room_Bedroom_View.w800.webp 800w, /Celestra Dodamarg/Room_Bedroom_View.w1200.webp 1200w, /Celestra Dodamarg/Room_Bedroom_View.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
+    },
+    "/Celestra Dodamarg/Room_Bedroom_Wide.png": {
+      "src": "/Celestra Dodamarg/Room_Bedroom_Wide.w1600.webp",
+      "srcSet": "/Celestra Dodamarg/Room_Bedroom_Wide.w480.webp 480w, /Celestra Dodamarg/Room_Bedroom_Wide.w800.webp 800w, /Celestra Dodamarg/Room_Bedroom_Wide.w1200.webp 1200w, /Celestra Dodamarg/Room_Bedroom_Wide.w1600.webp 1600w",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600
+      ]
     }
   },
   "videos": {
@@ -513,6 +566,11 @@
       "mp4": "/assets/generated/home-hero-mobile.mp4",
       "webm": "/assets/generated/home-hero-mobile.webm",
       "poster": "/assets/generated/home-hero-mobile-poster.w1280.webp"
+    },
+    "celestraHero": {
+      "mp4": "/assets/generated/celestra-hero.mp4",
+      "webm": "/assets/generated/celestra-hero.webm",
+      "poster": "/assets/generated/celestra-hero-poster.w1280.webp"
     }
   }
 }

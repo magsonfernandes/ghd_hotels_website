@@ -8,10 +8,7 @@ export const CELESTRA_PROPERTY_PHOTOS = [
   { src: celestraPropertyImage("02.jpg"), alt: "Celéstra Dodamarg — property view" },
   { src: celestraPropertyImage("03.jpg"), alt: "Celéstra Dodamarg — property view" },
   { src: celestraPropertyImage("04.jpg"), alt: "Celéstra Dodamarg — property view" },
-  { src: celestraPropertyImage("05.jpg"), alt: "Celéstra Dodamarg — property view" },
-  { src: celestraPropertyImage("06.jpg"), alt: "Celéstra Dodamarg — property view" },
   { src: celestraPropertyImage("07.jpg"), alt: "Celéstra Dodamarg — property view" },
-  { src: celestraPropertyImage("08.jpg"), alt: "Celéstra Dodamarg — property view" },
   { src: celestraPropertyImage("09.jpg"), alt: "Celéstra Dodamarg — property view" },
   { src: celestraPropertyImage("10.jpg"), alt: "Celéstra Dodamarg — property view" },
   { src: celestraPropertyImage("11.jpg"), alt: "Celéstra Dodamarg — property view" },
@@ -22,6 +19,38 @@ export const CELESTRA_PROPERTY_PHOTOS = [
   { src: celestraPropertyImage("16.jpg"), alt: "Celéstra Dodamarg — property view" },
   { src: celestraPropertyImage("17.jpg"), alt: "Celéstra Dodamarg — property view" },
   { src: celestraPropertyImage("18.jpg"), alt: "Celéstra Dodamarg — property view" },
+  {
+    src: celestraPropertyImage("Celestra_Exterior_Day.png"),
+    alt: "Celéstra Dodamarg — building exterior by day",
+  },
+  {
+    src: celestraPropertyImage("Celestra_Exterior_Night.png"),
+    alt: "Celéstra Dodamarg — building exterior at night",
+  },
+  {
+    src: celestraPropertyImage("Room_Studio_View_01.jpg"),
+    alt: "Celéstra Dodamarg — studio suite",
+  },
+  {
+    src: celestraPropertyImage("Room_Studio_View_02.jpg"),
+    alt: "Celéstra Dodamarg — studio suite living area",
+  },
+  {
+    src: celestraPropertyImage("Room_Studio_View_03.jpg"),
+    alt: "Celéstra Dodamarg — studio suite interior",
+  },
+  {
+    src: celestraPropertyImage("Room_Studio_Living.jpg"),
+    alt: "Celéstra Dodamarg — studio lounge and kitchenette",
+  },
+  {
+    src: celestraPropertyImage("Room_Bedroom_View.jpg"),
+    alt: "Celéstra Dodamarg — guest room",
+  },
+  {
+    src: celestraPropertyImage("Room_Bedroom_Wide.png"),
+    alt: "Celéstra Dodamarg — guest room with seating area",
+  },
   {
     src: celestraPropertyImage("Banquet_view02.jpg"),
     alt: "Celéstra Dodamarg — banquet hall",

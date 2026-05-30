@@ -202,6 +202,14 @@ async function main() {
         files: [path.join(publicDir, "assets/generated/MainPage.mov")],
         out: "home-hero-mobile",
       },
+      {
+        key: "celestraHero",
+        files: [
+          path.join(publicDir, "assets/generated/celestra video.mov"),
+          path.join(publicDir, "assets/generated/celestra-hero.mov"),
+        ],
+        out: "celestra-hero",
+      },
     ];
     for (const { key, files, out } of videoCandidates) {
       const input = files.find((f) => fs.existsSync(f));

@@ -55,3 +55,10 @@ export const HOME_HERO_VIDEO_MOBILE =
     mp4: "/assets/generated/MainPage.mov",
     poster: optimizeSrc("/assets/generated/hero-home.dim_1920x1080.png"),
   };
+
+export const CELESTRA_HERO_VIDEO =
+  videos.celestraHero ?? {
+    mp4: "/assets/generated/celestra-hero.mp4",
+    webm: "/assets/generated/celestra-hero.webm",
+    poster: "/assets/generated/celestra-hero-poster.w1280.webp",
+  };
