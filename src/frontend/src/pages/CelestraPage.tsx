@@ -449,8 +449,14 @@ export function CelestraPage() {
             >
               <div className="flex flex-col gap-5 lg:flex-row lg:items-stretch lg:gap-8">
                 <div className="min-w-0 shrink-0 text-left lg:flex lg:flex-col lg:justify-center">
-                  <span className="font-display text-gold-light text-2xl block">
-                    Celestra Dodamarg
+                  <span className="font-display text-gold-light text-2xl block leading-snug">
+                    <span className="font-body text-sm sm:text-base font-semibold uppercase tracking-[0.22em] text-gold">
+                      Opening Soon
+                    </span>
+                    <span className="text-ivory-muted/40 mx-2 sm:mx-3" aria-hidden>
+                      ·
+                    </span>
+                    Celéstra Dodamarg
                   </span>
                   <p className="body-refined text-ivory-muted/65 mt-3 max-w-md">
                     A premium Celéstra destination nestled in the Western Ghats —
