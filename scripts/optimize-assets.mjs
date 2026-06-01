@@ -218,6 +218,7 @@ async function main() {
       {
         key: "celestraHero",
         files: [
+          path.join(publicDir, "Celestra Dodamarg/GHD celestra.mov"),
           path.join(publicDir, "assets/generated/celestra video.mov"),
           path.join(publicDir, "assets/generated/celestra-hero.mov"),
         ],
