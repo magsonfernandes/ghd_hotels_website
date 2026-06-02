@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import {
+  ChevronLeft,
+  ChevronRight,
   Crown,
   Gem,
   Heart,
@@ -8,7 +10,7 @@ import {
   UtensilsCrossed,
   Waves,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
 import { ResponsiveImage } from "../components/ResponsiveImage";
@@ -55,6 +57,44 @@ const features = [
   },
 ];
 
+const propertyGallery = {
+  title: "Samraya Dodamarg",
+  images: [
+    {
+      folderLabel: "Exterior",
+      src: "/SAMRAYA/Exterior/DJI_20260227174647_0419_D.JPG",
+    },
+    {
+      folderLabel: "Exterior",
+      src: "/SAMRAYA/Exterior/DJI_20260227174028_0405_D.JPG",
+    },
+    {
+      folderLabel: "1 BHK",
+      src: "/SAMRAYA/1 BHK/YAD08303.JPG",
+    },
+    {
+      folderLabel: "1 BHK",
+      src: "/SAMRAYA/1 BHK/YAD08283.JPG",
+    },
+    {
+      folderLabel: "2 BHK",
+      src: "/SAMRAYA/2 BHK/YAD08068.JPG",
+    },
+    {
+      folderLabel: "2 BHK",
+      src: "/SAMRAYA/2 BHK/YAD07957.JPG",
+    },
+    {
+      folderLabel: "Villa",
+      src: "/SAMRAYA/Villa/YAD07641.JPG",
+    },
+    {
+      folderLabel: "Villa",
+      src: "/SAMRAYA/Villa/YAD07569.JPG",
+    },
+  ],
+};
+
 const SAMRAYA_PHILOSOPHY = {
   darkOverlayOpacity: 0.42,
 };
@@ -96,9 +136,65 @@ export function SamrayaPage() {
   const philosophyRef = useRef<HTMLElement | null>(null);
   const [royalParallax, setRoyalParallax] = useState(0);
   const [philosophyFade, setPhilosophyFade] = useState(0);
+  const [propertiesImageIndex, setPropertiesImageIndex] = useState(0);
+  const [propertiesPrevIndex, setPropertiesPrevIndex] = useState<number | null>(
+    null,
+  );
+  const [propertiesCarouselPaused, setPropertiesCarouselPaused] = useState(false);
+  const propertiesImageIndexRef = useRef(0);
+  const propertiesPrevIndexRef = useRef<number | null>(null);
+  const propertiesCrossfadeTimerRef = useRef<number | null>(null);
+
+  const PROPERTIES_IMAGES = propertyGallery.images;
+  const PROPERTIES_AUTO_ADVANCE_MS = 3000;
+  const PROPERTIES_CROSSFADE_MS = 380;
+
+  propertiesImageIndexRef.current = propertiesImageIndex;
+  propertiesPrevIndexRef.current = propertiesPrevIndex;
+
+  const goToPropertyPhoto = useCallback(
+    (nextIndex: number) => {
+      const total = PROPERTIES_IMAGES.length;
+      if (!total) return;
+      const next = ((nextIndex % total) + total) % total;
+      const current = propertiesImageIndexRef.current;
+      if (next === current && propertiesPrevIndexRef.current === null) return;
+
+      if (propertiesCrossfadeTimerRef.current) {
+        window.clearTimeout(propertiesCrossfadeTimerRef.current);
+        propertiesCrossfadeTimerRef.current = null;
+      }
+
+      setPropertiesPrevIndex(current);
+      setPropertiesImageIndex(next);
+
+      propertiesCrossfadeTimerRef.current = window.setTimeout(() => {
+        setPropertiesPrevIndex(null);
+        propertiesCrossfadeTimerRef.current = null;
+      }, PROPERTIES_CROSSFADE_MS);
+    },
+    [PROPERTIES_IMAGES.length],
+  );
 
   useEffect(() => {
     document.title = "Samrāya by GHD – Flagship Luxury";
+  }, []);
+
+  useEffect(() => {
+    if (propertiesCarouselPaused) return;
+    if (!PROPERTIES_IMAGES.length) return;
+    const id = window.setInterval(() => {
+      goToPropertyPhoto(propertiesImageIndexRef.current + 1);
+    }, PROPERTIES_AUTO_ADVANCE_MS);
+    return () => window.clearInterval(id);
+  }, [propertiesCarouselPaused, goToPropertyPhoto, PROPERTIES_IMAGES.length]);
+
+  useEffect(() => {
+    return () => {
+      if (propertiesCrossfadeTimerRef.current) {
+        window.clearTimeout(propertiesCrossfadeTimerRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -149,7 +245,8 @@ export function SamrayaPage() {
   return (
     <div className="bg-black min-h-screen overflow-x-clip samraya-test-font">
       <HeroSection
-        bgImage="/assets/generated/hero-samraya.dim_1920x1080.png"
+        bgVideo="/SAMRAYA/GHD Regenta Aangan About.mp4"
+        bgVideoPoster="/assets/generated/hero-samraya.dim_1920x1080.w1280.webp"
         title={
           <>
             — Samrāya —
@@ -420,6 +517,136 @@ export function SamrayaPage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* Properties */}
+      <section
+        id="properties"
+        className="home-section-pad bg-black border-t border-gold/10"
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+          <p className="eyebrow eyebrow--gold-emphasis mb-4">Properties</p>
+          <div
+            className="gold-divider mx-auto mb-8"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, #b8975a, transparent)",
+            }}
+          />
+
+          <ul className="text-left mx-auto space-y-4">
+            <li
+              className="font-body text-ivory/90 border border-gold/15 rounded-2xl px-6 py-6 sm:px-8 sm:py-8 w-full bg-black/30 animate-on-scroll"
+              style={{
+                fontFamily: "General Sans, Helvetica Neue, sans-serif",
+              }}
+            >
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-stretch lg:gap-8">
+                <div className="min-w-0 shrink-0 text-left lg:flex lg:flex-col lg:justify-center">
+                  <span className="font-display text-gold-light text-2xl block leading-snug">
+                    <span className="font-body text-sm sm:text-base font-semibold uppercase tracking-[0.22em] text-gold">
+                      Opening Soon
+                    </span>
+                    <span
+                      className="text-ivory-muted/40 mx-2 sm:mx-3"
+                      aria-hidden
+                    >
+                      ·
+                    </span>
+                    {propertyGallery.title}
+                  </span>
+                  <p className="body-refined text-ivory-muted/65 mt-3 max-w-md">
+                    A flagship Samrāya destination in Dodamarg — set amid the
+                    Western Ghats, where refined design meets quiet nature-led
+                    escape.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <div
+                  className="relative rounded-2xl overflow-hidden border border-gold/15 bg-black/30"
+                  onMouseEnter={() => setPropertiesCarouselPaused(true)}
+                  onMouseLeave={() => setPropertiesCarouselPaused(false)}
+                  onFocusCapture={() => setPropertiesCarouselPaused(true)}
+                  onBlurCapture={(e) => {
+                    const next = e.relatedTarget as Node | null;
+                    if (!next || !e.currentTarget.contains(next)) {
+                      setPropertiesCarouselPaused(false);
+                    }
+                  }}
+                >
+                  <div className="relative h-[340px] sm:h-[420px] lg:h-[520px]">
+                    <ResponsiveImage
+                      src={
+                        PROPERTIES_IMAGES[
+                          propertiesPrevIndex ?? propertiesImageIndex
+                        ]?.src ?? PROPERTIES_IMAGES[0]?.src ?? ""
+                      }
+                      alt=""
+                      aria-hidden
+                      className="nivaara-property-carousel__slide"
+                      sizes="(max-width: 1024px) 100vw, 1100px"
+                      draggable={false}
+                    />
+                    {propertiesPrevIndex !== null && (
+                      <ResponsiveImage
+                        key={propertiesImageIndex}
+                        src={
+                          PROPERTIES_IMAGES[propertiesImageIndex]?.src ??
+                          PROPERTIES_IMAGES[0]?.src ??
+                          ""
+                        }
+                        alt=""
+                        aria-hidden
+                        className="nivaara-property-carousel__slide nivaara-property-carousel__slide--incoming"
+                        sizes="(max-width: 1024px) 100vw, 1100px"
+                        priority
+                        draggable={false}
+                      />
+                    )}
+
+                    <div className="absolute top-3 right-3">
+                      <div
+                        className="inline-flex items-center self-start px-3 py-1 text-[11px] tracking-[0.22em] uppercase border"
+                        style={{
+                          borderColor: "rgba(255,255,255,0.18)",
+                          color: "rgba(255,255,255,0.86)",
+                          backgroundColor: "rgba(0,0,0,0.35)",
+                          backdropFilter: "blur(6px)",
+                        }}
+                      >
+                        {PROPERTIES_IMAGES[propertiesImageIndex]?.folderLabel ?? ""}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Left / right arrows */}
+                  <div className="absolute inset-y-0 left-0 flex items-center px-3">
+                    <button
+                      type="button"
+                      className="h-10 w-10 rounded-full bg-black/45 border border-white/10 text-ivory/90 flex items-center justify-center hover:bg-black/55 transition"
+                      aria-label="Previous photo"
+                      onClick={() => goToPropertyPhoto(propertiesImageIndex - 1)}
+                    >
+                      <ChevronLeft className="h-5 w-5" aria-hidden />
+                    </button>
+                  </div>
+                  <div className="absolute inset-y-0 right-0 flex items-center px-3">
+                    <button
+                      type="button"
+                      className="h-10 w-10 rounded-full bg-black/45 border border-white/10 text-ivory/90 flex items-center justify-center hover:bg-black/55 transition"
+                      aria-label="Next photo"
+                      onClick={() => goToPropertyPhoto(propertiesImageIndex + 1)}
+                    >
+                      <ChevronRight className="h-5 w-5" aria-hidden />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </section>
 
