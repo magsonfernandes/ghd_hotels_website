@@ -14,7 +14,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
 import { ResponsiveImage } from "../components/ResponsiveImage";
-import { HERO_IMAGE_SIZES } from "../lib/optimizedMedia";
+import { HERO_IMAGE_SIZES, SAMRAYA_HERO_VIDEO } from "../lib/optimizedMedia";
 import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
@@ -245,8 +245,9 @@ export function SamrayaPage() {
   return (
     <div className="bg-black min-h-screen overflow-x-clip samraya-test-font">
       <HeroSection
-        bgVideo="/SAMRAYA/GHD Regenta Aangan About.mp4"
-        bgVideoPoster="/assets/generated/hero-samraya.dim_1920x1080.w1280.webp"
+        bgVideo={SAMRAYA_HERO_VIDEO.mp4}
+        bgVideoWebm={SAMRAYA_HERO_VIDEO.webm}
+        bgVideoPoster={SAMRAYA_HERO_VIDEO.poster}
         title={
           <>
             — Samrāya —

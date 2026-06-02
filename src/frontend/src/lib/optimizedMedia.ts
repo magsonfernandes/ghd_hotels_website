@@ -59,3 +59,10 @@ export const CELESTRA_HERO_VIDEO =
     webm: "/assets/generated/celestra-hero.webm",
     poster: "/assets/generated/celestra-hero-poster.w1280.webp",
   };
+
+export const SAMRAYA_HERO_VIDEO =
+  videos.samrayaHero ?? {
+    mp4: "/SAMRAYA/GHD Regenta Aangan About.mp4",
+    webm: undefined,
+    poster: "/assets/generated/hero-samraya.dim_1920x1080.w1280.webp",
+  };

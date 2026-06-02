@@ -46,6 +46,7 @@ function pickWidths(meta, publicPath) {
   if (p.includes("/logo/") || p.includes("qr")) return LOGO_WIDTHS;
   if (p.includes("/nivaara/") || p.includes("/celestra dodamarg/"))
     return GALLERY_WIDTHS;
+  if (p.includes("/samraya/")) return GALLERY_WIDTHS;
   if (p.includes("hero-") || p.includes("hero.")) return HERO_WIDTHS;
   if (w <= 600) return SMALL_WIDTHS;
   if (w <= 1200) return CARD_WIDTHS;
@@ -168,13 +169,34 @@ function walkImages(dir, files = []) {
 async function main() {
   console.log("Optimizing images in", publicDir);
   const images = walkImages(publicDir);
-  const manifest = { images: {}, videos: {} };
+  const existingManifest = (() => {
+    try {
+      return JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    } catch {
+      return null;
+    }
+  })();
+  const manifest = existingManifest ?? { images: {}, videos: {} };
+  manifest.images = manifest.images ?? {};
+  manifest.videos = manifest.videos ?? {};
+
+  const onlyImagesRaw = process.env.ONLY_IMAGES?.trim();
+  const onlyImages = onlyImagesRaw
+    ? onlyImagesRaw
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : null;
 
   let i = 0;
   for (const abs of images) {
     i += 1;
     process.stdout.write(`\r[${i}/${images.length}] ${path.basename(abs)}`.padEnd(60));
     try {
+      const publicPath = toPublicUrl(abs);
+      if (onlyImages && !onlyImages.some((token) => publicPath.includes(token))) {
+        continue;
+      }
       const entry = await optimizeImage(abs);
       manifest.images[entry.original] = {
         src: entry.src,
@@ -224,8 +246,23 @@ async function main() {
         ],
         out: "celestra-hero",
       },
+      {
+        key: "samrayaHero",
+        files: [path.join(publicDir, "SAMRAYA/GHD Regenta Aangan About.mp4")],
+        out: "samraya-hero",
+      },
     ];
+    const onlyKeysRaw = process.env.ONLY_VIDEOS?.trim();
+    const onlyKeys = onlyKeysRaw
+      ? new Set(
+          onlyKeysRaw
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean),
+        )
+      : null;
     for (const { key, files, out } of videoCandidates) {
+      if (onlyKeys && !onlyKeys.has(key)) continue;
       const input = files.find((f) => fs.existsSync(f));
       if (!input) continue;
       try {
