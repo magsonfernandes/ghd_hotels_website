@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { sendMailViaSmtp } from "./lib/smtp";
 
 type Body = {
   name?: string;
@@ -40,6 +39,7 @@ export default async function handler(
     ].join("\n");
 
     try {
+      const { sendMailViaSmtp } = require("./lib/smtp.cjs");
       await sendMailViaSmtp({
         from: mailbox,
         to: mailbox,
