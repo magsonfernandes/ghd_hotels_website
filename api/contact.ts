@@ -1,7 +1,4 @@
 import { sendMailViaSmtp } from "./lib/smtp";
-import { nodeRuntime } from "./lib/runtime";
-
-export const config = nodeRuntime;
 
 type Body = {
   name?: string;

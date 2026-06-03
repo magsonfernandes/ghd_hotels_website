@@ -1,7 +1,4 @@
 import { sendMailViaSmtp } from "./lib/smtp";
-import { nodeRuntime } from "./lib/runtime";
-
-export const config = nodeRuntime;
 
 function json(status: number, payload: unknown) {
   return Response.json(payload, { status });
