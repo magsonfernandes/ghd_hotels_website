@@ -6,7 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import multer from "multer";
-import { sendMailViaSmtp } from "../mail/smtp.ts";
+import { sendMailViaSmtp } from "../lib/smtp.ts";
 import { loadRates, saveRates } from "./rates.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

@@ -73,9 +73,11 @@ export function HomePage() {
   const philosophySectionRef = useRef<HTMLElement | null>(null);
   const brandsSectionRef = useRef<HTMLElement | null>(null);
   const visionSectionRef = useRef<HTMLElement | null>(null);
+  const visionContentRef = useRef<HTMLDivElement | null>(null);
   const [philosophySectionFade, setPhilosophySectionFade] = useState(0);
   const [brandsSectionFade, setBrandsSectionFade] = useState(0);
   const [visionSectionFade, setVisionSectionFade] = useState(0);
+  const [visionContentParallax, setVisionContentParallax] = useState(0);
 
   const homeHeroVideo = HOME_HERO_VIDEO_DESKTOP;
 
@@ -114,6 +116,12 @@ export function HomePage() {
       }
       if (visionSectionRef.current) {
         setVisionSectionFade(getSectionFade(visionSectionRef.current, vh));
+      }
+      if (visionContentRef.current) {
+        const rect = visionContentRef.current.getBoundingClientRect();
+        const centerDelta = rect.top + rect.height / 2 - vh * 0.5;
+        // Move opposite direction for depth feel; small, smooth range.
+        setVisionContentParallax(clamp(centerDelta * -0.06, -28, 28));
       }
     };
     onScroll();
@@ -451,26 +459,32 @@ export function HomePage() {
               "linear-gradient(to bottom, rgba(15,15,15,0.6) 0%, rgba(15,15,15,0.45) 50%, rgba(15,15,15,0.75) 100%)",
           }}
         />
-        <div
-          className="home-future-section__content relative z-10 w-full text-center"
-          style={{ opacity: visionSectionFade, willChange: "opacity" }}
-        >
-          <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll">
-            The Future
-          </p>
-          <div className="gold-divider animate-on-scroll delay-100" />
-          <div className="space-y-4 animate-on-scroll delay-200 w-full mt-6">
-            <p className="home-vision-statement mx-auto">
-              GHD Hotels is developing a new generation of hotels that combine
-              design excellence, operational efficiency, and guest-focused
-              service. Our properties are currently under development across
-              carefully selected destinations.
+        <div className="home-future-section__content relative z-10 w-full text-center">
+          <div
+            ref={visionContentRef}
+            style={{
+              opacity: visionSectionFade,
+              transform: `translate3d(0, ${visionContentParallax}px, 0)`,
+              willChange: "opacity, transform",
+            }}
+          >
+            <p className="eyebrow eyebrow--gold-emphasis animate-on-scroll">
+              The Future
             </p>
-          </div>
-          <div className="mt-8 animate-on-scroll delay-400">
-            <Link to="/vision" className="btn-gold">
-              <span>Discover Our Vision</span>
-            </Link>
+            <div className="gold-divider animate-on-scroll delay-100" />
+            <div className="space-y-4 animate-on-scroll delay-200 w-full mt-6">
+              <p className="home-vision-statement mx-auto">
+                GHD Hotels is developing a new generation of hotels that combine
+                design excellence, operational efficiency, and guest-focused
+                service. Our properties are currently under development across
+                carefully selected destinations.
+              </p>
+            </div>
+            <div className="mt-8 animate-on-scroll delay-400">
+              <Link to="/vision" className="btn-gold">
+                <span>Discover Our Vision</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

@@ -1,5 +1,3 @@
-import { sendMailViaSmtp } from "./lib/smtp";
-
 function json(status: number, payload: unknown) {
   return Response.json(payload, { status });
 }
@@ -55,6 +53,7 @@ export default async function handler(req: Request): Promise<Response> {
     ].join("\n");
 
     try {
+      const { sendMailViaSmtp } = require("./lib/smtp.cjs");
       await sendMailViaSmtp({
         from: mailbox,
         to: mailbox,

@@ -560,6 +560,45 @@ export function CelestraPage() {
         </div>
       </section>
 
+      {/* Under Development Banner */}
+      <section className="py-10 sm:py-14 lg:py-16 bg-black">
+        <div className="max-w-3xl mx-auto text-center px-4 sm:px-6">
+          <div
+            className="p-6 sm:p-8 lg:p-12 animate-on-scroll"
+            style={{ border: "1px solid rgba(184, 151, 90, 0.25)" }}
+          >
+            <div
+              className="gold-divider"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent, #b8975a, transparent)",
+              }}
+            />
+            <h3
+              className="font-display text-xl sm:text-2xl mt-4 sm:mt-6 mb-3 sm:mb-4"
+              style={{
+                fontFamily: "Instrument Serif, Georgia, serif",
+                fontWeight: 400,
+                color: "#b8975a",
+              }}
+            >
+              Coming Soon
+            </h3>
+            <p className="font-body text-ivory-muted/65 text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
+              Celéstra hotels are currently under development at premier business
+              and leisure destinations across India and beyond.
+            </p>
+            <Link
+              to="/contact"
+              className="btn-gold text-sm w-full sm:w-auto inline-block text-center"
+              style={{ borderColor: "#b8975a", color: "#b8975a" }}
+            >
+              <span>Register Your Interest</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Cross Navigation */}
       <section className="py-10 sm:py-12 bg-black border-t border-gold/10">
         <div className="max-w-4xl mx-auto text-center px-6">

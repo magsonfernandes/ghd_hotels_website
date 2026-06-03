@@ -50,9 +50,11 @@ export function AboutPage() {
   const missionRef = useRef<HTMLElement | null>(null);
   const valuesRef = useRef<HTMLElement | null>(null);
   const quoteRef = useRef<HTMLElement | null>(null);
+  const quoteContentRef = useRef<HTMLDivElement | null>(null);
   const [missionFade, setMissionFade] = useState(0);
   const [valuesFade, setValuesFade] = useState(0);
   const [quoteFade, setQuoteFade] = useState(0);
+  const [quoteParallax, setQuoteParallax] = useState(0);
 
   useEffect(() => {
     document.title = "About GHD Hotels – Our Philosophy & Vision";
@@ -86,6 +88,11 @@ export function AboutPage() {
       if (missionRef.current) setMissionFade(getSectionFade(missionRef.current, vh));
       if (valuesRef.current) setValuesFade(getSectionFade(valuesRef.current, vh));
       if (quoteRef.current) setQuoteFade(getSectionFade(quoteRef.current, vh));
+      if (quoteContentRef.current) {
+        const rect = quoteContentRef.current.getBoundingClientRect();
+        const centerDelta = rect.top + rect.height / 2 - vh * 0.5;
+        setQuoteParallax(clamp(centerDelta * -0.06, -28, 28));
+      }
     };
 
     onScroll();
@@ -267,19 +274,25 @@ export function AboutPage() {
               "linear-gradient(to bottom, rgba(15,15,15,0.7) 0%, rgba(15,15,15,0.5) 50%, rgba(15,15,15,0.75) 100%)",
           }}
         />
-        <div
-          className="about-quote-section__content relative z-10 w-full text-center"
-          style={{ opacity: quoteFade, willChange: "opacity" }}
-        >
-          <div className="gold-divider animate-on-scroll" />
-          <blockquote
-            className="about-quote-statement animate-on-scroll delay-200"
-            style={{ margin: "1.5rem 0" }}
+        <div className="about-quote-section__content relative z-10 w-full text-center">
+          <div
+            ref={quoteContentRef}
+            style={{
+              opacity: quoteFade,
+              transform: `translate3d(0, ${quoteParallax}px, 0)`,
+              willChange: "opacity, transform",
+            }}
           >
-            "Hospitality is not an amenity. It is an art form — one that we at
-            GHD Hotels are dedicated to mastering, one property at a time."
-          </blockquote>
-          <div className="gold-divider animate-on-scroll delay-300" />
+            <div className="gold-divider animate-on-scroll" />
+            <blockquote
+              className="about-quote-statement animate-on-scroll delay-200"
+              style={{ margin: "1.5rem 0" }}
+            >
+              "Hospitality is not an amenity. It is an art form — one that we at
+              GHD Hotels are dedicated to mastering, one property at a time."
+            </blockquote>
+            <div className="gold-divider animate-on-scroll delay-300" />
+          </div>
         </div>
       </section>
 
