@@ -1,5 +1,3 @@
-const { createRequire } = require("node:module");
-const require = createRequire(__filename);
 const nodemailer = require("nodemailer");
 
 function parsePort(raw, fallback) {
