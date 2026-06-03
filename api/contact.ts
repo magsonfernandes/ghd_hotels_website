@@ -49,7 +49,11 @@ export default async function handler(
       });
     } catch (err) {
       if (err instanceof Error && /Missing SMTP_PASS/i.test(err.message)) {
-        return res.status(400).json({ ok: false, error: "Missing SMTP_PASS" });
+        return res.status(400).json({
+          ok: false,
+          error: "Missing SMTP_PASS",
+          hint: "Add SMTP_PASS (and SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, MAILBOX) in Vercel → Project → Settings → Environment Variables for Production, then redeploy. Quote the password if it contains #.",
+        });
       }
       const msg =
         err instanceof Error ? err.message : "Failed to send email";

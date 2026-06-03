@@ -66,7 +66,11 @@ export function formatContactFetchFailure(requestUrl: string, err: unknown): str
   const name = err instanceof Error ? err.name : "Error";
   const msg = err instanceof Error ? err.message : String(err);
   const lines = [`POST ${requestUrl}`, `${name}: ${msg}`];
-  if (/failed to fetch|networkerror|load failed/i.test(msg)) {
+  if (name === "AbortError" || /aborted/i.test(msg)) {
+    lines.push(
+      "The request timed out (~45s) before the mail server responded. The API is likely waiting on SMTP to mail.ghdhotels.in—that host is often reachable only from your production server, not from a laptop or Vercel. Check the error above after retrying; it should appear faster after a server update.",
+    );
+  } else if (/failed to fetch|networkerror|load failed/i.test(msg)) {
     lines.push(
       "The browser could not reach the server (offline, wrong URL, mixed HTTP/HTTPS, CORS, or blocked request).",
     );

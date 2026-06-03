@@ -5,6 +5,9 @@ const require = createRequire(import.meta.url);
 const nodemailerMod = require("nodemailer") as typeof import("nodemailer");
 const nodemailer = nodemailerMod.default ?? nodemailerMod;
 
+const MAIL_CANONICAL_HOST = "mail.ghdhotels.in";
+/** cPanel SMTP host when mail.* DNS wrongly points at the public website (e.g. Vercel). */
+const DEFAULT_SMTP_CONNECT_HOST = "d16211.bom1.stableserver.net";
 export type SmtpConfig = {
   host: string;
   port: number;
@@ -12,6 +15,8 @@ export type SmtpConfig = {
   user: string;
   pass: string;
   authMethod?: "LOGIN" | "PLAIN";
+  /** TLS SNI hostname (often mail.domain); may differ from TCP connect host. */
+  tlsServername: string;
 };
 
 function parsePort(raw: string | undefined, fallback: number): number {
@@ -56,8 +61,41 @@ function parseAuthMethod(
   return undefined;
 }
 
+/**
+ * On ghdhotels.in, mail.ghdhotels.in is a CNAME to the public site (Vercel), not the
+ * cPanel SMTP host. Connect to the hosting SMTP server; keep TLS SNI as mail.*.
+ * Set SMTP_CONNECT_HOST=mail.ghdhotels.in after fixing DNS if you need the literal name.
+ */
+function resolveSmtpConnectHost(requestedHost: string): {
+  connectHost: string;
+  tlsServername: string;
+} {
+  const tlsServername =
+    normalizeCredential(process.env.SMTP_TLS_SERVERNAME || "") ||
+    MAIL_CANONICAL_HOST;
+
+  const connectOverride = normalizeCredential(
+    process.env.SMTP_CONNECT_HOST || "",
+  );
+  if (connectOverride) {
+    return { connectHost: connectOverride, tlsServername };
+  }
+
+  if (requestedHost === MAIL_CANONICAL_HOST) {
+    const fallback =
+      normalizeCredential(process.env.SMTP_HOST_FALLBACK || "") ||
+      DEFAULT_SMTP_CONNECT_HOST;
+    return { connectHost: fallback, tlsServername };
+  }
+
+  return { connectHost: requestedHost, tlsServername };
+}
+
 export function getSmtpConfigFromEnv(): SmtpConfig {
-  const host = normalizeCredential(process.env.SMTP_HOST || "mail.ghdhotels.in");
+  const requestedHost = normalizeCredential(
+    process.env.SMTP_HOST || MAIL_CANONICAL_HOST,
+  );
+  const { connectHost, tlsServername } = resolveSmtpConnectHost(requestedHost);
   const port = parsePort(process.env.SMTP_PORT, 465);
   const secure = parseSecure(process.env.SMTP_SECURE, port);
   const user = normalizeCredential(process.env.SMTP_USER || "test@ghdhotels.in");
@@ -68,7 +106,63 @@ export function getSmtpConfigFromEnv(): SmtpConfig {
     throw new Error("Missing SMTP_PASS");
   }
 
-  return { host, port, secure, user, pass, authMethod };
+  return {
+    host: connectHost,
+    port,
+    secure,
+    user,
+    pass,
+    authMethod,
+    tlsServername,
+  };
+}
+
+const SMTP_CONNECT_MS = 10_000;
+const SMTP_ATTEMPT_MS = 14_000;
+
+function errCode(err: unknown): string {
+  if (err && typeof err === "object" && "code" in err) {
+    return String((err as { code: unknown }).code);
+  }
+  return "";
+}
+
+function isConnectionError(err: unknown): boolean {
+  const m = err instanceof Error ? err.message : String(err);
+  const code = errCode(err);
+  return /ETIMEDOUT|ECONNREFUSED|ECONNRESET|ESOCKET|ETIMEOUT|ENOTFOUND|EHOSTUNREACH|ECONNABORTED|timed out|timeout/i.test(
+    `${code} ${m}`,
+  );
+}
+
+async function sendMailAttempt(
+  transport: ReturnType<typeof nodemailer.createTransport>,
+  mail: SendMailOptions,
+): Promise<void> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    await Promise.race([
+      transport.sendMail(mail),
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => {
+          transport.close();
+          reject(
+            new Error(`SMTP timed out after ${SMTP_ATTEMPT_MS / 1000}s`),
+          );
+        }, SMTP_ATTEMPT_MS);
+      }),
+    ]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
+function connectionErrorMessage(cfg: SmtpConfig, err: unknown): string {
+  const detail = err instanceof Error ? err.message : String(err);
+  return (
+    `Cannot reach mail server ${cfg.host}:${cfg.port} (${detail}). ` +
+    `Check SMTP_CONNECT_HOST / SMTP_HOST and outbound SMTP from this server.`
+  );
 }
 
 export function createSmtpTransport(cfg: SmtpConfig) {
@@ -77,14 +171,15 @@ export function createSmtpTransport(cfg: SmtpConfig) {
     port: cfg.port,
     secure: cfg.secure,
     ...(cfg.authMethod ? { authMethod: cfg.authMethod } : {}),
-    connectionTimeout: 25_000,
-    socketTimeout: 25_000,
+    connectionTimeout: SMTP_CONNECT_MS,
+    greetingTimeout: SMTP_CONNECT_MS,
+    socketTimeout: SMTP_CONNECT_MS,
     auth: {
       user: cfg.user,
       pass: cfg.pass,
     },
     tls: {
-      servername: cfg.host,
+      servername: cfg.tlsServername,
     },
     ...(cfg.port === 587 && !cfg.secure ? { requireTLS: true } : {}),
   });
@@ -98,7 +193,15 @@ function isAuth535(err: unknown): boolean {
 }
 
 function configKey(c: SmtpConfig): string {
-  return `${c.host}|${c.port}|${c.secure}|${c.user}|${c.authMethod ?? "default"}`;
+  return `${c.host}|${c.tlsServername}|${c.port}|${c.secure}|${c.user}|${c.authMethod ?? "default"}`;
+}
+
+function authFailureMessage(err: unknown): string {
+  const detail = err instanceof Error ? err.message : String(err);
+  return (
+    `SMTP login failed (${detail}). Verify SMTP_USER and SMTP_PASS in .env match ` +
+    `the mailbox password in your hosting panel (Email Accounts). Quote passwords that contain #.`
+  );
 }
 
 /** Build a small ordered list of auth variants; many shared hosts accept only LOGIN or only full-email / local-part. */
@@ -121,13 +224,11 @@ function smtpAuthVariants(base: SmtpConfig): SmtpConfig[] {
   }
 
   push({ ...base, authMethod: "LOGIN" });
-  push({ ...base, authMethod: "PLAIN" });
 
   const at = base.user.indexOf("@");
   if (at > 0) {
     const local = base.user.slice(0, at);
     push({ ...base, user: local, authMethod: "LOGIN" });
-    push({ ...base, user: local, authMethod: "PLAIN" });
   }
 
   return out;
@@ -141,14 +242,17 @@ async function trySendWithVariants(
   for (const cfg of variants) {
     const transport = createSmtpTransport(cfg);
     try {
-      await transport.sendMail(mail);
+      await sendMailAttempt(transport, mail);
       return true;
     } catch (e) {
+      if (isConnectionError(e)) {
+        throw new Error(connectionErrorMessage(cfg, e));
+      }
       if (!isAuth535(e)) throw e;
       last535 = e;
     }
   }
-  if (last535) throw last535;
+  if (last535) throw new Error(authFailureMessage(last535));
   return false;
 }
 
@@ -166,6 +270,7 @@ export async function sendMailViaSmtp(
   try {
     if (await trySendWithVariants(primary, mail)) return;
   } catch (e) {
+    if (isConnectionError(e)) throw e;
     if (!isAuth535(e)) throw e;
     lastAuthErr = e;
   }
@@ -181,6 +286,6 @@ export async function sendMailViaSmtp(
     return;
   }
 
-  if (lastAuthErr) throw lastAuthErr;
+  if (lastAuthErr) throw new Error(authFailureMessage(lastAuthErr));
   throw new Error("SMTP authentication failed after all attempts");
 }

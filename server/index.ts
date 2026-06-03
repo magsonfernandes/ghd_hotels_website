@@ -16,6 +16,7 @@ dotenv.config({ path: path.join(repoRoot, ".env.local"), override: true });
 const distDir = path.join(repoRoot, "src/frontend/dist");
 
 const mailbox = String(process.env.MAILBOX || "test@ghdhotels.in").trim();
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 },
@@ -34,7 +35,10 @@ app.use(
 app.use(express.json({ limit: "256kb" }));
 
 app.get("/api/health", (_req, res) => {
-  return res.status(200).json({ ok: true });
+  const pass = String(process.env.SMTP_PASS ?? "").trim();
+  const smtpConfigured =
+    pass.length > 0 && pass !== "__SET_THIS_ON_THE_SERVER__";
+  return res.status(200).json({ ok: true, smtpConfigured });
 });
 
 // ─── Rates API (public read + admin write) ───────────────────────────
@@ -258,6 +262,10 @@ app.listen(port, () => {
     console.warn("[rates] Initial load failed", err);
   }
   console.log(`Mail + site server listening on http://127.0.0.1:${port}`);
+  console.warn(
+    "[mail] SMTP connects via cPanel (mail.ghdhotels.in DNS points at the website). " +
+      "Fix DNS: A record mail.ghdhotels.in → hosting IP (209.42.28.69).",
+  );
   if (!adminTokenEnv()) {
     console.warn(
       "[rates] ADMIN_TOKEN is not set — /api/admin/rates will respond with 503.",
