@@ -3,5 +3,15 @@
   "installCommand": "pnpm install",
   "buildCommand": "pnpm --filter @caffeine/template-frontend build",
   "outputDirectory": "src/frontend/dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "functions": {
+    "api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
 }

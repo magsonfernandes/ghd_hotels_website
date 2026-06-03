@@ -1,4 +1,7 @@
-import { SEED_RATES } from "../server/rates.ts";
+import { SEED_RATES } from "./lib/seed-rates.js";
+import { nodeRuntime } from "./lib/runtime.js";
+
+export const config = nodeRuntime;
 
 export default function handler(req: Request): Response {
   if (req.method !== "GET") {
