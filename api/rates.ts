@@ -1,5 +1,5 @@
-import { SEED_RATES } from "./lib/seed-rates.js";
-import { nodeRuntime } from "./lib/runtime.js";
+import { SEED_RATES } from "./lib/seed-rates";
+import { nodeRuntime } from "./lib/runtime";
 
 export const config = nodeRuntime;
 

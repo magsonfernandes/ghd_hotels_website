@@ -1,4 +1,4 @@
-import { nodeRuntime } from "./lib/runtime.js";
+import { nodeRuntime } from "./lib/runtime";
 
 export const config = nodeRuntime;
 

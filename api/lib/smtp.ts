@@ -1,4 +1,9 @@
-import nodemailer from "nodemailer";
+import { createRequire } from "node:module";
+import type { SendMailOptions } from "nodemailer";
+
+const require = createRequire(import.meta.url);
+const nodemailerMod = require("nodemailer") as typeof import("nodemailer");
+const nodemailer = nodemailerMod.default ?? nodemailerMod;
 
 export type SmtpConfig = {
   host: string;
@@ -130,7 +135,7 @@ function smtpAuthVariants(base: SmtpConfig): SmtpConfig[] {
 
 async function trySendWithVariants(
   variants: SmtpConfig[],
-  mail: nodemailer.SendMailOptions,
+  mail: SendMailOptions,
 ): Promise<boolean> {
   let last535: unknown;
   for (const cfg of variants) {
@@ -153,7 +158,7 @@ async function trySendWithVariants(
  * uses 465 but the host expects submission on 587, retries on 587+STARTTLS.
  */
 export async function sendMailViaSmtp(
-  mail: nodemailer.SendMailOptions,
+  mail: SendMailOptions,
 ): Promise<void> {
   const base = getSmtpConfigFromEnv();
   const primary = smtpAuthVariants(base);

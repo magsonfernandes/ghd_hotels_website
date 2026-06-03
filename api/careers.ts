@@ -1,5 +1,5 @@
-import { sendMailViaSmtp } from "./lib/smtp.js";
-import { nodeRuntime } from "./lib/runtime.js";
+import { sendMailViaSmtp } from "./lib/smtp";
+import { nodeRuntime } from "./lib/runtime";
 
 export const config = nodeRuntime;
 
