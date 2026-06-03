@@ -1,3 +1,4 @@
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { sendMailViaSmtp } from "./lib/smtp";
 
 type Body = {
@@ -7,24 +8,17 @@ type Body = {
   message?: string;
 };
 
-function json(status: number, payload: unknown) {
-  return Response.json(payload, { status });
-}
-
-export default async function handler(req: Request): Promise<Response> {
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse,
+) {
   try {
     if (req.method !== "POST") {
-      return json(405, { ok: false, error: "Method not allowed" });
+      return res.status(405).json({ ok: false, error: "Method not allowed" });
     }
 
     const mailbox = String(process.env.MAILBOX || "test@ghdhotels.in").trim();
-
-    let body: Body;
-    try {
-      body = (await req.json()) as Body;
-    } catch {
-      return json(400, { ok: false, error: "Invalid JSON body" });
-    }
+    const body = (req.body ?? {}) as Body;
 
     const name = String(body.name ?? "").trim();
     const email = String(body.email ?? "").trim();
@@ -32,7 +26,7 @@ export default async function handler(req: Request): Promise<Response> {
     const message = String(body.message ?? "").trim();
 
     if (!name || !email || !message) {
-      return json(400, { ok: false, error: "Missing required fields" });
+      return res.status(400).json({ ok: false, error: "Missing required fields" });
     }
 
     const subject = `New enquiry from ${name}`;
@@ -55,18 +49,18 @@ export default async function handler(req: Request): Promise<Response> {
       });
     } catch (err) {
       if (err instanceof Error && /Missing SMTP_PASS/i.test(err.message)) {
-        return json(400, { ok: false, error: "Missing SMTP_PASS" });
+        return res.status(400).json({ ok: false, error: "Missing SMTP_PASS" });
       }
       const msg =
         err instanceof Error ? err.message : "Failed to send email";
       console.error("[api/contact] send failed:", msg);
-      return json(500, { ok: false, error: msg });
+      return res.status(500).json({ ok: false, error: msg });
     }
 
-    return json(200, { ok: true });
+    return res.status(200).json({ ok: true });
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Server error";
     console.error("[api/contact] unhandled:", err);
-    return json(500, { ok: false, error: msg });
+    return res.status(500).json({ ok: false, error: msg });
   }
 }
