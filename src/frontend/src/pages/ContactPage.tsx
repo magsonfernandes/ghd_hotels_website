@@ -217,9 +217,12 @@ export function ContactPage() {
 
             <div className="animate-on-scroll-right delay-200 min-w-0">
               <div className="border border-gold/15 p-5 sm:p-8 md:p-10">
-                <h3 className="pillar-title text-ivory mb-8">
+                <h3 className="pillar-title text-ivory mb-2">
                   Send Us a Message
                 </h3>
+                <p className="body-refined-lg text-ivory-muted/55 mb-8">
+                  For enquiries, partnerships, or investment discussions.
+                </p>
 
                 {status === "success" ? (
                   <div className="border border-gold/30 p-8 text-center">
