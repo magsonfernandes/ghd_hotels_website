@@ -15,6 +15,7 @@ import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
 import { ResponsiveImage } from "../components/ResponsiveImage";
 import { HERO_IMAGE_SIZES, SAMRAYA_HERO_VIDEO } from "../lib/optimizedMedia";
+import { SAMRAYA_PROPERTY_GALLERY } from "../lib/samrayaGallery";
 import { heroImageTitleStyle } from "../lib/heroTitleStyle";
 import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 
@@ -57,43 +58,7 @@ const features = [
   },
 ];
 
-const propertyGallery = {
-  title: "Samraya Dodamarg",
-  images: [
-    {
-      folderLabel: "Exterior",
-      src: "/SAMRAYA/Exterior/DJI_20260227174647_0419_D.JPG",
-    },
-    {
-      folderLabel: "Exterior",
-      src: "/SAMRAYA/Exterior/DJI_20260227174028_0405_D.JPG",
-    },
-    {
-      folderLabel: "1 BHK",
-      src: "/SAMRAYA/1 BHK/YAD08303.JPG",
-    },
-    {
-      folderLabel: "1 BHK",
-      src: "/SAMRAYA/1 BHK/YAD08283.JPG",
-    },
-    {
-      folderLabel: "2 BHK",
-      src: "/SAMRAYA/2 BHK/YAD08068.JPG",
-    },
-    {
-      folderLabel: "2 BHK",
-      src: "/SAMRAYA/2 BHK/YAD07957.JPG",
-    },
-    {
-      folderLabel: "Villa",
-      src: "/SAMRAYA/Villa/YAD07641.JPG",
-    },
-    {
-      folderLabel: "Villa",
-      src: "/SAMRAYA/Villa/YAD07569.JPG",
-    },
-  ],
-};
+const propertyGallery = SAMRAYA_PROPERTY_GALLERY;
 
 const SAMRAYA_PHILOSOPHY = {
   darkOverlayOpacity: 0.42,
@@ -585,8 +550,11 @@ export function SamrayaPage() {
                           propertiesPrevIndex ?? propertiesImageIndex
                         ]?.src ?? PROPERTIES_IMAGES[0]?.src ?? ""
                       }
-                      alt=""
-                      aria-hidden
+                      alt={
+                        PROPERTIES_IMAGES[
+                          propertiesPrevIndex ?? propertiesImageIndex
+                        ]?.alt ?? PROPERTIES_IMAGES[0]?.alt ?? ""
+                      }
                       className="nivaara-property-carousel__slide"
                       sizes="(max-width: 1024px) 100vw, 1100px"
                       draggable={false}
@@ -599,28 +567,17 @@ export function SamrayaPage() {
                           PROPERTIES_IMAGES[0]?.src ??
                           ""
                         }
-                        alt=""
-                        aria-hidden
+                        alt={
+                          PROPERTIES_IMAGES[propertiesImageIndex]?.alt ??
+                          PROPERTIES_IMAGES[0]?.alt ??
+                          ""
+                        }
                         className="nivaara-property-carousel__slide nivaara-property-carousel__slide--incoming"
                         sizes="(max-width: 1024px) 100vw, 1100px"
                         priority
                         draggable={false}
                       />
                     )}
-
-                    <div className="absolute top-3 right-3">
-                      <div
-                        className="inline-flex items-center self-start px-3 py-1 text-[11px] tracking-[0.22em] uppercase border"
-                        style={{
-                          borderColor: "rgba(255,255,255,0.18)",
-                          color: "rgba(255,255,255,0.86)",
-                          backgroundColor: "rgba(0,0,0,0.35)",
-                          backdropFilter: "blur(6px)",
-                        }}
-                      >
-                        {PROPERTIES_IMAGES[propertiesImageIndex]?.folderLabel ?? ""}
-                      </div>
-                    </div>
                   </div>
 
                   {/* Left / right arrows */}

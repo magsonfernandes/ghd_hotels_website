@@ -52,6 +52,33 @@ export function formatContactFetchFailure(requestUrl: string, err: unknown): str
   return lines.join("\n");
 }
 
+export function mailApiHtmlError(requestUrl: string): string {
+  return [
+    `GET/POST ${requestUrl}`,
+    "The server returned a web page (HTML) instead of the mail API.",
+    "Local dev: run pnpm dev:stack (Vite + API on port 8788).",
+    "Production: run the Node server (pnpm start) and proxy /api/* to it.",
+  ].join("\n");
+}
+
+export async function readMailApiJson<T extends { ok?: boolean; error?: string }>(
+  res: Response,
+  requestUrl: string,
+): Promise<T> {
+  const raw = await res.text();
+  const ct = res.headers.get("content-type") || "";
+  if (looksLikeHtml(raw, ct)) {
+    throw new Error(mailApiHtmlError(requestUrl));
+  }
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    throw new Error(
+      `Invalid JSON from server (HTTP ${res.status}). Is the mail API running?`,
+    );
+  }
+}
+
 export function parseContactResponseJson(
   rawBody: string,
   contentType: string,

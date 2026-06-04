@@ -9,20 +9,9 @@ export function isSmtpPassConfigured(): boolean {
 }
 
 export function missingSmtpPassHint(options?: {
-  platform: "vercel" | "node";
   envFilePath?: string;
   envFileExists?: boolean;
 }): string {
-  const platform = options?.platform ?? (process.env.VERCEL ? "vercel" : "node");
-
-  if (platform === "vercel") {
-    return (
-      "SMTP_PASS is not set on Vercel. Open Vercel → Project → Settings → Environment Variables, " +
-      "add SMTP_PASS (and MAILBOX, SMTP_HOST, SMTP_PORT=465, SMTP_SECURE=true, SMTP_USER) for Production, " +
-      "then Redeploy. Use quotes in .env only; in the Vercel UI paste the password as one value."
-    );
-  }
-
   const envPath = options?.envFilePath ?? ".env";
   const exists = options?.envFileExists ?? false;
   if (!exists) {
@@ -40,11 +29,10 @@ export function missingSmtpPassHint(options?: {
 }
 
 export function mailHealthPayload(repoRoot?: string): Record<string, unknown> {
-  const platform = process.env.VERCEL ? "vercel" : "node";
   const smtpConfigured = isSmtpPassConfigured();
   const payload: Record<string, unknown> = {
     ok: true,
-    platform,
+    platform: "node",
     smtpConfigured,
   };
 
@@ -56,7 +44,6 @@ export function mailHealthPayload(repoRoot?: string): Record<string, unknown> {
 
   if (!smtpConfigured) {
     payload.hint = missingSmtpPassHint({
-      platform: platform as "vercel" | "node",
       envFilePath: repoRoot ? path.join(repoRoot, ".env") : ".env",
       envFileExists: repoRoot ? fs.existsSync(path.join(repoRoot, ".env")) : undefined,
     });

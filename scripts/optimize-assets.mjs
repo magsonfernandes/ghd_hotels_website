@@ -209,7 +209,7 @@ async function main() {
   }
   console.log("\n");
 
-  if (hasFfmpeg()) {
+  if (hasFfmpeg() && !onlyImages?.length) {
     console.log("Optimizing hero videos…");
     const videoCandidates = [
       {

@@ -1,7 +1,11 @@
+import path from "node:path";
 import { fileURLToPath, URL } from "url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import environment from "vite-plugin-environment";
+
+const frontendDir = fileURLToPath(new URL(".", import.meta.url));
+const repoRoot = path.resolve(frontendDir, "../..");
 
 const ii_url =
   process.env.DFX_NETWORK === "local"
@@ -13,6 +17,7 @@ process.env.STORAGE_GATEWAY_URL =
   process.env.STORAGE_GATEWAY_URL || "https://blob.caffeine.ai";
 
 export default defineConfig({
+  envDir: repoRoot,
   logLevel: "info",
   build: {
     emptyOutDir: true,
@@ -38,11 +43,7 @@ export default defineConfig({
       interval: 100,
     },
     proxy: {
-      "/api/contact": {
-        target: process.env.MAIL_SERVER_URL || "http://127.0.0.1:8788",
-        changeOrigin: true,
-      },
-      "/api/careers": {
+      "/api": {
         target: process.env.MAIL_SERVER_URL || "http://127.0.0.1:8788",
         changeOrigin: true,
       },

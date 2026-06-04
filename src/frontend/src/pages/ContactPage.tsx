@@ -1,6 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, MapPin, Phone } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import {
+  CONTACT_IMAGE_CAPTCHA_LENGTH,
+  ContactImageCaptcha,
+} from "../components/ContactImageCaptcha";
 import { Footer } from "../components/Footer";
 import { HeroSection } from "../components/HeroSection";
 import { heroImageTitleStyle } from "../lib/heroTitleStyle";
@@ -8,6 +12,7 @@ import { useScrollAnimationAll } from "../hooks/useScrollAnimation";
 import {
   formatContactFetchFailure,
   formatContactSubmitFailure,
+  mailApiHtmlError,
   parseContactResponseJson,
 } from "../lib/contactFormDiagnostics";
 import { mailApiUrl } from "../lib/mailApi";
@@ -38,6 +43,22 @@ export function ContactPage() {
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaAnswer, setCaptchaAnswer] = useState("");
+  const [captchaKey, setCaptchaKey] = useState(0);
+
+  const formReady = Boolean(
+    form.name.trim() && form.email.trim() && form.message.trim(),
+  );
+  const captchaReady =
+    captchaAnswer.length === CONTACT_IMAGE_CAPTCHA_LENGTH &&
+    Boolean(captchaToken);
+  const canSend = formReady && captchaReady && status !== "loading";
+
+  const handleCaptchaLoadError = useCallback((message: string) => {
+    setErrorMsg(message);
+    setStatus("error");
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -49,6 +70,11 @@ export function ContactPage() {
     e.preventDefault();
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       setErrorMsg("Please fill in all required fields.");
+      setStatus("error");
+      return;
+    }
+    if (!captchaToken || captchaAnswer.length !== CONTACT_IMAGE_CAPTCHA_LENGTH) {
+      setErrorMsg("Enter the numbers shown in the verification image.");
       setStatus("error");
       return;
     }
@@ -68,15 +94,23 @@ export function ContactPage() {
           email: form.email.trim(),
           phone: form.phone.trim(),
           message: form.message.trim(),
+          captchaToken,
+          captchaAnswer,
         }),
         signal: controller.signal,
       });
 
-      const contentType = res.headers.get("content-type") || "";
       const raw = await res.text();
-      const data =
+      const contentType = res.headers.get("content-type") || "";
+      let data =
         parseContactResponseJson(raw, contentType) ??
         ({} as { ok?: boolean; error?: string });
+      if (
+        !data.error &&
+        (raw.trim().startsWith("<!") || contentType.includes("text/html"))
+      ) {
+        throw new Error(mailApiHtmlError(url));
+      }
 
       if (!res.ok || data.ok !== true) {
         throw new Error(
@@ -89,6 +123,8 @@ export function ContactPage() {
       }
 
       setForm({ name: "", email: "", phone: "", message: "" });
+      setCaptchaToken("");
+      setCaptchaAnswer("");
       setStatus("success");
     } catch (err) {
       const isNetwork =
@@ -105,6 +141,13 @@ export function ContactPage() {
             : "Failed to send message.",
       );
       setStatus("error");
+      setCaptchaAnswer("");
+      if (
+        err instanceof Error &&
+        /captcha|numbers|verification|expired/i.test(err.message)
+      ) {
+        setCaptchaKey((k) => k + 1);
+      }
     } finally {
       window.clearTimeout(timeoutId);
     }
@@ -323,6 +366,15 @@ export function ContactPage() {
                         />
                       </div>
 
+                      <ContactImageCaptcha
+                        key={captchaKey}
+                        active={formReady}
+                        answer={captchaAnswer}
+                        onAnswerChange={setCaptchaAnswer}
+                        onTokenChange={setCaptchaToken}
+                        onLoadError={handleCaptchaLoadError}
+                      />
+
                       {status === "error" && errorMsg && (
                         <div className="border border-red-500/30 px-4 py-3 text-left">
                           <p className="font-body text-red-300 text-sm font-medium mb-2">
@@ -336,7 +388,7 @@ export function ContactPage() {
 
                       <button
                         type="submit"
-                        disabled={status === "loading"}
+                        disabled={!canSend}
                         className="btn-gold-filled w-full mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
                       >
                         {status === "loading" ? (
@@ -344,6 +396,10 @@ export function ContactPage() {
                             <span className="w-4 h-4 border border-charcoal/40 border-t-charcoal rounded-full animate-spin" />
                             Sending...
                           </span>
+                        ) : !formReady ? (
+                          "Fill in the form to continue"
+                        ) : !captchaReady ? (
+                          "Enter the numbers from the image"
                         ) : (
                           "Send Message"
                         )}

@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import multer from "multer";
 import { isSmtpPassConfigured, mailHealthPayload, missingSmtpPassHint } from "../lib/mailEnv.ts";
 import { sendMailViaSmtp } from "../lib/smtp.ts";
+import { createImageCaptcha, verifyImageCaptcha } from "../lib/imageCaptcha.ts";
 import { loadRates, saveRates } from "./rates.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -16,7 +17,8 @@ dotenv.config({ path: path.join(repoRoot, ".env") });
 dotenv.config({ path: path.join(repoRoot, ".env.local"), override: true });
 const distDir = path.join(repoRoot, "src/frontend/dist");
 
-const mailbox = String(process.env.MAILBOX || "test@ghdhotels.in").trim();
+const mailbox = String(process.env.MAILBOX || "website@ghdhotels.in").trim();
+const careersTo = String(process.env.CAREERS_TO || "hr@ghdhotels.in").trim();
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -134,11 +136,28 @@ app.put("/api/admin/rates", (req, res) => {
   }
 });
 
+app.get("/api/captcha", (_req, res) => {
+  try {
+    const { token, imageDataUrl } = createImageCaptcha();
+    return res.status(200).json({ ok: true, token, imageDataUrl });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Failed to create CAPTCHA";
+    return res.status(500).json({ ok: false, error: msg });
+  }
+});
+
 app.post("/api/contact", async (req, res) => {
   const name = String(req.body?.name ?? "").trim();
   const email = String(req.body?.email ?? "").trim();
   const phone = String(req.body?.phone ?? "").trim();
   const message = String(req.body?.message ?? "").trim();
+  const captchaToken = String(req.body?.captchaToken ?? "").trim();
+  const captchaAnswer = String(req.body?.captchaAnswer ?? "").trim();
+
+  const captcha = verifyImageCaptcha(captchaToken, captchaAnswer);
+  if (!captcha.ok) {
+    return res.status(400).json({ ok: false, error: captcha.error });
+  }
 
   if (!name || !email || !message) {
     return res.status(400).json({ ok: false, error: "Missing required fields" });
@@ -168,7 +187,6 @@ app.post("/api/contact", async (req, res) => {
         ok: false,
         error: "Missing SMTP_PASS",
         hint: missingSmtpPassHint({
-          platform: "node",
           envFilePath: path.join(repoRoot, ".env"),
           envFileExists: fs.existsSync(path.join(repoRoot, ".env")),
         }),
@@ -220,7 +238,7 @@ app.post("/api/careers", upload.single("cv"), async (req, res) => {
   try {
     await sendMailViaSmtp({
       from: mailbox,
-      to: mailbox,
+      to: careersTo,
       subject,
       text,
       replyTo: email,
@@ -238,7 +256,6 @@ app.post("/api/careers", upload.single("cv"), async (req, res) => {
         ok: false,
         error: "Missing SMTP_PASS",
         hint: missingSmtpPassHint({
-          platform: "node",
           envFilePath: path.join(repoRoot, ".env"),
           envFileExists: fs.existsSync(path.join(repoRoot, ".env")),
         }),
@@ -279,7 +296,6 @@ app.listen(port, () => {
   if (!isSmtpPassConfigured()) {
     console.error(
       `[mail] SMTP_PASS is not configured — contact and careers forms will return 400. ${missingSmtpPassHint({
-        platform: "node",
         envFilePath: path.join(repoRoot, ".env"),
         envFileExists: fs.existsSync(path.join(repoRoot, ".env")),
       })}`,

@@ -11,3 +11,4 @@ dist/
 .vite/
 **/.vite/
 data/
+.vercel/

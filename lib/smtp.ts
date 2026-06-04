@@ -6,7 +6,7 @@ const nodemailerMod = require("nodemailer") as typeof import("nodemailer");
 const nodemailer = nodemailerMod.default ?? nodemailerMod;
 
 const MAIL_CANONICAL_HOST = "mail.ghdhotels.in";
-/** cPanel SMTP host when mail.* DNS wrongly points at the public website (e.g. Vercel). */
+/** cPanel SMTP host when mail.* DNS wrongly points at the public website IP. */
 const DEFAULT_SMTP_CONNECT_HOST = "d16211.bom1.stableserver.net";
 export type SmtpConfig = {
   host: string;
@@ -62,7 +62,7 @@ function parseAuthMethod(
 }
 
 /**
- * On ghdhotels.in, mail.ghdhotels.in is a CNAME to the public site (Vercel), not the
+ * On ghdhotels.in, mail.ghdhotels.in may CNAME to the public site IP, not the
  * cPanel SMTP host. Connect to the hosting SMTP server; keep TLS SNI as mail.*.
  * Set SMTP_CONNECT_HOST=mail.ghdhotels.in after fixing DNS if you need the literal name.
  */
@@ -98,7 +98,7 @@ export function getSmtpConfigFromEnv(): SmtpConfig {
   const { connectHost, tlsServername } = resolveSmtpConnectHost(requestedHost);
   const port = parsePort(process.env.SMTP_PORT, 465);
   const secure = parseSecure(process.env.SMTP_SECURE, port);
-  const user = normalizeCredential(process.env.SMTP_USER || "test@ghdhotels.in");
+  const user = normalizeCredential(process.env.SMTP_USER || "website@ghdhotels.in");
   const pass = normalizeCredential(process.env.SMTP_PASS || "");
   const authMethod = parseAuthMethod(process.env.SMTP_AUTH_METHOD);
 
