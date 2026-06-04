@@ -52,7 +52,8 @@ export default async function handler(
         return res.status(400).json({
           ok: false,
           error: "Missing SMTP_PASS",
-          hint: "Add SMTP_PASS (and SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, MAILBOX) in Vercel → Project → Settings → Environment Variables for Production, then redeploy. Quote the password if it contains #.",
+          hint:
+            "Add SMTP_PASS and other SMTP_* variables in Vercel Environment Variables (Production), then redeploy.",
         });
       }
       const msg =

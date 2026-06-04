@@ -39,7 +39,18 @@ server {
 }
 ```
 
-Health check: `GET /api/health` should return `{ "ok": true }`.
+Health check: `GET /api/health` should return `{ "ok": true, "platform": "node", "smtpConfigured": true }`.
+If `smtpConfigured` is `false`, the contact and careers forms will fail until you set `SMTP_PASS` in `.env` and restart.
+
+### Troubleshooting `Missing SMTP_PASS`
+
+1. **See which backend serves your site** — open `https://your-domain.com/api/health` in a browser:
+   - `"platform":"vercel"` → traffic goes to **Vercel**, not your Linux server. Either add SMTP variables in the [Vercel dashboard](https://vercel.com) (Project → Settings → Environment Variables → Production → **Redeploy**), or point DNS/nginx to your Node server (step 2).
+   - `"platform":"node"` → your **GHD server** is serving the API. Create `/path/to/ghd-hotels-magson/.env` from `.env.example`, set `SMTP_PASS="your-password"` (quotes if the password contains `#`), run `pnpm start` from the repo root, and ensure nginx proxies **all** paths including `/api/*` to port `8788`.
+
+2. **`.env` location** — must live next to `package.json` (repo root), not only in `src/frontend`. The app does not commit `.env`; copy it manually on each server.
+
+3. **PM2 / systemd** — if the process manager does not load `.env`, export variables in the unit file or use `EnvironmentFile=/path/to/.env`.
 
 ## Deploy on Vercel
 
@@ -54,12 +65,12 @@ The repo includes `vercel.json` for the Vite frontend plus serverless handlers i
 
 | Variable | Required for | Notes |
 |----------|----------------|-------|
-| `SMTP_HOST` | Contact & Careers mail | e.g. `mail.ghdhotels.in` |
-| `SMTP_PORT` | Contact & Careers mail | e.g. `465` |
-| `SMTP_SECURE` | Contact & Careers mail | `true` for port 465 |
-| `SMTP_USER` | Contact & Careers mail | SMTP login |
-| `SMTP_PASS` | Contact & Careers mail | SMTP password (mark as **Sensitive**) |
-| `MAILBOX` | Contact & Careers mail | Inbox that receives submissions |
+| `SMTP_HOST` | Contact & careers mail | e.g. `mail.ghdhotels.in` |
+| `SMTP_PORT` | Contact & careers mail | e.g. `465` |
+| `SMTP_SECURE` | Contact & careers mail | `true` for port 465 |
+| `SMTP_USER` | Contact & careers mail | `test@ghdhotels.in` |
+| `SMTP_PASS` | Contact & careers mail | Mailbox password (quote if it contains `#`) |
+| `MAILBOX` | Contact & careers mail | Inbox that receives submissions |
 
 5. Deploy. Your site will be at `https://<project>.vercel.app`.
 

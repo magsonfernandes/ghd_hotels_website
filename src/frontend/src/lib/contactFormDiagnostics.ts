@@ -1,10 +1,8 @@
-const BODY_SNIP = 600;
-
-function tryParseJson(raw: string): { ok?: boolean; error?: string } | null {
+function tryParseJson(raw: string): { ok?: boolean; error?: string; hint?: string } | null {
   const t = raw.trim();
   if (!t.startsWith("{") && !t.startsWith("[")) return null;
   try {
-    return JSON.parse(t) as { ok?: boolean; error?: string };
+    return JSON.parse(t) as { ok?: boolean; error?: string; hint?: string };
   } catch {
     return null;
   }
@@ -17,7 +15,6 @@ function looksLikeHtml(raw: string, contentType: string): boolean {
   return head.includes("<!doctype") || head.includes("<html");
 }
 
-/** Human-readable + technical lines for support / debugging. */
 export function formatContactSubmitFailure(input: {
   requestUrl: string;
   response: Response;
@@ -31,32 +28,13 @@ export function formatContactSubmitFailure(input: {
   lines.push(`POST ${requestUrl}`);
   lines.push(`HTTP ${response.status} ${response.statusText}`.trim());
 
-  if (parsed?.error) {
-    lines.push(`API: ${parsed.error}`);
-  }
+  if (parsed?.error) lines.push(`API: ${parsed.error}`);
+  if (parsed?.hint?.trim()) lines.push(parsed.hint.trim());
 
   if (looksLikeHtml(rawBody, ct)) {
     lines.push(
-      "The response was HTML (your website page), not the JSON mail API. The server is not routing POST /api/contact to the Node mail server—fix reverse proxy / deployment, or set VITE_MAIL_API_URL to the API base URL during build.",
+      "The response was HTML, not the mail API. Ensure POST /api/contact is proxied to the Node server or set VITE_MAIL_API_URL.",
     );
-    const oneLine = rawBody.replace(/\s+/g, " ").trim().slice(0, BODY_SNIP);
-    if (oneLine) lines.push(`HTML snippet: ${oneLine}${rawBody.length > BODY_SNIP ? "…" : ""}`);
-  } else if (!parsed?.error && rawBody.trim()) {
-    lines.push(
-      `Body: ${rawBody.trim().slice(0, BODY_SNIP)}${rawBody.length > BODY_SNIP ? "…" : ""}`,
-    );
-  }
-
-  if (response.status === 405) {
-    lines.push(
-      "405 often means the host only serves static files and rejects POST on /api/contact.",
-    );
-  }
-  if (response.status === 404) {
-    lines.push("404: /api/contact not found on this host.");
-  }
-  if (response.status === 502 || response.status === 504) {
-    lines.push("Bad gateway / timeout: proxy cannot reach the app or the app hung (e.g. SMTP connect stall).");
   }
 
   return lines.join("\n");
@@ -67,13 +45,9 @@ export function formatContactFetchFailure(requestUrl: string, err: unknown): str
   const msg = err instanceof Error ? err.message : String(err);
   const lines = [`POST ${requestUrl}`, `${name}: ${msg}`];
   if (name === "AbortError" || /aborted/i.test(msg)) {
-    lines.push(
-      "The request timed out (~45s) before the mail server responded. The API is likely waiting on SMTP to mail.ghdhotels.in—that host is often reachable only from your production server, not from a laptop or Vercel. Check the error above after retrying; it should appear faster after a server update.",
-    );
+    lines.push("The request timed out before the server responded.");
   } else if (/failed to fetch|networkerror|load failed/i.test(msg)) {
-    lines.push(
-      "The browser could not reach the server (offline, wrong URL, mixed HTTP/HTTPS, CORS, or blocked request).",
-    );
+    lines.push("The browser could not reach the server.");
   }
   return lines.join("\n");
 }
@@ -81,7 +55,7 @@ export function formatContactFetchFailure(requestUrl: string, err: unknown): str
 export function parseContactResponseJson(
   rawBody: string,
   contentType: string,
-): { ok?: boolean; error?: string } | null {
+): { ok?: boolean; error?: string; hint?: string } | null {
   const ct = contentType.toLowerCase();
   if (ct.includes("application/json") || rawBody.trim().startsWith("{")) {
     return tryParseJson(rawBody);

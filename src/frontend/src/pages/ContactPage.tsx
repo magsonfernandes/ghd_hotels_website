@@ -12,7 +12,6 @@ import {
 } from "../lib/contactFormDiagnostics";
 import { mailApiUrl } from "../lib/mailApi";
 
-/** Add your hero image under `public/` and set this, e.g. `"/assets/contact/hero.jpg"`. */
 const CONTACT_HERO_IMAGE: string | undefined = "/assets/generated/contact.png";
 
 interface FormState {
@@ -48,7 +47,7 @@ export function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.message) {
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       setErrorMsg("Please fill in all required fields.");
       setStatus("error");
       return;
@@ -58,18 +57,17 @@ export function ContactPage() {
 
     const url = mailApiUrl("/api/contact");
     const controller = new AbortController();
-    const timeoutMs = 45_000;
-    const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+    const timeoutId = window.setTimeout(() => controller.abort(), 30_000);
 
     try {
       const res = await fetch(url, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          message: form.message,
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          message: form.message.trim(),
         }),
         signal: controller.signal,
       });
@@ -77,24 +75,17 @@ export function ContactPage() {
       const contentType = res.headers.get("content-type") || "";
       const raw = await res.text();
       const data =
-        parseContactResponseJson(raw, contentType) ?? ({} as { ok?: boolean; error?: string });
+        parseContactResponseJson(raw, contentType) ??
+        ({} as { ok?: boolean; error?: string });
 
-      const success = res.ok && data.ok === true;
-      if (!success) {
-        const detail = formatContactSubmitFailure({
-          requestUrl: url,
-          response: res,
-          rawBody: raw,
-        });
-        console.error("[contact form] submit failed", {
-          url,
-          status: res.status,
-          statusText: res.statusText,
-          contentType,
-          parsed: data,
-          rawPrefix: raw.slice(0, 1500),
-        });
-        throw new Error(detail);
+      if (!res.ok || data.ok !== true) {
+        throw new Error(
+          formatContactSubmitFailure({
+            requestUrl: url,
+            response: res,
+            rawBody: raw,
+          }),
+        );
       }
 
       setForm({ name: "", email: "", phone: "", message: "" });
@@ -106,14 +97,13 @@ export function ContactPage() {
         (err instanceof Error &&
           /failed to fetch|networkerror|load failed|aborted/i.test(err.message));
 
-      const message = isNetwork
-        ? formatContactFetchFailure(url, err)
-        : err instanceof Error
-          ? err.message
-          : "Failed to send message.";
-
-      console.error("[contact form] error", { url, isNetwork, err });
-      setErrorMsg(message);
+      setErrorMsg(
+        isNetwork
+          ? formatContactFetchFailure(url, err)
+          : err instanceof Error
+            ? err.message
+            : "Failed to send message.",
+      );
       setStatus("error");
     } finally {
       window.clearTimeout(timeoutId);
@@ -133,11 +123,9 @@ export function ContactPage() {
         titleStyle={heroImageTitleStyle}
       />
 
-      {/* Contact Layout */}
       <section className="home-section-pad bg-black">
         <div className="max-w-6xl mx-auto px-4 sm:px-0">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10">
-            {/* Left: Info */}
             <div>
               <div className="gold-divider gold-divider-left animate-on-scroll" />
               <h2
@@ -202,7 +190,6 @@ export function ContactPage() {
                 </div>
               </div>
 
-              {/* Decorative Brand Links */}
               <div className="mt-8 pt-6 border-t border-gold/10 animate-on-scroll delay-400">
                 <p className="eyebrow eyebrow--gold-emphasis mb-4">
                   Our Brands
@@ -211,10 +198,7 @@ export function ContactPage() {
                   {[
                     { to: "/samraya", label: "Samrāya — Luxury Hotels" },
                     { to: "/celestra", label: "Celéstra — Premium Hotels" },
-                    {
-                      to: "/nivaara",
-                      label: "Nivaãra — Smart Comfort Hotels",
-                    },
+                    { to: "/nivaara", label: "Nivaãra — Smart Comfort Hotels" },
                   ].map((brand) => (
                     <Link
                       key={brand.label}
@@ -231,7 +215,6 @@ export function ContactPage() {
               </div>
             </div>
 
-            {/* Right: Form */}
             <div className="animate-on-scroll-right delay-200 min-w-0">
               <div className="border border-gold/15 p-5 sm:p-8 md:p-10">
                 <h3 className="pillar-title text-ivory mb-8">
@@ -239,10 +222,7 @@ export function ContactPage() {
                 </h3>
 
                 {status === "success" ? (
-                  <div
-                    className="border border-gold/30 p-8 text-center"
-                    data-ocid="contact.success_state"
-                  >
+                  <div className="border border-gold/30 p-8 text-center">
                     <div className="gold-divider" />
                     <p className="pillar-title text-gold mt-6 mb-3">
                       Message Received
@@ -279,7 +259,6 @@ export function ContactPage() {
                           className="ghd-input"
                           autoComplete="name"
                           required
-                          data-ocid="contact.name.input"
                         />
                       </div>
 
@@ -300,7 +279,6 @@ export function ContactPage() {
                           className="ghd-input"
                           autoComplete="email"
                           required
-                          data-ocid="contact.email.input"
                         />
                       </div>
 
@@ -320,7 +298,6 @@ export function ContactPage() {
                           placeholder="+91 00000 00000"
                           className="ghd-input"
                           autoComplete="tel"
-                          data-ocid="contact.phone.input"
                         />
                       </div>
 
@@ -340,41 +317,17 @@ export function ContactPage() {
                           rows={5}
                           className="ghd-input resize-none"
                           required
-                          data-ocid="contact.message.textarea"
                         />
                       </div>
 
                       {status === "error" && errorMsg && (
-                        <div
-                          className="border border-red-500/30 px-4 py-3 text-left"
-                          data-ocid="contact.error_state"
-                        >
-                          <p
-                            className="font-body text-red-300 text-sm font-medium mb-2"
-                            style={{
-                              fontFamily:
-                                "General Sans, Helvetica Neue, sans-serif",
-                            }}
-                          >
+                        <div className="border border-red-500/30 px-4 py-3 text-left">
+                          <p className="font-body text-red-300 text-sm font-medium mb-2">
                             Could not send your message. Details:
                           </p>
-                          <pre
-                            className="font-mono text-xs text-red-200/90 whitespace-pre-wrap break-words leading-relaxed max-h-64 overflow-y-auto"
-                            data-ocid="contact.error_details"
-                          >
+                          <pre className="font-mono text-xs text-red-200/90 whitespace-pre-wrap break-words leading-relaxed max-h-64 overflow-y-auto">
                             {errorMsg}
                           </pre>
-                          <p
-                            className="font-body text-red-400/70 text-xs mt-3"
-                            style={{
-                              fontFamily:
-                                "General Sans, Helvetica Neue, sans-serif",
-                            }}
-                          >
-                            Open the browser developer console (F12 → Console) for
-                            the same log entry{" "}
-                            <span className="font-mono">[contact form]</span>.
-                          </p>
                         </div>
                       )}
 
@@ -382,13 +335,9 @@ export function ContactPage() {
                         type="submit"
                         disabled={status === "loading"}
                         className="btn-gold-filled w-full mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
-                        data-ocid="contact.submit_button"
                       >
                         {status === "loading" ? (
-                          <span
-                            data-ocid="contact.loading_state"
-                            className="flex items-center justify-center gap-2"
-                          >
+                          <span className="flex items-center justify-center gap-2">
                             <span className="w-4 h-4 border border-charcoal/40 border-t-charcoal rounded-full animate-spin" />
                             Sending...
                           </span>

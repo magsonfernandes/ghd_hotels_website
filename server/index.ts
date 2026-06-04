@@ -6,6 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import multer from "multer";
+import { isSmtpPassConfigured, mailHealthPayload, missingSmtpPassHint } from "../lib/mailEnv.ts";
 import { sendMailViaSmtp } from "../lib/smtp.ts";
 import { loadRates, saveRates } from "./rates.ts";
 
@@ -35,10 +36,7 @@ app.use(
 app.use(express.json({ limit: "256kb" }));
 
 app.get("/api/health", (_req, res) => {
-  const pass = String(process.env.SMTP_PASS ?? "").trim();
-  const smtpConfigured =
-    pass.length > 0 && pass !== "__SET_THIS_ON_THE_SERVER__";
-  return res.status(200).json({ ok: true, smtpConfigured });
+  return res.status(200).json(mailHealthPayload(repoRoot));
 });
 
 // ─── Rates API (public read + admin write) ───────────────────────────
@@ -166,7 +164,15 @@ app.post("/api/contact", async (req, res) => {
     });
   } catch (err) {
     if (err instanceof Error && /Missing SMTP_PASS/i.test(err.message)) {
-      return res.status(400).json({ ok: false, error: "Missing SMTP_PASS" });
+      return res.status(400).json({
+        ok: false,
+        error: "Missing SMTP_PASS",
+        hint: missingSmtpPassHint({
+          platform: "node",
+          envFilePath: path.join(repoRoot, ".env"),
+          envFileExists: fs.existsSync(path.join(repoRoot, ".env")),
+        }),
+      });
     }
     const msg =
       err instanceof Error
@@ -228,7 +234,15 @@ app.post("/api/careers", upload.single("cv"), async (req, res) => {
     });
   } catch (err) {
     if (err instanceof Error && /Missing SMTP_PASS/i.test(err.message)) {
-      return res.status(400).json({ ok: false, error: "Missing SMTP_PASS" });
+      return res.status(400).json({
+        ok: false,
+        error: "Missing SMTP_PASS",
+        hint: missingSmtpPassHint({
+          platform: "node",
+          envFilePath: path.join(repoRoot, ".env"),
+          envFileExists: fs.existsSync(path.join(repoRoot, ".env")),
+        }),
+      });
     }
     const msg =
       err instanceof Error
@@ -262,10 +276,20 @@ app.listen(port, () => {
     console.warn("[rates] Initial load failed", err);
   }
   console.log(`Mail + site server listening on http://127.0.0.1:${port}`);
-  console.warn(
-    "[mail] SMTP connects via cPanel (mail.ghdhotels.in DNS points at the website). " +
-      "Fix DNS: A record mail.ghdhotels.in → hosting IP (209.42.28.69).",
-  );
+  if (!isSmtpPassConfigured()) {
+    console.error(
+      `[mail] SMTP_PASS is not configured — contact and careers forms will return 400. ${missingSmtpPassHint({
+        platform: "node",
+        envFilePath: path.join(repoRoot, ".env"),
+        envFileExists: fs.existsSync(path.join(repoRoot, ".env")),
+      })}`,
+    );
+  } else {
+    console.warn(
+      "[mail] SMTP connects via cPanel (mail.ghdhotels.in DNS points at the website). " +
+        "Fix DNS: A record mail.ghdhotels.in → hosting IP (209.42.28.69).",
+    );
+  }
   if (!adminTokenEnv()) {
     console.warn(
       "[rates] ADMIN_TOKEN is not set — /api/admin/rates will respond with 503.",
