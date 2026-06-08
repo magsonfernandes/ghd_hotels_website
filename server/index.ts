@@ -8,7 +8,6 @@ import { fileURLToPath } from "node:url";
 import multer from "multer";
 import { isSmtpPassConfigured, mailHealthPayload, missingSmtpPassHint } from "../lib/mailEnv.ts";
 import { sendMailViaSmtp } from "../lib/smtp.ts";
-import { createImageCaptcha, verifyImageCaptcha } from "../lib/imageCaptcha.ts";
 import { loadRates, saveRates } from "./rates.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -137,13 +136,12 @@ app.put("/api/admin/rates", (req, res) => {
 });
 
 app.get("/api/captcha", (_req, res) => {
-  try {
-    const { token, imageDataUrl } = createImageCaptcha();
-    return res.status(200).json({ ok: true, token, imageDataUrl });
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : "Failed to create CAPTCHA";
-    return res.status(500).json({ ok: false, error: msg });
-  }
+  // CAPTCHA temporarily disabled on contact form — route kept for easy restore.
+  // See server/contactCaptchaVerification.backup.ts and lib/imageCaptcha.backup.ts
+  return res.status(503).json({
+    ok: false,
+    error: "CAPTCHA temporarily disabled",
+  });
 });
 
 app.post("/api/contact", async (req, res) => {
@@ -151,13 +149,8 @@ app.post("/api/contact", async (req, res) => {
   const email = String(req.body?.email ?? "").trim();
   const phone = String(req.body?.phone ?? "").trim();
   const message = String(req.body?.message ?? "").trim();
-  const captchaToken = String(req.body?.captchaToken ?? "").trim();
-  const captchaAnswer = String(req.body?.captchaAnswer ?? "").trim();
 
-  const captcha = verifyImageCaptcha(captchaToken, captchaAnswer);
-  if (!captcha.ok) {
-    return res.status(400).json({ ok: false, error: captcha.error });
-  }
+  // CAPTCHA verification temporarily disabled — see contactCaptchaVerification.backup.ts
 
   if (!name || !email || !message) {
     return res.status(400).json({ ok: false, error: "Missing required fields" });

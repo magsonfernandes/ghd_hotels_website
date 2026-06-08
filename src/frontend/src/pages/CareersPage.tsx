@@ -1,42 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useId, useRef, useState } from "react";
+import { CareersJobModal } from "../components/CareersJobModal";
 import { Footer } from "../components/Footer";
 import { mailApiUrl } from "../lib/mailApi";
-
-const JOB_POSTINGS = [
-  {
-    id: "front-office",
-    title: "Front Office Executive",
-    location: "Nerul, Goa",
-    type: "Full-time",
-    summary:
-      "Welcome guests, manage reservations, and coordinate with housekeeping. Prior hotel or retail front-desk experience preferred.",
-  },
-  {
-    id: "housekeeping",
-    title: "Housekeeping Supervisor",
-    location: "Nerul, Goa",
-    type: "Full-time",
-    summary:
-      "Lead room standards, train the team, and maintain inventory. Eye for detail and prior supervisory experience in hospitality.",
-  },
-  {
-    id: "fnb",
-    title: "F&B Service Associate",
-    location: "Nerul, Goa",
-    type: "Full-time",
-    summary:
-      "Support breakfast service and in-room dining. Warm guest presence; training provided for brand service standards.",
-  },
-  {
-    id: "engineering",
-    title: "Engineering Technician",
-    location: "Nerul, Goa",
-    type: "Full-time",
-    summary:
-      "HVAC, plumbing, and general property maintenance. Rotating shifts; certification in a trade is a plus.",
-  },
-] as const;
+import { JOB_POSTINGS, type JobPosting } from "../lib/jobPostings";
 
 type FormState = {
   fullName: string;
@@ -57,12 +24,14 @@ const initialForm = (): FormState => ({
 export function CareersPage() {
   const formId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const applySectionRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = useState<FormState>(initialForm);
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [formError, setFormError] = useState("");
+  const [selectedJob, setSelectedJob] = useState<JobPosting | null>(null);
 
   useEffect(() => {
     document.title = "Careers | GHD Hotels";
@@ -158,6 +127,22 @@ export function CareersPage() {
     setFormError("");
   };
 
+  const openJobDetails = (job: JobPosting) => {
+    setSelectedJob(job);
+  };
+
+  const applyForJob = (jobId: string) => {
+    setSelectedJob(null);
+    setForm((prev) => ({ ...prev, roleId: jobId }));
+    setFormError("");
+    requestAnimationFrame(() => {
+      applySectionRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  };
+
   return (
     <div className="bg-charcoal min-h-screen flex flex-col">
       <section className="flex-1 section-pad pt-28 sm:pt-32 pb-16">
@@ -174,10 +159,9 @@ export function CareersPage() {
           </div>
 
           <p className={`${p} text-center max-w-2xl mx-auto mb-12`}>
-            We are growing our team across operations, guest experience, and
-            support. Explore sample openings below and apply with your details
-            and CV — this page is a demo; connect a backend when you are ready
-            to receive real applications.
+            We are growing our team across projects, marketing, and hospitality
+            operations. Explore open positions below and apply with your details
+            and CV.
           </p>
 
           <h2
@@ -186,11 +170,13 @@ export function CareersPage() {
           >
             Open positions
           </h2>
-          <div className="grid sm:grid-cols-2 gap-4 sm:gap-5 mb-14 sm:mb-16">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-14 sm:mb-16">
             {JOB_POSTINGS.map((job) => (
-              <article
+              <button
                 key={job.id}
-                className="rounded-2xl border border-gold/15 bg-black/25 p-5 sm:p-6 flex flex-col"
+                type="button"
+                onClick={() => openJobDetails(job)}
+                className="rounded-2xl border border-gold/15 bg-black/25 p-5 sm:p-6 text-left flex flex-col h-full hover:border-gold/35 hover:bg-black/35 transition-colors cursor-pointer"
               >
                 <h3
                   className="font-display text-ivory text-lg sm:text-xl mb-2"
@@ -201,12 +187,24 @@ export function CareersPage() {
                 <p className="text-xs uppercase tracking-[0.16em] text-gold/85 mb-3">
                   {job.location} · {job.type}
                 </p>
-                <p className={`${p} flex-1`}>{job.summary}</p>
-              </article>
+                <p className={`${p} flex-1 line-clamp-3`}>{job.summary}</p>
+                <span className="mt-4 text-xs uppercase tracking-[0.14em] text-gold/90">
+                  View full details →
+                </span>
+              </button>
             ))}
           </div>
 
-          <div className="rounded-2xl border border-gold/15 bg-black/25 p-5 sm:p-8 md:p-10">
+          <CareersJobModal
+            job={selectedJob}
+            onClose={() => setSelectedJob(null)}
+            onApply={applyForJob}
+          />
+
+          <div
+            ref={applySectionRef}
+            className="rounded-2xl border border-gold/15 bg-black/25 p-5 sm:p-8 md:p-10"
+          >
             <h2
               className="font-display text-ivory text-xl sm:text-2xl mb-2"
               style={{ fontFamily: "Instrument Serif, Georgia, serif" }}
